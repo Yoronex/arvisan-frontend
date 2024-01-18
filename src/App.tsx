@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Button } from 'react-bootstrap';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
@@ -18,11 +19,11 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button type="button" onClick={() => setCount((c: number) => c + 1)}>
+        <Button variant="outline-primary" type="button" onClick={() => setCount((c: number) => c + 1)}>
           count is
           {' '}
           {count}
-        </button>
+        </Button>
         <p>
           Edit
           {' '}
