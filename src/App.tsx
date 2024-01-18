@@ -8,9 +8,7 @@ function App() {
         <MainMenu />
         <VisualizationSettings />
       </div>
-      <div className="w-100 vh-100 bg-danger">
-        <p>Hello world!</p>
-      </div>
+      <div className="w-100 vh-100 bg-danger" />
     </>
   );
 }
