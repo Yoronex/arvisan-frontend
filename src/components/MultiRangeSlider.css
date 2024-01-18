@@ -1,0 +1,91 @@
+.slider {
+    position: relative;
+    width: 100%;
+}
+
+.slider__track,
+.slider__range,
+.slider__left-value,
+.slider__right-value {
+    position: absolute;
+}
+
+.slider__track,
+.slider__range {
+    border-radius: 3px;
+    height: 5px;
+}
+
+.slider__track {
+    background-color: #ced4da;
+    width: 100%;
+    z-index: 1;
+}
+
+.slider__range {
+    background-color: var(--bs-primary);
+    z-index: 2;
+}
+
+.slider__left-value,
+.slider__right-value {
+    margin-top: 0.5rem;
+}
+
+.slider__left-value {
+    left: 6px;
+}
+
+.slider__right-value {
+    right: -4px;
+}
+
+/* Removing the default appearance */
+.thumb,
+.thumb::-webkit-slider-thumb {
+    -webkit-appearance: none;
+}
+
+.thumb {
+    pointer-events: none;
+    position: absolute;
+    height: 0;
+    width: calc(100% - 28px);
+    outline: none;
+}
+
+.thumb--left {
+    z-index: 3;
+}
+
+.thumb--right {
+    z-index: 4;
+}
+
+/* For Chrome browsers */
+.thumb::-webkit-slider-thumb {
+    background-color: var(--bs-primary);
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 0 1px 1px #ced4da;
+    cursor: pointer;
+    height: 18px;
+    width: 18px;
+    margin-top: 4px;
+    pointer-events: all;
+    position: relative;
+}
+
+/* For Firefox browsers */
+.thumb::-moz-range-thumb {
+    background-color: var(--bs-primary);
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 0 1px 1px #ced4da;
+    cursor: pointer;
+    height: 18px;
+    width: 18px;
+    margin-top: 4px;
+    pointer-events: all;
+    position: relative;
+}
