@@ -16,9 +16,11 @@ interface Props {
 }
 
 function MultiRangeSlider({
-  values, onChange, min, max, label,
+  values, onChange, min, max: userMax, label,
 }: Props) {
-  const [minVal, maxVal] = values;
+  const [minVal, userMaxVal] = values;
+  const max = userMax + 1;
+  const maxVal = userMaxVal === Number.POSITIVE_INFINITY ? max : userMaxVal;
 
   const [left, setLeft] = useState(0);
   const [width, setWidth] = useState(0);
@@ -27,7 +29,11 @@ function MultiRangeSlider({
     onChange([newValue, maxVal]);
   };
   const setMaxVal = (newValue: number) => {
-    onChange([minVal, newValue]);
+    if (newValue === max) {
+      onChange([minVal, Number.POSITIVE_INFINITY]);
+    } else {
+      onChange([minVal, newValue]);
+    }
   };
 
   const minValRef = useRef(min);
@@ -97,7 +103,7 @@ function MultiRangeSlider({
         <div className="slider__track" />
         <div ref={range} className="slider__range" style={{ width: `${width}%`, left: `${left}%` }} />
         <div className="slider__left-value">{minVal}</div>
-        <div className="slider__right-value">{maxVal}</div>
+        <div className="slider__right-value">{maxVal === max ? `${userMax}+` : maxVal}</div>
       </div>
     </div>
   );
