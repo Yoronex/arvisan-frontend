@@ -24,6 +24,7 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-    'import/no-absolute-path': 'off'
+    'import/no-absolute-path': 'off',
+    "react/react-in-jsx-scope": "off",
   },
 }
