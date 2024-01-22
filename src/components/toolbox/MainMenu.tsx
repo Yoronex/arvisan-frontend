@@ -4,7 +4,7 @@ import {
 
 export default function MainMenu() {
   return (
-    <div className="position-absolute p-3 w-100">
+    <div className="position-absolute p-3 w-100 z-1">
       <Navbar expand="lg" className="w-100 bg-light rounded-3 shadow">
         <Container>
           <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>

@@ -7,7 +7,11 @@ import RangeSlider from '../MultiRangeSlider';
 const RANGE_MIN = 0;
 const RANGE_MAX = 20;
 
-export default function VisualizationSettings() {
+interface Props {
+  cardWidth: string | number;
+}
+
+export default function VisualizationSettings({ cardWidth }: Props) {
   const [dependencyRange, setDependencyRange] = React
     .useState<[number, number]>([RANGE_MIN, Number.POSITIVE_INFINITY]);
   const [dependentRange, setDependentRange] = React
@@ -20,8 +24,8 @@ export default function VisualizationSettings() {
   const [showDependentRelationships, setShowDependentRelationships] = React.useState(false);
 
   return (
-    <div className="position-absolute vh-100 px-3 pb-3" style={{ paddingTop: '6rem' }}>
-      <Card className="h-100 shadow" style={{ width: '18rem' }}>
+    <div className="position-absolute vh-100 px-3 pb-3 z-1" style={{ paddingTop: '6rem' }}>
+      <Card className="h-100 shadow" style={{ width: cardWidth }}>
         <CardHeader>
           <CardTitle>
             Settings
