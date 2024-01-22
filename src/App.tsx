@@ -1,6 +1,6 @@
 import MainMenu from './components/toolbox/MainMenu';
 import VisualizationSettings from './components/toolbox/VisualizationSettings';
-import Visualization from './components/visualization/Visualization';
+import VisualizationWrapper from './components/visualization/VisualizationWrapper';
 
 const SIDEBAR_WIDTH = '18rem';
 
@@ -12,7 +12,7 @@ function App() {
         <VisualizationSettings cardWidth={SIDEBAR_WIDTH} />
       </div>
       <div className="w-100 vh-100">
-        <Visualization sidebarWidth={SIDEBAR_WIDTH} />
+        <VisualizationWrapper sidebarWidth={SIDEBAR_WIDTH} />
       </div>
     </>
   );

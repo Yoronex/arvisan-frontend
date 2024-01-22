@@ -24,7 +24,7 @@ export default function VisualizationSettings({ cardWidth }: Props) {
   const [showDependentRelationships, setShowDependentRelationships] = React.useState(false);
 
   return (
-    <div className="position-absolute vh-100 px-3 pb-3 z-1" style={{ paddingTop: '6rem' }}>
+    <div className="position-absolute vh-100 px-3 pb-3 z-2" style={{ paddingTop: '6rem' }}>
       <Card className="h-100 shadow" style={{ width: cardWidth }}>
         <CardHeader>
           <CardTitle>
