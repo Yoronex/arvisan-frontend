@@ -3,6 +3,7 @@ import {
 } from 'react';
 import cytoscape from 'cytoscape';
 import { KlayLayoutOptions } from 'cytoscape-klay';
+import { ColaLayoutOptions } from '../../local-types/cytoscape-cola';
 
 export enum VisualizationAlgorithm {
   GRID = 'grid',
@@ -10,16 +11,19 @@ export enum VisualizationAlgorithm {
   COLA = 'cola',
 }
 
+export type PossibleLayoutOptions = cytoscape.GridLayoutOptions | KlayLayoutOptions
+| ColaLayoutOptions;
+
 type IVisualizationLayoutContext = {
   algorithm: VisualizationAlgorithm,
   setAlgorithm: (a: VisualizationAlgorithm) => void;
-  layoutOptions: cytoscape.LayoutOptions;
+  layoutOptions: PossibleLayoutOptions;
   reload: () => void;
   reloadedAt: Date;
 };
 
 const defaultAlgorithm: VisualizationAlgorithm = VisualizationAlgorithm.GRID;
-const defaultLayoutOptions: cytoscape.LayoutOptions = {
+const defaultLayoutOptions: PossibleLayoutOptions = {
   name: 'grid', nodeDimensionsIncludeLabels: true,
 };
 
@@ -53,7 +57,6 @@ export default function VisualizationLayoutContextProvider({ children }: PropsWi
       case VisualizationAlgorithm.COLA:
         setLayoutOptions({
           name: 'cola',
-          // @ts-ignore
           nodeDimensionsIncludeLabels: true,
         });
         break;

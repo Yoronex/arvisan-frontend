@@ -17,16 +17,25 @@ export default function VisualizationWrapper({ sidebarWidth: rawSidebarWidth }: 
   } else {
     sidebarWidth = rawSidebarWidth;
   }
+  const menubarHeight: number = 100;
 
   const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
   const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
 
-  const center = { x: sidebarWidth + (vw - sidebarWidth) / 2, y: vh / 2 };
+  const center = {
+    x: sidebarWidth + (vw - sidebarWidth) / 2,
+    y: menubarHeight + (vh - menubarHeight) / 2,
+  };
 
   return (
     <div className="cy-wrapper w-100 h-100">
       {loading && <VisualizationLoading center={center} />}
-      <Visualization center={center} />
+      <Visualization
+        center={center}
+        menusCorner={{ x: sidebarWidth, y: menubarHeight }}
+        width={vw - sidebarWidth}
+        height={vh - menubarHeight}
+      />
     </div>
   );
 }

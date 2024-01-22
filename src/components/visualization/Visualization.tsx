@@ -9,22 +9,29 @@ import './Visualization.scss';
 import { VisualizationContext } from '../../context/VisualizationContext';
 import VisualizationStyle from './VisualizationStyle';
 import { assignEdgeWeights, colorNodes } from '../../cytoscape/operations';
-import { VisualizationLayoutContext } from '../../context/VisualizationLayoutContext';
+import { PossibleLayoutOptions, VisualizationLayoutContext } from '../../context/VisualizationLayoutContext';
 
 cytoscape.use(klay);
 cytoscape.use(cola);
 
 interface Props {
+  menusCorner: { x: number, y: number };
   center: { x: number, y: number };
+  width: number;
+  height: number;
 }
 
-export default function Visualization({ center }: Props) {
+export default function Visualization({
+  center, menusCorner, width, height,
+}: Props) {
   const { graph, selectNode } = useContext(VisualizationContext);
   const { nodes, edges } = graph;
   const { layoutOptions, reloadedAt } = useContext(VisualizationLayoutContext);
   const cy = useRef<cytoscape.Core>();
 
   const elements: (cytoscape.ElementDefinition)[] = [...nodes, ...edges];
+
+  console.log(menusCorner);
 
   /**
    * For all nodes with a "contains" relationship, make sure the target node is
@@ -43,7 +50,16 @@ export default function Visualization({ center }: Props) {
   /** Graph operations */
   useEffect(() => {
     if (!cy.current) return;
-    cy.current.layout(layoutOptions).run();
+    cy.current.layout({
+      ...layoutOptions,
+      fit: false,
+      boundingBox: {
+        x1: menusCorner.x,
+        y1: menusCorner.y,
+        w: width,
+        h: height,
+      },
+    } as PossibleLayoutOptions).run();
   }, [cy, graph, layoutOptions, reloadedAt]);
 
   /** Node operations */
@@ -70,12 +86,13 @@ export default function Visualization({ center }: Props) {
     <CytoscapeComponent
       elements={elements}
       style={{ width: '100%', height: '100%' }}
-      pan={center}
+      // pan={center}
       stylesheet={VisualizationStyle}
       className="cy"
       cy={(c) => {
         cy.current = c;
       }}
+      wheelSensitivity={0.1}
     />
   );
 }

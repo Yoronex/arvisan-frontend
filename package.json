@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@types/cytoscape": "^3.19.16",
+    "@types/cytoscape-cola": "file:local-types/cytoscape-cola",
     "@types/cytoscape-klay": "^3.1.4",
     "@types/react": "^18.2.47",
     "@types/react-cytoscapejs": "^1.2.5",
