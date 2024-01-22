@@ -5,7 +5,7 @@
 import {
   useCallback, useEffect, useState, useRef,
 } from 'react';
-import './multiRangeSlider.css';
+import './MultiRangeSlider.css';
 
 interface Props {
   values: [number, number];

@@ -1,7 +1,10 @@
 import React, { createContext, PropsWithChildren } from 'react';
+import cytoscape from 'cytoscape';
 import { Graph, GraphService } from '../api';
 
 interface IVisualizationSettings {
+  layerDepth: number,
+  dependencyLength: number,
   showDependencies: boolean;
   minDependencies: number;
   maxDependencies: number;
@@ -17,9 +20,14 @@ interface IVisualizationContext {
   updateSettings: (settings: IVisualizationSettings) => void;
   graph: Graph;
   loading: boolean;
+
+  selectNode: (n: cytoscape.NodeSingular) => void;
+  returnToOverview: () => void;
 }
 
 const defaultSettings: IVisualizationSettings = {
+  layerDepth: 1,
+  dependencyLength: 1,
   showDependencies: true,
   minDependencies: 0,
   maxDependencies: Number.POSITIVE_INFINITY,
@@ -37,6 +45,8 @@ export const VisualizationContext = createContext<IVisualizationContext>({
   graph: defaultGraph,
   updateSettings: () => {},
   loading: true,
+  selectNode: () => {},
+  returnToOverview: () => {},
 });
 
 interface Props extends PropsWithChildren {}
@@ -45,17 +55,75 @@ export default function VisualizationContextProvider({ children }: Props) {
   const [settings, setSettings] = React.useState(defaultSettings);
   const [graph, setGraph] = React.useState(defaultGraph);
   const [loading, setLoading] = React.useState(true);
+  const [selectedNode, setSelectedNode] = React.useState<cytoscape.NodeSingular | undefined>();
+
+  const getDomainOverview = async () => {
+    setLoading(true);
+    const g = await GraphService.getAllDomains();
+    setGraph(g);
+    setLoading(false);
+    return g;
+  };
+
+  const getSelectedNodeGraph = async () => {
+    if (!selectedNode) return;
+    setLoading(true);
+
+    const onlyInternalRelations = !settings.showExternalRelationships;
+    const onlyExternalRelations = !settings.showInternalRelationships;
+
+    const g = await GraphService.getNode({
+      id: selectedNode.id(),
+      layerDepth: settings.layerDepth,
+      dependencyDepth: settings.dependencyLength,
+      onlyInternalRelations,
+      onlyExternalRelations,
+      showDependencies: settings.showDependencies,
+      showDependents: settings.showDependents,
+      dependencyRange: {
+        min: settings.minDependencies || undefined,
+        max: settings.maxDependencies === Number.POSITIVE_INFINITY
+          ? undefined : settings.maxDependencies,
+      },
+      dependentRange: {
+        min: settings.minDependents || undefined,
+        max: settings.maxDependents === Number.POSITIVE_INFINITY
+          ? undefined : settings.maxDependents,
+      },
+    });
+
+    setGraph(g);
+    setLoading(false);
+  };
 
   // Fetch initial graph
   React.useEffect(() => {
-    GraphService.getAllDomains()
-      .then((g) => setGraph(g))
+    getDomainOverview()
       .catch((e) => console.error(e))
       .finally(() => setLoading(false));
   }, []);
 
+  // Reload graph when selecting a node
+  React.useEffect(() => {
+    if (!selectedNode) return;
+
+    getSelectedNodeGraph()
+      .catch((e) => console.error(e))
+      .finally(() => setLoading(false));
+  }, [selectedNode, settings]);
+
   const updateSettings = (newSettings: IVisualizationSettings) => {
     setSettings(newSettings);
+  };
+
+  const selectNode = (node: cytoscape.NodeSingular) => {
+    setSelectedNode(node);
+  };
+
+  const returnToOverview = () => {
+    setSelectedNode(undefined);
+    getDomainOverview()
+      .catch((e) => console.error(e));
   };
 
   const visualizationContext = React.useMemo((): IVisualizationContext => ({
@@ -63,6 +131,8 @@ export default function VisualizationContextProvider({ children }: Props) {
     graph,
     updateSettings,
     loading,
+    selectNode,
+    returnToOverview,
   }), [settings, graph, loading]);
 
   return (

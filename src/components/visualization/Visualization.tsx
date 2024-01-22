@@ -13,11 +13,25 @@ interface Props {
 }
 
 export default function Visualization({ center }: Props) {
-  const { graph } = useContext(VisualizationContext);
+  const { graph, selectNode } = useContext(VisualizationContext);
   const { nodes, edges } = graph;
   const cy = useRef<cytoscape.Core>();
 
   const elements: (cytoscape.ElementDefinition)[] = [...nodes, ...edges];
+
+  /**
+   * For all nodes with a "contains" relationship, make sure the target node is
+   * contained in the source node and hide the edge.
+   */
+  const createNestedNodes = () => {
+    if (!cy.current) return;
+
+    cy.current.edges('#parentRel').removeClass('parentRel');
+    cy.current.edges('[interaction="contains"]').forEach((e) => {
+      e.target().move({ parent: e.source().id() });
+    });
+    cy.current.edges('[interaction = "contains"]').addClass('parentRel');
+  };
 
   /** Graph operations */
   useEffect(() => {
@@ -29,12 +43,20 @@ export default function Visualization({ center }: Props) {
   useEffect(() => {
     if (!cy.current) return;
     cy.current.nodes().forEach(colorNodes);
-  }, [cy, nodes]);
+
+    // Add event listener to select a node once it has been clicked
+    cy.current.on('tap', 'node', (event) => {
+      const node = event.target as cytoscape.NodeSingular;
+      selectNode(node);
+    });
+  }, [cy, nodes, selectNode]);
 
   /** Edge operations */
   useEffect(() => {
     if (!cy.current) return;
     cy.current.edges().forEach(assignEdgeWeights);
+
+    createNestedNodes();
   }, [cy, edges]);
 
   return (

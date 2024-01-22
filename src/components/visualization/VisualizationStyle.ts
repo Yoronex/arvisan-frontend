@@ -26,6 +26,11 @@ const stylesheet: cytoscape.Stylesheet[] = [{
     'curve-style': 'bezier',
     width: 1.5,
   },
+}, {
+  selector: '.parentRel',
+  css: {
+    display: 'none',
+  },
 }];
 
 export default stylesheet;
