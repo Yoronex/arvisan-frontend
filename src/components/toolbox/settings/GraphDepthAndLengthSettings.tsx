@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { Form } from 'react-bootstrap';
 import { VisualizationContext } from '../../../context/VisualizationContext';
 import RangeSlider from '../../settings/RangeSlider';

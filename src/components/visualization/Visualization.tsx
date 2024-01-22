@@ -3,10 +3,16 @@ import {
 } from 'react';
 import cytoscape from 'cytoscape';
 import CytoscapeComponent from 'react-cytoscapejs';
+import klay from 'cytoscape-klay';
+import cola from 'cytoscape-cola';
 import './Visualization.scss';
 import { VisualizationContext } from '../../context/VisualizationContext';
 import VisualizationStyle from './VisualizationStyle';
 import { assignEdgeWeights, colorNodes } from '../../cytoscape/operations';
+import { VisualizationLayoutContext } from '../../context/VisualizationLayoutContext';
+
+cytoscape.use(klay);
+cytoscape.use(cola);
 
 interface Props {
   center: { x: number, y: number };
@@ -15,6 +21,7 @@ interface Props {
 export default function Visualization({ center }: Props) {
   const { graph, selectNode } = useContext(VisualizationContext);
   const { nodes, edges } = graph;
+  const { layoutOptions, reloadedAt } = useContext(VisualizationLayoutContext);
   const cy = useRef<cytoscape.Core>();
 
   const elements: (cytoscape.ElementDefinition)[] = [...nodes, ...edges];
@@ -36,8 +43,8 @@ export default function Visualization({ center }: Props) {
   /** Graph operations */
   useEffect(() => {
     if (!cy.current) return;
-    cy.current.layout({ name: 'grid' }).run();
-  }, [cy, graph]);
+    cy.current.layout(layoutOptions).run();
+  }, [cy, graph, layoutOptions, reloadedAt]);
 
   /** Node operations */
   useEffect(() => {
