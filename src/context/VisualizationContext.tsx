@@ -1,5 +1,5 @@
 import React, { createContext, PropsWithChildren } from 'react';
-import { Client, Graph } from '../api/Client';
+import { Graph, GraphService } from '../api';
 
 interface IVisualizationSettings {
   showDependencies: boolean;
@@ -30,7 +30,7 @@ const defaultSettings: IVisualizationSettings = {
   showExternalRelationships: true,
 };
 
-const defaultGraph: Graph = new Graph({ name: '', nodes: [], edges: [] });
+const defaultGraph: Graph = { name: '', nodes: [], edges: [] };
 
 export const VisualizationContext = createContext<IVisualizationContext>({
   settings: defaultSettings,
@@ -48,7 +48,7 @@ export default function VisualizationContextProvider({ children }: Props) {
 
   // Fetch initial graph
   React.useEffect(() => {
-    new Client().getAllDomains()
+    GraphService.getAllDomains()
       .then((g) => setGraph(g))
       .catch((e) => console.error(e))
       .finally(() => setLoading(false));
