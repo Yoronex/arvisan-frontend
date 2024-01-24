@@ -1,5 +1,5 @@
 import {
-  useContext, useEffect, useRef,
+  useContext, useEffect, useRef, useState,
 } from 'react';
 import cytoscape from 'cytoscape';
 import CytoscapeComponent from 'react-cytoscapejs';
@@ -10,6 +10,7 @@ import { VisualizationContext } from '../../context/VisualizationContext';
 import VisualizationStyle from './VisualizationStyle';
 import { assignEdgeWeights, colorNodes } from '../../cytoscape/operations';
 import { PossibleLayoutOptions, VisualizationLayoutContext } from '../../context/VisualizationLayoutContext';
+import HoverDetailsCard from './HoverDetailsCard';
 
 cytoscape.use(klay);
 cytoscape.use(cola);
@@ -27,11 +28,12 @@ export default function Visualization({
   const { graph, selectNode } = useContext(VisualizationContext);
   const { nodes, edges } = graph;
   const { layoutOptions, reloadedAt } = useContext(VisualizationLayoutContext);
+
+  const [hoveredNode, setHoveredNode] = useState<cytoscape.NodeSingular | null>(null);
+
   const cy = useRef<cytoscape.Core>();
 
   const elements: (cytoscape.ElementDefinition)[] = [...nodes, ...edges];
-
-  console.log(menusCorner);
 
   /**
    * For all nodes with a "contains" relationship, make sure the target node is
@@ -52,13 +54,7 @@ export default function Visualization({
     if (!cy.current) return;
     cy.current.layout({
       ...layoutOptions,
-      fit: false,
-      boundingBox: {
-        x1: menusCorner.x,
-        y1: menusCorner.y,
-        w: width,
-        h: height,
-      },
+      fit: true,
     } as PossibleLayoutOptions).run();
   }, [cy, graph, layoutOptions, reloadedAt]);
 
@@ -72,6 +68,13 @@ export default function Visualization({
       const node = event.target as cytoscape.NodeSingular;
       selectNode(node);
     });
+    cy.current.on('mouseover', 'node', (event) => {
+      const node = event.target as cytoscape.NodeSingular;
+      setHoveredNode(node);
+    });
+    cy.current.on('mouseout', 'node', () => {
+      setHoveredNode(null);
+    });
   }, [cy, nodes, selectNode]);
 
   /** Edge operations */
@@ -83,16 +86,19 @@ export default function Visualization({
   }, [cy, edges]);
 
   return (
-    <CytoscapeComponent
-      elements={elements}
-      style={{ width: '100%', height: '100%' }}
-      // pan={center}
-      stylesheet={VisualizationStyle}
-      className="cy"
-      cy={(c) => {
-        cy.current = c;
-      }}
-      wheelSensitivity={0.1}
-    />
+    <>
+      <CytoscapeComponent
+        elements={elements}
+        style={{ width: '100%', height: '100%' }}
+        pan={center}
+        stylesheet={VisualizationStyle}
+        className="cy"
+        cy={(c) => {
+          cy.current = c;
+        }}
+        wheelSensitivity={0.1}
+      />
+      <HoverDetailsCard node={hoveredNode} />
+    </>
   );
 }
