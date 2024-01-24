@@ -23,28 +23,10 @@ export default function Visualization({
   center,
 }: Props) {
   const { graph, selectNode } = useContext(VisualizationContext);
-  const { nodes, edges } = graph;
   const { layoutOptions, reloadedAt } = useContext(VisualizationLayoutContext);
-
   const [hoveredNode, setHoveredNode] = useState<cytoscape.NodeSingular | null>(null);
 
   const cy = useRef<cytoscape.Core>();
-
-  const elements: (cytoscape.ElementDefinition)[] = [...nodes, ...edges];
-
-  /**
-   * For all nodes with a "contains" relationship, make sure the target node is
-   * contained in the source node and hide the edge.
-   */
-  const createNestedNodes = () => {
-    if (!cy.current) return;
-
-    cy.current.edges('#parentRel').removeClass('parentRel');
-    cy.current.edges('[interaction="contains"]').forEach((e) => {
-      e.target().move({ parent: e.source().id() });
-    });
-    cy.current.edges('[interaction = "contains"]').addClass('parentRel');
-  };
 
   /** Graph operations */
   useEffect(() => {
@@ -72,20 +54,18 @@ export default function Visualization({
     cy.current.on('mouseout', 'node', () => {
       setHoveredNode(null);
     });
-  }, [cy, nodes, selectNode]);
+  }, [cy, graph, selectNode]);
 
   /** Edge operations */
   useEffect(() => {
     if (!cy.current) return;
     cy.current.edges().forEach(assignEdgeWeights);
-
-    createNestedNodes();
-  }, [cy, edges]);
+  }, [cy, graph]);
 
   return (
     <>
       <CytoscapeComponent
-        elements={elements}
+        elements={CytoscapeComponent.normalizeElements(graph)}
         style={{ width: '100%', height: '100%' }}
         pan={center}
         stylesheet={VisualizationStyle}

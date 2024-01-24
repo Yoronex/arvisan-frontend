@@ -25,11 +25,8 @@ const stylesheet: cytoscape.Stylesheet[] = [{
     'line-gradient-stop-positions': [0, 100],
     'curve-style': 'bezier',
     width: 1.5,
-  },
-}, {
-  selector: '.parentRel',
-  css: {
-    display: 'none',
+    'control-point-step-size': 200,
+    'loop-sweep': '90deg',
   },
 }, {
   selector: 'node[properties.selected = "true"]',

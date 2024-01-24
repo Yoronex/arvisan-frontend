@@ -11,6 +11,8 @@ export default function HoverDetailsCard({ node }: Props) {
   if (!node) return null;
 
   const parents = node.parents().toArray();
+  const outgoers = node.outgoers().filter((ele) => ele.isEdge()).toArray();
+  const incomers = node.incomers().filter((ele) => ele.isEdge()).toArray();
 
   return (
     <div className="position-absolute z-2 bottom-0 end-0 mb-3 me-3">
@@ -42,12 +44,20 @@ export default function HoverDetailsCard({ node }: Props) {
               {node.isChildless() && (
                 <>
                   <tr>
-                    <td className="pe-2 text-end">Dependencies:</td>
+                    <td className="pe-2 text-end">Dependency edges:</td>
                     <td>{node.outdegree(true)}</td>
                   </tr>
                   <tr>
-                    <td className="pe-2 text-end">Dependents:</td>
-                    <td>{node.indegree(true) - 1}</td>
+                    <td className="pe-2 text-end">Total dependencies:</td>
+                    <td>{outgoers.reduce((total, edge) => total + Number(edge.data('properties.weight')), 0)}</td>
+                  </tr>
+                  <tr>
+                    <td className="pe-2 text-end">Dependent edges:</td>
+                    <td>{node.indegree(true)}</td>
+                  </tr>
+                  <tr>
+                    <td className="pe-2 text-end">Total dependents:</td>
+                    <td>{incomers.reduce((total, edge) => total + Number(edge.data('properties.weight')), 0)}</td>
                   </tr>
                 </>
               )}
