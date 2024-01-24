@@ -30,12 +30,7 @@ export default function VisualizationWrapper({ sidebarWidth: rawSidebarWidth }: 
   return (
     <div className="cy-wrapper w-100 h-100">
       {loading && <VisualizationLoading center={center} />}
-      <Visualization
-        center={center}
-        menusCorner={{ x: sidebarWidth, y: menubarHeight }}
-        width={vw - sidebarWidth}
-        height={vh - menubarHeight}
-      />
+      <Visualization center={center} />
     </div>
   );
 }

@@ -16,14 +16,11 @@ cytoscape.use(klay);
 cytoscape.use(cola);
 
 interface Props {
-  menusCorner: { x: number, y: number };
   center: { x: number, y: number };
-  width: number;
-  height: number;
 }
 
 export default function Visualization({
-  center, menusCorner, width, height,
+  center,
 }: Props) {
   const { graph, selectNode } = useContext(VisualizationContext);
   const { nodes, edges } = graph;

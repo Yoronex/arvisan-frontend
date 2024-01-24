@@ -31,6 +31,12 @@ const stylesheet: cytoscape.Stylesheet[] = [{
   css: {
     display: 'none',
   },
+}, {
+  selector: 'node[properties.selected = "true"]',
+  css: {
+    'border-color': '#ff0000',
+    'border-width': 4,
+  },
 }];
 
 export default stylesheet;
