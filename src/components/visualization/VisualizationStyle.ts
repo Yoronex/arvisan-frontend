@@ -6,7 +6,7 @@ const stylesheet: cytoscape.Stylesheet[] = [{
     height: 'label',
     width: 'label',
     'padding-top': '16',
-    'border-color': 'darkgray',
+    'border-color': 'black',
     'background-color': 'data(properties.color)',
     'border-width': 1,
     shape: 'round-rectangle',
