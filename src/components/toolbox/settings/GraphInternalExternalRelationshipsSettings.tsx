@@ -4,7 +4,7 @@ import { VisualizationContext } from '../../../context/VisualizationContext';
 
 export default function GraphInternalExternalRelationshipsSettings() {
   const { settings, updateSettings } = useContext(VisualizationContext);
-  const { showInternalRelationships, showExternalRelationships } = settings;
+  const { showInternalRelationships, showExternalRelationships, selfEdges } = settings;
 
   const setShowInternalRelationships = (value: boolean) => {
     updateSettings({
@@ -16,6 +16,12 @@ export default function GraphInternalExternalRelationshipsSettings() {
     updateSettings({
       ...settings,
       showExternalRelationships: value,
+    });
+  };
+  const setSelfEdges = (value: boolean) => {
+    updateSettings({
+      ...settings,
+      selfEdges: value,
     });
   };
 
@@ -32,6 +38,12 @@ export default function GraphInternalExternalRelationshipsSettings() {
         checked={showExternalRelationships}
         type="switch"
         label="Show external relationships"
+      />
+      <FormCheck
+        onChange={(event) => setSelfEdges(event.target.checked)}
+        checked={selfEdges}
+        type="switch"
+        label="Show self edges"
       />
     </Form>
   );

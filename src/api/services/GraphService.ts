@@ -24,12 +24,14 @@ export class GraphService {
 
     /**
      * @param requestBody 
-     * @returns Graph Ok
+     * @returns any Ok
      * @throws ApiError
      */
     public static getNode(
 requestBody: QueryOptions,
-): CancelablePromise<Graph> {
+): CancelablePromise<(Graph | {
+message: string;
+})> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/graph/node',

@@ -5,6 +5,7 @@ import App from './App';
 import VisualizationContextProvider from './context/VisualizationContext';
 import { OpenAPI } from './api';
 import VisualizationLayoutContextProvider from './context/VisualizationLayoutContext';
+import VisualizationHistoryProvider from './context/VisualizationHistory';
 
 // HTTP Basic Auth is enforced on the backend
 OpenAPI.WITH_CREDENTIALS = true;
@@ -13,7 +14,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <VisualizationContextProvider>
       <VisualizationLayoutContextProvider>
-        <App />
+        <VisualizationHistoryProvider>
+          <App />
+        </VisualizationHistoryProvider>
       </VisualizationLayoutContextProvider>
     </VisualizationContextProvider>
   </React.StrictMode>,

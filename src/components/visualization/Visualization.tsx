@@ -11,6 +11,7 @@ import VisualizationStyle from './VisualizationStyle';
 import { assignEdgeWeights, colorNodes } from '../../cytoscape/operations';
 import { PossibleLayoutOptions, VisualizationLayoutContext } from '../../context/VisualizationLayoutContext';
 import HoverDetailsCard from './HoverDetailsCard';
+import { VisualizationHistory } from '../../context/VisualizationHistory';
 
 cytoscape.use(klay);
 cytoscape.use(cola);
@@ -22,7 +23,8 @@ interface Props {
 export default function Visualization({
   center,
 }: Props) {
-  const { graph, selectNode } = useContext(VisualizationContext);
+  const { graph } = useContext(VisualizationContext);
+  const { visitNode } = useContext(VisualizationHistory);
   const { layoutOptions, reloadedAt } = useContext(VisualizationLayoutContext);
   const [hoveredNode, setHoveredNode] = useState<cytoscape.NodeSingular | null>(null);
 
@@ -45,7 +47,7 @@ export default function Visualization({
     // Add event listener to select a node once it has been clicked
     cy.current.on('tap', 'node', (event) => {
       const node = event.target as cytoscape.NodeSingular;
-      selectNode(node);
+      visitNode(node);
     });
     cy.current.on('mouseover', 'node', (event) => {
       const node = event.target as cytoscape.NodeSingular;
@@ -54,7 +56,7 @@ export default function Visualization({
     cy.current.on('mouseout', 'node', () => {
       setHoveredNode(null);
     });
-  }, [cy, graph, selectNode]);
+  }, [cy, graph, visitNode]);
 
   /** Edge operations */
   useEffect(() => {

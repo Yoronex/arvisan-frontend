@@ -19,4 +19,5 @@ min?: number;
 max?: number;
 min?: number;
 };
+    selfEdges?: boolean;
 };

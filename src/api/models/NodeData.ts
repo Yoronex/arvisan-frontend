@@ -13,6 +13,10 @@ export type NodeData = {
      */
     label: string;
     /**
+     * ID of the parent node (if it exists)
+     */
+    parent?: string;
+    /**
      * Custom properties of node
      */
     properties: {

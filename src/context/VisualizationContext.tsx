@@ -13,6 +13,7 @@ interface IVisualizationSettings {
   maxDependents: number;
   showInternalRelationships: boolean;
   showExternalRelationships: boolean;
+  selfEdges: boolean;
 }
 
 interface IVisualizationContext {
@@ -21,6 +22,7 @@ interface IVisualizationContext {
   graph: Graph;
   loading: boolean;
 
+  selectedNode: cytoscape.NodeSingular | undefined;
   selectNode: (n: cytoscape.NodeSingular) => void;
   returnToOverview: () => void;
 }
@@ -36,6 +38,7 @@ const defaultSettings: IVisualizationSettings = {
   maxDependents: Number.POSITIVE_INFINITY,
   showInternalRelationships: true,
   showExternalRelationships: true,
+  selfEdges: true,
 };
 
 const defaultGraph: Graph = { name: '', nodes: [], edges: [] };
@@ -45,6 +48,7 @@ export const VisualizationContext = createContext<IVisualizationContext>({
   graph: defaultGraph,
   updateSettings: () => {},
   loading: true,
+  selectedNode: undefined,
   selectNode: () => {},
   returnToOverview: () => {},
 });
@@ -90,6 +94,7 @@ export default function VisualizationContextProvider({ children }: Props) {
         max: settings.maxDependents === Number.POSITIVE_INFINITY
           ? undefined : settings.maxDependents,
       },
+      selfEdges: settings.selfEdges,
     });
 
     setGraph(g);
@@ -131,6 +136,7 @@ export default function VisualizationContextProvider({ children }: Props) {
     graph,
     updateSettings,
     loading,
+    selectedNode,
     selectNode,
     returnToOverview,
   }), [settings, graph, loading]);
