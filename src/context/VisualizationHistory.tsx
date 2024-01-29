@@ -1,34 +1,38 @@
-import {
+import React, {
   createContext, PropsWithChildren, useContext, useMemo, useState,
 } from 'react';
-import cytoscape from 'cytoscape';
-import { VisualizationContext } from './VisualizationContext';
+import { NodeData } from '../api';
+import { DomainContext } from './DomainContext';
 
 interface IVisualizationHistory {
   back: () => void;
   canGoBack: () => boolean;
-  visitNode: (node: cytoscape.NodeSingular) => void;
+  visitNode: (node: NodeData, domain: NodeData) => void;
+  currentNode: NodeData | undefined;
 }
 
 export const VisualizationHistory = createContext<IVisualizationHistory>({
   back: () => {},
   canGoBack: () => false,
   visitNode: () => {},
+  currentNode: undefined,
 });
 
 export default function VisualizationHistoryProvider({ children }: PropsWithChildren) {
-  const [history, setHistory] = useState<cytoscape.NodeSingular[]>([]);
+  const [history, setHistory] = useState<NodeData[]>([]);
+  const [currentNode, setCurrentNode] = React.useState<NodeData | undefined>();
 
-  const { selectNode, selectedNode } = useContext(VisualizationContext);
+  const { updateDomain } = useContext(DomainContext);
 
-  const visitNode = (node: cytoscape.NodeSingular) => {
-    if (selectedNode) {
+  const visitNode = (node: NodeData, domain: NodeData) => {
+    if (currentNode) {
       const historyCopy = [...history];
-      historyCopy.unshift(selectedNode);
+      historyCopy.unshift(currentNode);
       setHistory(historyCopy);
     }
 
-    selectNode(node);
+    updateDomain(domain);
+    setCurrentNode(node);
   };
 
   const canGoBack = () => history.length > 0;
@@ -39,14 +43,15 @@ export default function VisualizationHistoryProvider({ children }: PropsWithChil
     const node = historyCopy.shift();
     setHistory(historyCopy);
 
-    selectNode(node!);
+    setCurrentNode(node);
   };
 
-  const historyContext = useMemo(() => ({
+  const historyContext = useMemo((): IVisualizationHistory => ({
     visitNode,
     canGoBack,
     back,
-  }), [back, canGoBack, visitNode]);
+    currentNode,
+  }), [back, canGoBack, visitNode, currentNode]);
 
   return (
     <VisualizationHistory.Provider value={historyContext}>

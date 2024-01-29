@@ -3,6 +3,7 @@ import {
 } from 'react-bootstrap';
 import { ReactNode } from 'react';
 import VisualizationSettings from '../toolbox/VisualizationSettings';
+import GraphNavigator from '../toolbox/navigator/GraphNavigator';
 
 interface Props {
   cardWidth: string | number;
@@ -16,7 +17,7 @@ interface TabItem {
 
 export default function ToolSideBar({ cardWidth }: Props) {
   const tabs: TabItem[] = [
-    { title: 'Navigation', key: 'navigation', children: <p className="fst-italic">Nothing here yet</p> },
+    { title: 'Navigation', key: 'navigation', children: <GraphNavigator /> },
     { title: 'Visualization', key: 'visualization', children: <VisualizationSettings /> },
     { title: 'Analysis', key: 'analysis', children: <p className="fst-italic">Nothing here yet</p> },
   ];

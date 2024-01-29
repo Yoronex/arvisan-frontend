@@ -1,6 +1,6 @@
 import React, { createContext, PropsWithChildren } from 'react';
-import cytoscape from 'cytoscape';
 import { Graph, GraphService } from '../api';
+import { VisualizationHistory } from './VisualizationHistory';
 
 interface IVisualizationSettings {
   layerDepth: number,
@@ -21,10 +21,6 @@ interface IVisualizationContext {
   updateSettings: (settings: IVisualizationSettings) => void;
   graph: Graph;
   loading: boolean;
-
-  selectedNode: cytoscape.NodeSingular | undefined;
-  selectNode: (n: cytoscape.NodeSingular) => void;
-  returnToOverview: () => void;
 }
 
 const defaultSettings: IVisualizationSettings = {
@@ -48,9 +44,6 @@ export const VisualizationContext = createContext<IVisualizationContext>({
   graph: defaultGraph,
   updateSettings: () => {},
   loading: true,
-  selectedNode: undefined,
-  selectNode: () => {},
-  returnToOverview: () => {},
 });
 
 interface Props extends PropsWithChildren {}
@@ -59,7 +52,8 @@ export default function VisualizationContextProvider({ children }: Props) {
   const [settings, setSettings] = React.useState(defaultSettings);
   const [graph, setGraph] = React.useState(defaultGraph);
   const [loading, setLoading] = React.useState(true);
-  const [selectedNode, setSelectedNode] = React.useState<cytoscape.NodeSingular | undefined>();
+
+  const { currentNode } = React.useContext(VisualizationHistory);
 
   const getDomainOverview = async () => {
     setLoading(true);
@@ -70,14 +64,14 @@ export default function VisualizationContextProvider({ children }: Props) {
   };
 
   const getSelectedNodeGraph = async () => {
-    if (!selectedNode) return;
+    if (!currentNode) return;
     setLoading(true);
 
     const onlyInternalRelations = !settings.showExternalRelationships;
     const onlyExternalRelations = !settings.showInternalRelationships;
 
     const g = await GraphService.getNode({
-      id: selectedNode.id(),
+      id: currentNode.id,
       layerDepth: settings.layerDepth,
       dependencyDepth: settings.dependencyLength,
       onlyInternalRelations,
@@ -110,25 +104,15 @@ export default function VisualizationContextProvider({ children }: Props) {
 
   // Reload graph when selecting a node
   React.useEffect(() => {
-    if (!selectedNode) return;
+    if (!currentNode) return;
 
     getSelectedNodeGraph()
       .catch((e) => console.error(e))
       .finally(() => setLoading(false));
-  }, [selectedNode, settings]);
+  }, [currentNode, settings]);
 
   const updateSettings = (newSettings: IVisualizationSettings) => {
     setSettings(newSettings);
-  };
-
-  const selectNode = (node: cytoscape.NodeSingular) => {
-    setSelectedNode(node);
-  };
-
-  const returnToOverview = () => {
-    setSelectedNode(undefined);
-    getDomainOverview()
-      .catch((e) => console.error(e));
   };
 
   const visualizationContext = React.useMemo((): IVisualizationContext => ({
@@ -136,9 +120,6 @@ export default function VisualizationContextProvider({ children }: Props) {
     graph,
     updateSettings,
     loading,
-    selectedNode,
-    selectNode,
-    returnToOverview,
   }), [settings, graph, loading]);
 
   return (

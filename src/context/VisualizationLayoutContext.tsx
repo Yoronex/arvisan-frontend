@@ -58,7 +58,7 @@ export default function VisualizationLayoutContextProvider({ children }: PropsWi
         setLayoutOptions({
           name: 'cola',
           nodeDimensionsIncludeLabels: true,
-        });
+        } as ColaLayoutOptions);
         break;
       case VisualizationAlgorithm.KLAY:
         setLayoutOptions({

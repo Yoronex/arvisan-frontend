@@ -3,7 +3,7 @@ import VisualizationWrapper from './components/visualization/VisualizationWrappe
 import ReturnButton from './components/navigation/ReturnButton';
 import ToolSideBar from './components/navigation/ToolSideBar';
 
-const SIDEBAR_WIDTH = '18rem';
+const SIDEBAR_WIDTH = '23rem';
 
 function App() {
   return (
