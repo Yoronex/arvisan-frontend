@@ -1,8 +1,19 @@
 import {
-  Container, Nav, Navbar,
+  Container, Nav, Navbar, NavDropdown,
 } from 'react-bootstrap';
+import { useContext, useState } from 'react';
+import { DomainContext } from '../../context/DomainContext';
+import DomainSelectorOptions from '../toolbox/navigator/DomainSelectorOptions';
 
 export default function MainMenu() {
+  const [searchKey, setSearchKey] = useState('');
+  const { currentDomain } = useContext(DomainContext);
+
+  const handleToggle = (nextShow: boolean) => {
+    if (nextShow) return;
+    setSearchKey('');
+  };
+
   return (
     <div className="position-absolute p-3 w-100 z-2">
       <Navbar expand="lg" className="w-100 bg-light rounded-3 shadow">
@@ -11,19 +22,19 @@ export default function MainMenu() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              {/* <Nav.Link>Overview</Nav.Link> */}
-              {/* <Nav.Link href="#link">Link</Nav.Link> */}
-              {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown"> */}
-              {/*  <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item> */}
-              {/*  <NavDropdown.Item href="#action/3.2"> */}
-              {/*    Another action */}
-              {/*  </NavDropdown.Item> */}
-              {/*  <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item> */}
-              {/*  <NavDropdown.Divider /> */}
-              {/*  <NavDropdown.Item href="#action/3.4"> */}
-              {/*    Separated link */}
-              {/*  </NavDropdown.Item> */}
-              {/* </NavDropdown> */}
+              <NavDropdown
+                title={currentDomain ? currentDomain.label : 'Choose domain'}
+                active={currentDomain != null}
+                onToggle={handleToggle}
+              >
+                <div style={{ maxHeight: '50dvh' }} className="overflow-y-scroll overflow-x-hidden">
+                  <DomainSelectorOptions
+                    searchKey={searchKey}
+                    setSearchKey={setSearchKey}
+                    DropdownComponent={NavDropdown}
+                  />
+                </div>
+              </NavDropdown>
             </Nav>
           </Navbar.Collapse>
         </Container>

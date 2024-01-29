@@ -13,6 +13,7 @@ import { PossibleLayoutOptions, VisualizationLayoutContext } from '../../context
 import HoverDetailsCard from './HoverDetailsCard';
 import { VisualizationHistory } from '../../context/VisualizationHistory';
 import { NodeData } from '../../api';
+import { NodeHighlightContext } from '../../context/NodeHighlightContext';
 
 cytoscape.use(klay);
 cytoscape.use(cola);
@@ -26,6 +27,7 @@ export default function Visualization({
 }: Props) {
   const { graph } = useContext(VisualizationContext);
   const { visitNode } = useContext(VisualizationHistory);
+  const { node: highlightedNode, finish: finishHighlightNode } = useContext(NodeHighlightContext);
   const { layoutOptions, reloadedAt } = useContext(VisualizationLayoutContext);
   const [hoveredNode, setHoveredNode] = useState<cytoscape.NodeSingular | null>(null);
 
@@ -72,6 +74,20 @@ export default function Visualization({
     if (!cy.current) return;
     cy.current.edges().forEach(assignEdgeWeights);
   }, [cy, graph]);
+
+  useEffect(() => {
+    if (!cy.current) return;
+    if (!highlightedNode) return;
+    const nodes = cy.current.nodes(`[id = '${highlightedNode.id}']`);
+    cy.current.animate;
+    cy.current.animate({
+      fit: {
+        eles: nodes,
+        padding: Math.min(window.innerHeight / 3, window.innerWidth / 3),
+      },
+    });
+    finishHighlightNode();
+  }, [cy, finishHighlightNode, highlightedNode]);
 
   return (
     <>

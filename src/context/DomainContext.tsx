@@ -28,7 +28,12 @@ export default function DomainContextProvider({ children }: PropsWithChildren) {
         .map((n) => ({
           ...n.data,
           label: n.data.label.substring(2),
-        }))))
+        }))
+        .sort((a, b) => {
+          if (a.label < b.label) return -1;
+          if (a.label > b.label) return 1;
+          return 0;
+        })))
       .catch((e) => console.error(e))
       .finally(() => setLoading(false));
   }, []);
