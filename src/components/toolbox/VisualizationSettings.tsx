@@ -1,32 +1,18 @@
-import {
-  Card, CardBody, CardHeader, CardTitle,
-} from 'react-bootstrap';
 import GraphInternalExternalRelationshipsSettings from './settings/GraphInternalExternalRelationshipsSettings';
 import GraphDependantsAndDependenciesSettings from './settings/GraphDependantsAndDependenciesSettings';
 import GraphDepthAndLengthSettings from './settings/GraphDepthAndLengthSettings';
 import GraphLayoutAlgorithm from './settings/GraphLayoutAlgorithm';
 
-interface Props {
-  cardWidth: string | number;
-}
-
-export default function VisualizationSettings({ cardWidth }: Props) {
+export default function VisualizationSettings() {
   return (
-    <Card className="h-100 shadow overflow-y-auto" style={{ width: cardWidth }}>
-      <CardHeader>
-        <CardTitle>
-          Settings
-        </CardTitle>
-      </CardHeader>
-      <CardBody>
-        <GraphDepthAndLengthSettings />
-        <hr />
-        <GraphDependantsAndDependenciesSettings />
-        <hr />
-        <GraphInternalExternalRelationshipsSettings />
-        <hr />
-        <GraphLayoutAlgorithm />
-      </CardBody>
-    </Card>
+    <>
+      <GraphDepthAndLengthSettings />
+      <hr />
+      <GraphDependantsAndDependenciesSettings />
+      <hr />
+      <GraphInternalExternalRelationshipsSettings />
+      <hr />
+      <GraphLayoutAlgorithm />
+    </>
   );
 }

@@ -97,7 +97,7 @@ export default function VisualizationContextProvider({ children }: Props) {
       selfEdges: settings.selfEdges,
     });
 
-    setGraph(g);
+    setGraph(g as Graph);
     setLoading(false);
   };
 

@@ -1,7 +1,7 @@
-import MainMenu from './components/toolbox/MainMenu';
-import VisualizationSettings from './components/toolbox/VisualizationSettings';
+import MainMenu from './components/navigation/MainMenu';
 import VisualizationWrapper from './components/visualization/VisualizationWrapper';
-import ReturnButton from './components/toolbox/ReturnButton';
+import ReturnButton from './components/navigation/ReturnButton';
+import ToolSideBar from './components/navigation/ToolSideBar';
 
 const SIDEBAR_WIDTH = '18rem';
 
@@ -11,7 +11,7 @@ function App() {
       <div className="" style={{ }}>
         <MainMenu />
         <div className="position-absolute vh-100 px-3 pb-3 z-2 d-flex flex-row gap-3" style={{ paddingTop: '6rem' }}>
-          <VisualizationSettings cardWidth={SIDEBAR_WIDTH} />
+          <ToolSideBar cardWidth={SIDEBAR_WIDTH} />
           <ReturnButton />
         </div>
       </div>

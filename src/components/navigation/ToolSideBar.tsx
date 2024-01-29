@@ -1,0 +1,48 @@
+import {
+  Card, CardBody, CardHeader, Nav, Tab,
+} from 'react-bootstrap';
+import { ReactNode } from 'react';
+import VisualizationSettings from '../toolbox/VisualizationSettings';
+
+interface Props {
+  cardWidth: string | number;
+}
+
+interface TabItem {
+  title: string;
+  key: string;
+  children: ReactNode;
+}
+
+export default function ToolSideBar({ cardWidth }: Props) {
+  const tabs: TabItem[] = [
+    { title: 'Navigation', key: 'navigation', children: <p className="fst-italic">Nothing here yet</p> },
+    { title: 'Visualization', key: 'visualization', children: <VisualizationSettings /> },
+    { title: 'Analysis', key: 'analysis', children: <p className="fst-italic">Nothing here yet</p> },
+  ];
+
+  return (
+    <Card className="h-100 shadow overflow-y-auto" style={{ width: cardWidth }}>
+      <Tab.Container>
+        <CardHeader className="">
+          <Nav variant="tabs">
+            {tabs.map((tab) => (
+              <Nav.Item key={tab.key}>
+                <Nav.Link eventKey={tab.key}>{tab.title}</Nav.Link>
+              </Nav.Item>
+            ))}
+          </Nav>
+        </CardHeader>
+        <CardBody>
+          <Tab.Content>
+            {tabs.map((tab) => (
+              <Tab.Pane key={tab.key} eventKey={tab.key}>
+                {tab.children}
+              </Tab.Pane>
+            ))}
+          </Tab.Content>
+        </CardBody>
+      </Tab.Container>
+    </Card>
+  );
+}
