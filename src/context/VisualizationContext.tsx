@@ -53,7 +53,7 @@ export default function VisualizationContextProvider({ children }: Props) {
   const [graph, setGraph] = React.useState(defaultGraph);
   const [loading, setLoading] = React.useState(true);
 
-  const { currentNode } = React.useContext(VisualizationHistory);
+  const { currentNodeId } = React.useContext(VisualizationHistory);
 
   const getDomainOverview = async () => {
     setLoading(true);
@@ -61,38 +61,6 @@ export default function VisualizationContextProvider({ children }: Props) {
     setGraph(g);
     setLoading(false);
     return g;
-  };
-
-  const getSelectedNodeGraph = async () => {
-    if (!currentNode) return;
-    setLoading(true);
-
-    const onlyInternalRelations = !settings.showExternalRelationships;
-    const onlyExternalRelations = !settings.showInternalRelationships;
-
-    const g = await GraphService.getNode({
-      id: currentNode.id,
-      layerDepth: settings.layerDepth,
-      dependencyDepth: settings.dependencyLength,
-      onlyInternalRelations,
-      onlyExternalRelations,
-      showDependencies: settings.showDependencies,
-      showDependents: settings.showDependents,
-      dependencyRange: {
-        min: settings.minDependencies || undefined,
-        max: settings.maxDependencies === Number.POSITIVE_INFINITY
-          ? undefined : settings.maxDependencies,
-      },
-      dependentRange: {
-        min: settings.minDependents || undefined,
-        max: settings.maxDependents === Number.POSITIVE_INFINITY
-          ? undefined : settings.maxDependents,
-      },
-      selfEdges: settings.selfEdges,
-    });
-
-    setGraph(g as Graph);
-    setLoading(false);
   };
 
   // Fetch initial graph
@@ -104,12 +72,44 @@ export default function VisualizationContextProvider({ children }: Props) {
 
   // Reload graph when selecting a node
   React.useEffect(() => {
-    if (!currentNode) return;
+    const getSelectedNodeGraph = async () => {
+      if (!currentNodeId) return;
+      setLoading(true);
+
+      const onlyInternalRelations = !settings.showExternalRelationships;
+      const onlyExternalRelations = !settings.showInternalRelationships;
+
+      const g = await GraphService.getNode({
+        id: currentNodeId,
+        layerDepth: settings.layerDepth,
+        dependencyDepth: settings.dependencyLength,
+        onlyInternalRelations,
+        onlyExternalRelations,
+        showDependencies: settings.showDependencies,
+        showDependents: settings.showDependents,
+        dependencyRange: {
+          min: settings.minDependencies || undefined,
+          max: settings.maxDependencies === Number.POSITIVE_INFINITY
+            ? undefined : settings.maxDependencies,
+        },
+        dependentRange: {
+          min: settings.minDependents || undefined,
+          max: settings.maxDependents === Number.POSITIVE_INFINITY
+            ? undefined : settings.maxDependents,
+        },
+        selfEdges: settings.selfEdges,
+      });
+
+      setGraph(g as Graph);
+      setLoading(false);
+    };
+
+    if (!currentNodeId) return;
 
     getSelectedNodeGraph()
       .catch((e) => console.error(e))
       .finally(() => setLoading(false));
-  }, [currentNode, settings]);
+  }, [currentNodeId, settings]);
 
   const updateSettings = (newSettings: IVisualizationSettings) => {
     setSettings(newSettings);

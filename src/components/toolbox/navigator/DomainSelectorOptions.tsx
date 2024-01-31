@@ -8,6 +8,7 @@ import { DomainContext } from '../../../context/DomainContext';
 import { VisualizationHistory } from '../../../context/VisualizationHistory';
 import HighlightSearch from './HighlightSearch';
 import { searchNodes } from '../../../helpers/filter';
+import { NodeData } from '../../../api';
 
 interface Props {
   searchKey: string;
@@ -18,10 +19,15 @@ interface Props {
 export default function DomainSelectorOptions({
   searchKey, setSearchKey, DropdownComponent,
 }: Props) {
-  const { domains, loading } = useContext(DomainContext);
-  const { currentNode, visitNode } = useContext(VisualizationHistory);
+  const { domains, loading, updateDomain } = useContext(DomainContext);
+  const { currentNodeId, visitNode } = useContext(VisualizationHistory);
 
   const filteredDomains = searchNodes(domains, searchKey);
+
+  const onSelect = (data: NodeData) => {
+    visitNode({ type: 'backend', data, timestamp: new Date() });
+    updateDomain(data);
+  };
 
   const renderOptions = (): ReactNode | ReactNode[] => {
     if (loading) return <Spinner />;
@@ -29,8 +35,8 @@ export default function DomainSelectorOptions({
     return filteredDomains.map((d) => (
       <DropdownComponent.Item
         key={d.id}
-        onClick={() => visitNode(d, d)}
-        active={d.id === currentNode?.id}
+        onClick={() => onSelect(d)}
+        active={d.id === currentNodeId}
       >
         <HighlightSearch label={d.label} searchKey={searchKey} />
       </DropdownComponent.Item>

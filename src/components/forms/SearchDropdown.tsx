@@ -56,12 +56,15 @@ export default function SearchDropdown({ options, onSelect, label }: Props) {
               setSearchKey(event.target.value);
             }}
             ref={textBoxRef}
+            placeholder={label}
           />
           <button
             type="button"
             aria-label={`Clear ${label.toLowerCase()}`}
-            className="border-0 position-absolute top-50 bottom-50 end-0 me-2 d-flex justify-content-center align-items-center text-black-50"
-            style={{ width: '1rem', height: '1rem', backgroundColor: 'rgba(0, 0, 0, 0)' }}
+            className="border-0 position-absolute top-50 translate-middle-y end-0 me-2 d-flex justify-content-center align-items-center text-black-50"
+            style={{
+              width: '1.25rem', height: '1.25rem', backgroundColor: 'rgba(0, 0, 0, 0)', fontSize: '1.25rem',
+            }}
             onClick={() => {
               setSearchKey('');
               textBoxRef.current?.focus();

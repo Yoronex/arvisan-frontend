@@ -12,7 +12,7 @@ export default function ReturnButton() {
       <Button
         title="Go back to previous node"
         disabled={!canGoBack()}
-        onClick={back}
+        onClick={() => back()}
       >
         <FontAwesomeIcon icon={faArrowLeft} />
       </Button>

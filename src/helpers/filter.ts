@@ -3,7 +3,6 @@ export interface Option {
   id: string | number;
 }
 
-// eslint-disable-next-line import/prefer-default-export
 export function searchNodes<T extends Option>(nodes: T[], searchKey: string): T[] {
   return nodes.filter((n) => {
     const nameSpaces = n.label.replaceAll('_', ' ');

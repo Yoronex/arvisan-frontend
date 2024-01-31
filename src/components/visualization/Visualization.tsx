@@ -12,7 +12,6 @@ import { assignEdgeWeights, colorNodes } from '../../cytoscape/operations';
 import { PossibleLayoutOptions, VisualizationLayoutContext } from '../../context/VisualizationLayoutContext';
 import HoverDetailsCard from './HoverDetailsCard';
 import { VisualizationHistory } from '../../context/VisualizationHistory';
-import { NodeData } from '../../api';
 import { NodeHighlightContext } from '../../context/NodeHighlightContext';
 
 cytoscape.use(klay);
@@ -33,12 +32,6 @@ export default function Visualization({
 
   const cy = useRef<cytoscape.Core>();
 
-  const getDomain = (node: cytoscape.NodeSingular): NodeData => {
-    if (node.isOrphan()) return node.data() as NodeData;
-    const parent = node.parent();
-    return getDomain(parent.first());
-  };
-
   /** Graph operations */
   useEffect(() => {
     if (!cy.current) return;
@@ -56,9 +49,11 @@ export default function Visualization({
     // Add event listener to select a node once it has been clicked
     cy.current.on('tap', 'node', (event) => {
       const node = event.target as cytoscape.NodeSingular;
-      const nodeData = node.data() as NodeData;
-      const domain = getDomain(node);
-      visitNode(nodeData, domain);
+      visitNode({
+        type: 'cytoscape',
+        data: node,
+        timestamp: new Date(),
+      });
     });
     cy.current.on('mouseover', 'node', (event) => {
       const node = event.target as cytoscape.NodeSingular;
@@ -79,7 +74,6 @@ export default function Visualization({
     if (!cy.current) return;
     if (!highlightedNode) return;
     const nodes = cy.current.nodes(`[id = '${highlightedNode.id}']`);
-    cy.current.animate;
     cy.current.animate({
       fit: {
         eles: nodes,
