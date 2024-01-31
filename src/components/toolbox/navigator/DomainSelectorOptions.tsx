@@ -1,8 +1,9 @@
 import {
   Dropdown, Form, InputGroup, NavDropdown, Spinner,
 } from 'react-bootstrap';
-import { Search } from 'react-bootstrap-icons';
 import { ReactNode, useContext } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { DomainContext } from '../../../context/DomainContext';
 import { VisualizationHistory } from '../../../context/VisualizationHistory';
 import HighlightSearch from './HighlightSearch';
@@ -43,7 +44,7 @@ export default function DomainSelectorOptions({
       </DropdownComponent.Header>
       <DropdownComponent.Header>
         <InputGroup>
-          <InputGroup.Text><Search /></InputGroup.Text>
+          <InputGroup.Text><FontAwesomeIcon icon={faMagnifyingGlass} /></InputGroup.Text>
           <Form.Control
             value={searchKey}
             onChange={(event) => setSearchKey(event.target.value)}

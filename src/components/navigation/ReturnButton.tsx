@@ -1,6 +1,7 @@
 import { Button } from 'react-bootstrap';
-import { ArrowLeft } from 'react-bootstrap-icons';
 import { useContext } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { VisualizationHistory } from '../../context/VisualizationHistory';
 
 export default function ReturnButton() {
@@ -13,7 +14,7 @@ export default function ReturnButton() {
         disabled={!canGoBack()}
         onClick={back}
       >
-        <ArrowLeft className="mb-1" />
+        <FontAwesomeIcon icon={faArrowLeft} />
       </Button>
     </div>
   );
