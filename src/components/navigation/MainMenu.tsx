@@ -1,13 +1,17 @@
 import {
-  Container, Nav, Navbar, NavDropdown,
+  Container, Form, Nav, Navbar, NavDropdown,
 } from 'react-bootstrap';
 import { useContext, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { DomainContext } from '../../context/DomainContext';
 import DomainSelectorOptions from '../toolbox/navigator/DomainSelectorOptions';
+import { VisualizationContext } from '../../context/VisualizationContext';
 
 export default function MainMenu() {
   const [searchKey, setSearchKey] = useState('');
   const { currentDomain } = useContext(DomainContext);
+  const { enableMovingNodes, setEnableMovingNodes } = useContext(VisualizationContext);
 
   const handleToggle = (nextShow: boolean) => {
     if (nextShow) return;
@@ -34,6 +38,19 @@ export default function MainMenu() {
                     DropdownComponent={NavDropdown}
                   />
                 </div>
+              </NavDropdown>
+            </Nav>
+            <Nav>
+              <NavDropdown title={<FontAwesomeIcon icon={faGear} title="Settings" />}>
+                <Form className="dropdown-item-text text-nowrap">
+                  <Form.Check
+                    type="switch"
+                    label="Enable moving nodes"
+                    id="enable-moving-nodes"
+                    checked={enableMovingNodes}
+                    onChange={() => setEnableMovingNodes(!enableMovingNodes)}
+                  />
+                </Form>
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>

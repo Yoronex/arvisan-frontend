@@ -13,8 +13,8 @@ export default function DomainSelector() {
   };
 
   return (
-    <Dropdown onToggle={handleToggle} title="Choose domain...">
-      <Dropdown.Toggle>{currentDomain ? currentDomain.label : 'Choose domain...'}</Dropdown.Toggle>
+    <Dropdown onToggle={handleToggle} title="Choose domain..." className="w-100">
+      <Dropdown.Toggle className="w-100">{currentDomain ? currentDomain.label : 'Choose domain...'}</Dropdown.Toggle>
       <Dropdown.Menu show className="overflow-x-hidden overflow-y-scroll" style={{ height: '20rem' }}>
         <DomainSelectorOptions
           searchKey={searchKey}

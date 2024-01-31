@@ -24,7 +24,7 @@ interface Props {
 export default function Visualization({
   center,
 }: Props) {
-  const { graph } = useContext(VisualizationContext);
+  const { graph, enableMovingNodes } = useContext(VisualizationContext);
   const { visitNode } = useContext(VisualizationHistory);
   const { node: highlightedNode, finish: finishHighlightNode } = useContext(NodeHighlightContext);
   const { layoutOptions, reloadedAt } = useContext(VisualizationLayoutContext);
@@ -77,7 +77,7 @@ export default function Visualization({
     cy.current.animate({
       fit: {
         eles: nodes,
-        padding: Math.min(window.innerHeight / 3, window.innerWidth / 3),
+        padding: Math.round(Math.min(window.innerHeight / 2.5, window.innerWidth / 2.5)),
       },
     });
     finishHighlightNode();
@@ -95,6 +95,9 @@ export default function Visualization({
           cy.current = c;
         }}
         wheelSensitivity={0.1}
+        autoungrabify={!enableMovingNodes}
+        boxSelectionEnabled
+        userPanningEnabled
       />
       <HoverDetailsCard node={hoveredNode} />
     </>

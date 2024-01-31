@@ -21,6 +21,9 @@ interface IVisualizationContext {
   updateSettings: (settings: IVisualizationSettings) => void;
   graph: Graph;
   loading: boolean;
+
+  enableMovingNodes: boolean;
+  setEnableMovingNodes: (enable: boolean) => void;
 }
 
 const defaultSettings: IVisualizationSettings = {
@@ -44,6 +47,8 @@ export const VisualizationContext = createContext<IVisualizationContext>({
   graph: defaultGraph,
   updateSettings: () => {},
   loading: true,
+  enableMovingNodes: false,
+  setEnableMovingNodes: () => {},
 });
 
 interface Props extends PropsWithChildren {}
@@ -52,6 +57,7 @@ export default function VisualizationContextProvider({ children }: Props) {
   const [settings, setSettings] = React.useState(defaultSettings);
   const [graph, setGraph] = React.useState(defaultGraph);
   const [loading, setLoading] = React.useState(true);
+  const [enableMovingNodes, setEnableMovingNodes] = React.useState(false);
 
   const { currentNodeId } = React.useContext(VisualizationHistory);
 
@@ -120,7 +126,9 @@ export default function VisualizationContextProvider({ children }: Props) {
     graph,
     updateSettings,
     loading,
-  }), [settings, graph, loading]);
+    enableMovingNodes,
+    setEnableMovingNodes,
+  }), [settings, graph, loading, enableMovingNodes]);
 
   return (
     <VisualizationContext.Provider value={visualizationContext}>

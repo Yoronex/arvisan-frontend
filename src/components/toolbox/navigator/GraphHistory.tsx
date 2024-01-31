@@ -23,8 +23,6 @@ export default function GraphHistory() {
     );
   };
 
-  console.log(history.map((h) => (h.type === 'cytoscape' ? h.data.data('label') as string : h.data.label)), historyStackPosition);
-
   return (
     <div>
       <h4>History</h4>
