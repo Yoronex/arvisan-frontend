@@ -57,15 +57,28 @@ export default function WelcomeModal() {
     );
   };
 
+  const { shortHash, tags, date: rawDate } = LAST_COMMIT_INFO;
+  const date = new Date(rawDate);
+
   return (
     <>
       <NavLink onClick={() => setShow(true)}>Overview</NavLink>
 
       <Modal show={show} size="xl" onHide={handleClose}>
         <Modal.Header closeButton={currentNode != null}>
-          <Modal.Title>
-            Welcome to the Vopak Architecture Visualizer & Analyzer
-          </Modal.Title>
+          <div>
+            <Modal.Title>
+              Welcome to the Vopak Architecture Visualizer & Analyzer
+            </Modal.Title>
+            <p className="mb-0">
+              {shortHash}
+              {tags.length > 0 ? `-${tags.join('-')}` : ''}
+              {' '}
+              (
+              {date.toLocaleString()}
+              )
+            </p>
+          </div>
         </Modal.Header>
         <Modal.Body>
           <p>
