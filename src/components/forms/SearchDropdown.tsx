@@ -61,9 +61,9 @@ export default function SearchDropdown({ options, onSelect, label }: Props) {
           <button
             type="button"
             aria-label={`Clear ${label.toLowerCase()}`}
-            className="border-0 position-absolute top-50 translate-middle-y end-0 me-2 d-flex justify-content-center align-items-center text-black-50"
+            className="border-0 position-absolute top-50 translate-middle-y end-0 me-2 d-flex justify-content-center align-items-center bg-transparent text-secondary"
             style={{
-              width: '1.25rem', height: '1.25rem', backgroundColor: 'rgba(0, 0, 0, 0)', fontSize: '1.25rem',
+              width: '1.25rem', height: '1.25rem', fontSize: '1.25rem',
             }}
             onClick={() => {
               setSearchKey('');

@@ -6,8 +6,13 @@ import CurrentNodeStack from './CurrentNodeStack';
 export default function GraphNavigator() {
   return (
     <div className="d-flex flex-column gap-3">
-      <DomainSelector />
-      <NodeFinder />
+      <div>
+        <h5>Domain & Node Selectors</h5>
+        <div className="d-flex flex-column gap-3">
+          <DomainSelector />
+          <NodeFinder />
+        </div>
+      </div>
       <hr />
       <CurrentNodeStack />
       <hr />

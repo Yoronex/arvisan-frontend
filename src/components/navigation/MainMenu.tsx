@@ -7,6 +7,7 @@ import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { DomainContext } from '../../context/DomainContext';
 import DomainSelectorOptions from '../toolbox/navigator/DomainSelectorOptions';
 import { VisualizationContext } from '../../context/VisualizationContext';
+import WelcomeModal from '../WelcomeModal';
 
 export default function MainMenu() {
   const [searchKey, setSearchKey] = useState('');
@@ -26,6 +27,7 @@ export default function MainMenu() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
+              <WelcomeModal />
               <NavDropdown
                 title={currentDomain ? currentDomain.label : 'Choose domain'}
                 active={currentDomain != null}

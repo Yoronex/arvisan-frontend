@@ -61,21 +61,6 @@ export default function VisualizationContextProvider({ children }: Props) {
 
   const { currentNodeId } = React.useContext(VisualizationHistory);
 
-  const getDomainOverview = async () => {
-    setLoading(true);
-    const g = await GraphService.getAllDomains();
-    setGraph(g);
-    setLoading(false);
-    return g;
-  };
-
-  // Fetch initial graph
-  React.useEffect(() => {
-    getDomainOverview()
-      .catch((e) => console.error(e))
-      .finally(() => setLoading(false));
-  }, []);
-
   // Reload graph when selecting a node
   React.useEffect(() => {
     const getSelectedNodeGraph = async () => {
