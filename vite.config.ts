@@ -39,6 +39,7 @@ export default defineConfig({
         secure: false,
       },
     },
+    host: true,
   },
   define: {
     LAST_COMMIT_INFO: JSON.stringify(commitInfo),

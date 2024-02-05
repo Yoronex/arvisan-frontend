@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Domain } from '../models/Domain';
 import type { Graph } from '../models/Graph';
 import type { QueryOptions } from '../models/QueryOptions';
 
@@ -12,10 +13,10 @@ import { request as __request } from '../core/request';
 export class GraphService {
 
     /**
-     * @returns Graph Ok
+     * @returns Domain Ok
      * @throws ApiError
      */
-    public static getAllDomains(): CancelablePromise<Graph> {
+    public static getDomains(): CancelablePromise<Array<Domain>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/graph/domains',

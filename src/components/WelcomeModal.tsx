@@ -47,7 +47,7 @@ export default function WelcomeModal() {
                 <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.label}</button></td>
                 <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.nrDependencies}</button></td>
                 <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.nrDependents}</button></td>
-                <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.nrSelfEdges}</button></td>
+                <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.nrInternalDependencies}</button></td>
                 <td><Button onClick={click} size="sm" title={`Select ${d.label}`}>Select</Button></td>
               </tr>
             );
