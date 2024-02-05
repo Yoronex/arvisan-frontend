@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { VisualizationHistory } from '../context/VisualizationHistory';
 import { DomainContext } from '../context/DomainContext';
+import BackendVersion from './BackendVersion';
 
 export default function WelcomeModal() {
   const { currentNode, visitNode } = useContext(VisualizationHistory);
@@ -57,8 +58,11 @@ export default function WelcomeModal() {
     );
   };
 
-  const { shortHash, tags, date: rawDate } = LAST_COMMIT_INFO;
-  const date = new Date(rawDate);
+  const getFrontendVersion = () => {
+    const { shortHash, tags, date: rawDate } = LAST_COMMIT_INFO;
+    const date = new Date(rawDate);
+    return `Frontend: ${tags.length > 0 ? tags.join('-') : 'dev'}-${shortHash} (${date.toLocaleString()})`;
+  };
 
   return (
     <>
@@ -70,14 +74,8 @@ export default function WelcomeModal() {
             <Modal.Title>
               Welcome to the Vopak Architecture Visualizer & Analyzer
             </Modal.Title>
-            <p className="mb-0">
-              {shortHash}
-              {tags.length > 0 ? `-${tags.join('-')}` : ''}
-              {' '}
-              (
-              {date.toLocaleString()}
-              )
-            </p>
+            <p className="mb-0"><BackendVersion /></p>
+            <p className="mb-0">{getFrontendVersion()}</p>
           </div>
         </Modal.Header>
         <Modal.Body>
