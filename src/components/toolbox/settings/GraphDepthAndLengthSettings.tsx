@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Form } from 'react-bootstrap';
 import { VisualizationContext } from '../../../context/VisualizationContext';
-import RangeSlider from '../../settings/RangeSlider';
+import RangeSlider from '../../forms/RangeSlider';
 
 export default function GraphDepthAndLengthSettings() {
   const { settings, updateSettings } = useContext(VisualizationContext);

@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Form, FormCheck } from 'react-bootstrap';
 import { VisualizationContext } from '../../../context/VisualizationContext';
-import MultiRangeSlider from '../../settings/MultiRangeSlider';
+import MultiRangeSlider from '../../forms/MultiRangeSlider';
 
 const RANGE_MIN = 0;
 const RANGE_MAX = 20;
