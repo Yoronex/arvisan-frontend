@@ -52,6 +52,7 @@ export default function GraphDependantsAndDependenciesSettings() {
           min={RANGE_MIN}
           max={RANGE_MAX}
           label="Number of dependencies"
+          disabled={showDependencies ? [false, false] : [true, true]}
         />
         <FormCheck
           onChange={(event) => setShowDependencies(event.target.checked)}
@@ -67,6 +68,7 @@ export default function GraphDependantsAndDependenciesSettings() {
           min={RANGE_MIN}
           max={RANGE_MAX}
           label="Number of dependents"
+          disabled={showDependents ? [false, false] : [false, false]}
         />
         <FormCheck
           onChange={(event) => setShowDependents(event.target.checked)}

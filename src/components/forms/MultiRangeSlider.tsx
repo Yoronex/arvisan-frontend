@@ -14,10 +14,11 @@ interface Props {
   min: number;
   max: number;
   label?: string;
+  disabled?: [boolean, boolean];
 }
 
 function MultiRangeSlider({
-  values, onChange, min, max: userMax, label,
+  values, onChange, min, max: userMax, label, disabled,
 }: Props) {
   const [minVal, userMaxVal] = values;
   const max = userMax + 1;
@@ -83,6 +84,7 @@ function MultiRangeSlider({
         onPointerUp={(v) => {
           updateSetting({ min: v });
         }}
+        disabled={disabled ? disabled[0] : undefined}
       />
       <MultiRangeSliderSlider
         position="right"
@@ -97,11 +99,16 @@ function MultiRangeSlider({
         onPointerUp={(v) => {
           updateSetting({ max: v });
         }}
+        disabled={disabled ? disabled[1] : undefined}
       />
 
       <div className="slider">
         <div className="slider__track" />
-        <div ref={range} className="slider__range" style={{ width: `${width}%`, left: `${left}%` }} />
+        <div
+          ref={range}
+          className={`slider__range ${disabled && disabled[0] && disabled[1] ? 'disabled' : ''}`}
+          style={{ width: `${width}%`, left: `${left}%` }}
+        />
         <div className="slider__left-value">{minVal}</div>
         <div className="slider__right-value">{maxVal === max ? `${userMax}+` : maxVal}</div>
       </div>
@@ -111,6 +118,7 @@ function MultiRangeSlider({
 
 MultiRangeSlider.defaultProps = ({
   label: undefined,
+  disabled: undefined,
 });
 
 export default MultiRangeSlider;
