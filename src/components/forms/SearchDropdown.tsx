@@ -78,7 +78,7 @@ export default function SearchDropdown({ options, onSelect, label }: Props) {
       </InputGroup>
       <div>
         <Dropdown.Menu show={showOptions}>
-          <div className="overflow-x-hidden overflow-y-scroll" style={{ height: '20rem' }}>
+          <div className="overflow-x-hidden overflow-y-scroll" style={{ height: '20rem', width: ref.current?.clientWidth }}>
             <Dropdown.Header>Found nodes:</Dropdown.Header>
             {filteredOptions.map((o) => (
               <Dropdown.Item key={o.id} onClick={() => selectOption(o)}>
