@@ -14,20 +14,33 @@ interface Props {
   min: number;
   max: number;
   label?: string;
+  valueLabels?: string[];
   disabled?: [boolean, boolean];
+  infinity?: boolean;
 }
 
 function MultiRangeSlider({
-  values, onChange, min, max: userMax, label, disabled,
+  values, onChange, min, max: userMax, label, valueLabels, disabled, infinity,
 }: Props) {
   const [minVal, userMaxVal] = values;
-  const max = userMax + 1;
+  const max = infinity ? userMax + 1 : userMax;
   const maxVal = userMaxVal === Number.POSITIVE_INFINITY ? max : userMaxVal;
 
   const [bottomVal, setBottomVal] = useState(minVal);
   const [topVal, setTopVal] = useState(maxVal);
   const [left, setLeft] = useState(0);
   const [width, setWidth] = useState(0);
+
+  // If the parent element changes the top/bottom values, we
+  // should also update them here
+  useEffect(() => {
+    if (minVal !== bottomVal) {
+      setBottomVal(minVal);
+    }
+    if (maxVal !== topVal) {
+      setTopVal(maxVal);
+    }
+  }, [minVal, maxVal]);
 
   const updateSetting = (range: { min?: number, max?: number }) => {
     let newTop = range.max ?? maxVal;
@@ -66,6 +79,17 @@ function MultiRangeSlider({
     }
   }, [topVal, getPercent]);
 
+  const getLabel = (v: number): string => {
+    if (valueLabels) {
+      const index = v - min;
+      return valueLabels[index];
+    }
+    if (infinity) {
+      return v === max ? `${userMax}+` : v.toString();
+    }
+    return v.toString();
+  };
+
   return (
     <div className="w-100">
       <div>
@@ -85,6 +109,7 @@ function MultiRangeSlider({
           updateSetting({ min: v });
         }}
         disabled={disabled ? disabled[0] : undefined}
+        label={getLabel(bottomVal)}
       />
       <MultiRangeSliderSlider
         position="right"
@@ -100,6 +125,7 @@ function MultiRangeSlider({
           updateSetting({ max: v });
         }}
         disabled={disabled ? disabled[1] : undefined}
+        label={getLabel(topVal)}
       />
 
       <div className="slider">
@@ -109,8 +135,8 @@ function MultiRangeSlider({
           className={`slider__range ${disabled && disabled[0] && disabled[1] ? 'disabled' : ''}`}
           style={{ width: `${width}%`, left: `${left}%` }}
         />
-        <div className="slider__left-value">{minVal}</div>
-        <div className="slider__right-value">{maxVal === max ? `${userMax}+` : maxVal}</div>
+        <div className="slider__left-value">{getLabel(minVal)}</div>
+        <div className="slider__right-value">{getLabel(maxVal)}</div>
       </div>
     </div>
   );
@@ -119,6 +145,8 @@ function MultiRangeSlider({
 MultiRangeSlider.defaultProps = ({
   label: undefined,
   disabled: undefined,
+  valueLabels: undefined,
+  infinity: false,
 });
 
 export default MultiRangeSlider;

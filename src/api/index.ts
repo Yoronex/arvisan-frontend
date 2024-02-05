@@ -12,6 +12,7 @@ export type { Edge } from './models/Edge';
 export type { EdgeData } from './models/EdgeData';
 export type { GitCommitInfo } from './models/GitCommitInfo';
 export type { Graph } from './models/Graph';
+export type { GraphLayer } from './models/GraphLayer';
 export type { Node } from './models/Node';
 export { NodeData } from './models/NodeData';
 export type { QueryOptions } from './models/QueryOptions';

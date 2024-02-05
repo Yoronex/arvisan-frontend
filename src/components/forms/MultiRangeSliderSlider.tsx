@@ -11,10 +11,11 @@ interface Props {
   onChange: (v: number) => void;
   onPointerUp: (v: number) => void;
   disabled?: boolean;
+  label: string;
 }
 
 export default function MultiRangeSliderSlider({
-  position, min, max, value, onChange, onPointerUp, disabled,
+  position, min, max, value, onChange, onPointerUp, disabled, label,
 }: Props) {
   const [tooltipOffset, setTooltipOffset] = useState(0);
   const ref = useRef<HTMLInputElement | null>(null);
@@ -29,7 +30,7 @@ export default function MultiRangeSliderSlider({
     <OverlayTrigger
       overlay={(
         <Tooltip arrowProps={{ style: { visibility: 'hidden' } }}>
-          {value === max ? `${max - 1}+` : value}
+          {label}
         </Tooltip>
       )}
       trigger={['hover', 'focus']}
@@ -67,3 +68,7 @@ export default function MultiRangeSliderSlider({
     </OverlayTrigger>
   );
 }
+
+MultiRangeSliderSlider.defaultProps = ({
+  disabled: false,
+});

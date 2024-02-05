@@ -4,6 +4,7 @@
 /* eslint-disable */
 import type { Domain } from '../models/Domain';
 import type { Graph } from '../models/Graph';
+import type { GraphLayer } from '../models/GraphLayer';
 import type { QueryOptions } from '../models/QueryOptions';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -11,17 +12,6 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class GraphService {
-
-    /**
-     * @returns Domain Ok
-     * @throws ApiError
-     */
-    public static getDomains(): CancelablePromise<Array<Domain>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/graph/domains',
-        });
-    }
 
     /**
      * @param requestBody 
@@ -38,6 +28,28 @@ message: string;
             url: '/graph/node',
             body: requestBody,
             mediaType: 'application/json',
+        });
+    }
+
+    /**
+     * @returns Domain Ok
+     * @throws ApiError
+     */
+    public static getDomains(): CancelablePromise<Array<Domain>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/graph/domains',
+        });
+    }
+
+    /**
+     * @returns GraphLayer Ok
+     * @throws ApiError
+     */
+    public static getLayers(): CancelablePromise<Array<GraphLayer>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/graph/layers',
         });
     }
 
