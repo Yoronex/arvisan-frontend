@@ -17,10 +17,11 @@ interface Props {
   valueLabels?: string[];
   disabled?: [boolean, boolean];
   infinity?: boolean;
+  keepBarLeft?: boolean;
 }
 
 function MultiRangeSlider({
-  values, onChange, min, max: userMax, label, valueLabels, disabled, infinity,
+  values, onChange, min, max: userMax, label, valueLabels, disabled, infinity, keepBarLeft,
 }: Props) {
   const [minVal, userMaxVal] = values;
   const max = infinity ? userMax + 1 : userMax;
@@ -31,26 +32,37 @@ function MultiRangeSlider({
   const [left, setLeft] = useState(0);
   const [width, setWidth] = useState(0);
 
+  const bottomValRef = useRef(min);
+  const topValRef = useRef(max);
+  const rangeTrackRef = useRef(null);
+
+  const updateBottomVal = (v: number) => {
+    const value = Math.min(v, maxVal);
+    setBottomVal(value);
+    bottomValRef.current = value;
+  };
+  const updateTopVal = (v: number) => {
+    const value = Math.max(v, minVal);
+    setTopVal(value);
+    topValRef.current = value;
+  };
+
   // If the parent element changes the top/bottom values, we
   // should also update them here
   useEffect(() => {
     if (minVal !== bottomVal) {
-      setBottomVal(minVal);
+      updateBottomVal(minVal);
     }
     if (maxVal !== topVal) {
-      setTopVal(maxVal);
+      updateTopVal(maxVal);
     }
   }, [minVal, maxVal]);
 
   const updateSetting = (range: { min?: number, max?: number }) => {
     let newTop = range.max ?? maxVal;
-    if (newTop === max) newTop = Number.POSITIVE_INFINITY;
+    if (newTop === userMax + 1) newTop = Number.POSITIVE_INFINITY;
     onChange([range.min ?? minVal, newTop]);
   };
-
-  const bottomValRef = useRef(min);
-  const topValRef = useRef(max);
-  const range = useRef(null);
 
   // Convert to percentage
   const getPercent = useCallback(
@@ -58,14 +70,23 @@ function MultiRangeSlider({
     [min, max],
   );
 
+  const setSliderTrack = (minPercent: number, maxPercent: number) => {
+    if (keepBarLeft) {
+      setLeft(0);
+      setWidth(maxPercent);
+    } else {
+      setLeft(minPercent);
+      setWidth(maxPercent - minPercent);
+    }
+  };
+
   // Set width of the range to decrease from the left side
   useEffect(() => {
     const minPercent = getPercent(bottomVal);
     const maxPercent = getPercent(topValRef.current);
 
-    if (range.current) {
-      setLeft(minPercent);
-      setWidth(maxPercent - minPercent);
+    if (rangeTrackRef.current) {
+      setSliderTrack(minPercent, maxPercent);
     }
   }, [bottomVal, getPercent]);
 
@@ -74,8 +95,8 @@ function MultiRangeSlider({
     const minPercent = getPercent(bottomValRef.current);
     const maxPercent = getPercent(topVal);
 
-    if (range.current) {
-      setWidth(maxPercent - minPercent);
+    if (rangeTrackRef.current) {
+      setSliderTrack(minPercent, maxPercent);
     }
   }, [topVal, getPercent]);
 
@@ -100,11 +121,7 @@ function MultiRangeSlider({
         min={min}
         max={max}
         value={bottomVal}
-        onChange={(v) => {
-          const value = Math.min(v, maxVal);
-          setBottomVal(value);
-          bottomValRef.current = value;
-        }}
+        onChange={updateBottomVal}
         onPointerUp={(v) => {
           updateSetting({ min: v });
         }}
@@ -116,11 +133,7 @@ function MultiRangeSlider({
         min={min}
         max={max}
         value={topVal}
-        onChange={(v) => {
-          const value = Math.max(v, minVal);
-          setTopVal(value);
-          topValRef.current = value;
-        }}
+        onChange={updateTopVal}
         onPointerUp={(v) => {
           updateSetting({ max: v });
         }}
@@ -131,7 +144,7 @@ function MultiRangeSlider({
       <div className="slider">
         <div className="slider__track" />
         <div
-          ref={range}
+          ref={rangeTrackRef}
           className={`slider__range ${disabled && disabled[0] && disabled[1] ? 'disabled' : ''}`}
           style={{ width: `${width}%`, left: `${left}%` }}
         />
@@ -147,6 +160,7 @@ MultiRangeSlider.defaultProps = ({
   disabled: undefined,
   valueLabels: undefined,
   infinity: false,
+  keepBarLeft: false,
 });
 
 export default MultiRangeSlider;

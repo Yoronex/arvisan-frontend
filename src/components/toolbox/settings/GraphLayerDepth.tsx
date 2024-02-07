@@ -15,8 +15,8 @@ export default function GraphLayerDepth() {
   } else if (currentNode?.type === 'backend') {
     layer = currentNode.data.properties.layer;
   }
-  if (layer) {
-    currentDepth = layers.findIndex((l) => layer.includes(l.label));
+  if (layer !== undefined) {
+    currentDepth = layers.findIndex((l) => layer!.includes(l.label));
   }
   const sliderValue = Math.min(currentDepth + layerDepth, layers.length - 1);
 
@@ -36,6 +36,7 @@ export default function GraphLayerDepth() {
       label="Layer depth"
       disabled={[true, loading]}
       valueLabels={layers.map((l) => l.label)}
+      keepBarLeft
     />
   );
 }
