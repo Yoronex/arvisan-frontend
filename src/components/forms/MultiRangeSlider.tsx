@@ -18,10 +18,12 @@ interface Props {
   disabled?: [boolean, boolean];
   infinity?: boolean;
   keepBarLeft?: boolean;
+  markerValue?: number;
 }
 
 function MultiRangeSlider({
-  values, onChange, min, max: userMax, label, valueLabels, disabled, infinity, keepBarLeft,
+  values, onChange, min, max: userMax,
+  label, valueLabels, disabled, infinity, keepBarLeft, markerValue,
 }: Props) {
   const [minVal, userMaxVal] = values;
   const max = infinity ? userMax + 1 : userMax;
@@ -148,8 +150,13 @@ function MultiRangeSlider({
           className={`slider__range ${disabled && disabled[0] && disabled[1] ? 'disabled' : ''}`}
           style={{ width: `${width}%`, left: `${left}%` }}
         />
-        <div className="slider__left-value">{getLabel(minVal)}</div>
-        <div className="slider__right-value">{getLabel(maxVal)}</div>
+        {markerValue != null && (
+          <div className="slider__marker__box">
+            <div className="slider__marker" style={{ left: `${getPercent(markerValue)}%` }} />
+          </div>
+        )}
+        <div className="slider__left-value">{getLabel(min)}</div>
+        <div className="slider__right-value">{getLabel(max)}</div>
       </div>
     </div>
   );
@@ -161,6 +168,7 @@ MultiRangeSlider.defaultProps = ({
   valueLabels: undefined,
   infinity: false,
   keepBarLeft: false,
+  markerValue: undefined,
 });
 
 export default MultiRangeSlider;

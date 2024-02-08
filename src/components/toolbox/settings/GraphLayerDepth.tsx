@@ -37,6 +37,7 @@ export default function GraphLayerDepth() {
       disabled={[true, loading]}
       valueLabels={layers.map((l) => l.label)}
       keepBarLeft
+      markerValue={currentDepth}
     />
   );
 }

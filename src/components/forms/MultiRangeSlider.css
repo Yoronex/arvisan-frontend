@@ -6,6 +6,8 @@
 
 .slider__track,
 .slider__range,
+.slider__marker__box,
+.slider__marker,
 .slider__left-value,
 .slider__right-value {
     position: absolute;
@@ -15,6 +17,22 @@
 .slider__range {
     border-radius: 3px;
     height: 5px;
+}
+
+.slider__marker__box {
+    width: calc(100% - 14px);
+    margin-left: 7px;
+    margin-right: 7px;
+}
+
+.slider__marker {
+    background-color: red;
+    width: 3px;
+    height: 30px;
+    border-radius: 3px;
+    left: 0;
+    top: 2px;
+    transform: translateY(-50%);
 }
 
 .slider__track {
