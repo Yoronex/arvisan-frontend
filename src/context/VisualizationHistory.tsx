@@ -48,6 +48,19 @@ export default function VisualizationHistoryProvider({ children }: PropsWithChil
 
   const { updateDomain } = useContext(DomainContext);
 
+  let currentNodeId: string | undefined;
+  if (currentNode) {
+    switch (currentNode.type) {
+      case 'cytoscape':
+        currentNodeId = currentNode.data.id();
+        break;
+      case 'backend':
+        currentNodeId = currentNode.data.id;
+        break;
+      default: currentNodeId = undefined;
+    }
+  }
+
   const historyContext = useMemo((): IVisualizationHistory => {
     const getDomain = (node: cytoscape.NodeSingular): NodeData => {
       if (node.isOrphan()) return node.data() as NodeData;
@@ -56,6 +69,9 @@ export default function VisualizationHistoryProvider({ children }: PropsWithChil
     };
 
     const visitNode = (node: HistoryNode) => {
+      const nodeId = node.type === 'cytoscape' ? node.data.id() : node.data.id;
+      if (nodeId === currentNodeId) return;
+
       const historyCopy = [...history];
       // If the stack pointer is not on top of the stack,
       // delete elements till you reach the pointer.
@@ -85,19 +101,6 @@ export default function VisualizationHistoryProvider({ children }: PropsWithChil
       setCurrentNode(node);
     };
 
-    let currentNodeId: string | undefined;
-    if (currentNode) {
-      switch (currentNode.type) {
-        case 'cytoscape':
-          currentNodeId = currentNode.data.id();
-          break;
-        case 'backend':
-          currentNodeId = currentNode.data.id;
-          break;
-        default: currentNodeId = undefined;
-      }
-    }
-
     return {
       visitNode,
       canGoBack,
@@ -107,7 +110,7 @@ export default function VisualizationHistoryProvider({ children }: PropsWithChil
       history,
       historyStackPosition,
     };
-  }, [currentNode, history, historyStackPosition, updateDomain, historyStackPosition]);
+  }, [currentNode, currentNodeId, history, historyStackPosition, updateDomain]);
 
   return (
     <VisualizationHistory.Provider value={historyContext}>
