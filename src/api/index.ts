@@ -8,6 +8,7 @@ export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { DependencyCycle } from './models/DependencyCycle';
+export type { DependencyCycleRender } from './models/DependencyCycleRender';
 export { Domain } from './models/Domain';
 export type { Edge } from './models/Edge';
 export type { EdgeData } from './models/EdgeData';

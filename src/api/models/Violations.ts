@@ -3,8 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { DependencyCycle } from './DependencyCycle';
+import type { DependencyCycleRender } from './DependencyCycleRender';
 
 export type Violations = {
-    dependencyCycles: Array<DependencyCycle>;
+    dependencyCycles: Array<DependencyCycleRender>;
 };
