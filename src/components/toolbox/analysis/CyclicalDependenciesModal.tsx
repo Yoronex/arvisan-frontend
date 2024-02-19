@@ -1,9 +1,9 @@
-import { Modal } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRightLong } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightLong, faBinoculars } from '@fortawesome/free-solid-svg-icons';
 import { DependencyCycle, DependencyCycleRender } from '../../../api';
-import { GraphContext } from '../../../context';
+import { GraphContext, GraphHighlightContext } from '../../../context';
 
 interface Props {
   cyclicalDependencies?: DependencyCycleRender[];
@@ -13,15 +13,28 @@ interface Props {
 
 export default function CyclicalDependenciesModal({ cyclicalDependencies, onClose, label }: Props) {
   const { graph } = useContext(GraphContext);
+  const { highlightEdges, highlightNodes } = useContext(GraphHighlightContext);
 
   const cyclicalDepVisible = (d: DependencyCycle) => {
     const edges = d.path;
     return edges.every((e1) => graph.edges.find((e2) => e2.data.id.includes(e1.id)));
   };
 
+  const onHighlight = (d: DependencyCycleRender) => {
+    // highlightNodes(d.path.map((e) => e.targetNode));
+    highlightEdges(d.path);
+    onClose();
+  };
+
   const renderDepCycle = (cyclicalDependency: DependencyCycleRender) => (
     <div>
       <h5 className="d-flex flex-wrap align-items-center gap-2">
+        <Button
+          title="Highlight this cyclical dependency"
+          onClick={() => onHighlight(cyclicalDependency)}
+        >
+          <FontAwesomeIcon icon={faBinoculars} size="sm" />
+        </Button>
         <div>Rendered dependency:</div>
         <div className="">
           {cyclicalDependency.node.label}

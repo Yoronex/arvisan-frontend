@@ -7,7 +7,7 @@ import klay from 'cytoscape-klay';
 import cola from 'cytoscape-cola';
 import './Visualization.scss';
 import {
-  GraphContext, VisualizationHistory, NodeHighlightContext, ViolationsContext,
+  GraphContext, VisualizationHistory, GraphHighlightContext, ViolationsContext,
 } from '../../context';
 import VisualizationStyle from './VisualizationStyle';
 import { assignEdgeWeights, colorNodes } from '../../cytoscape/operations';
@@ -26,7 +26,9 @@ export default function Visualization({
 }: Props) {
   const { graph, enableMovingNodes } = useContext(GraphContext);
   const { visitNode } = useContext(VisualizationHistory);
-  const { node: highlightedNode, finish: finishHighlightNode } = useContext(NodeHighlightContext);
+  const {
+    nodes: highlightedNodes, edges: highlightedEdges, finish: finishHighlight,
+  } = useContext(GraphHighlightContext);
   const { layoutOptions, reloadedAt } = useContext(VisualizationLayoutContext);
   const { violations } = useContext(ViolationsContext);
 
@@ -76,35 +78,51 @@ export default function Visualization({
   useEffect(() => {
     if (!cy.current) return;
     const ids = violations.dependencyCycles.map((c) => c.path.map((p) => p.id)).flat();
-    console.log(ids.sort());
     cy.current.edges().forEach((e: cytoscape.EdgeSingular) => {
       e.removeClass('violation');
 
       const idWithRandom = e.id();
       const id = idWithRandom.split('--')[0] || '';
 
-      console.log(id);
-
       if (ids.includes(id)) {
-        console.log('match!');
         e.addClass('violation');
       }
     });
   }, [cy, violations]);
 
-  /** Highlight node */
+  /** Highlight nodes */
   useEffect(() => {
     if (!cy.current) return;
-    if (!highlightedNode) return;
-    const nodes = cy.current.nodes(`[id = '${highlightedNode.id}']`);
+    if (!highlightedNodes) return;
+    const ids = [highlightedNodes[0]].map((n) => `[id = '${n.id}']`).join(', ');
+    const nodes = cy.current.nodes(`${ids}`);
     cy.current.animate({
       fit: {
         eles: nodes,
         padding: Math.round(Math.min(window.innerHeight / 2.5, window.innerWidth / 2.5)),
       },
     });
-    finishHighlightNode();
-  }, [cy, finishHighlightNode, highlightedNode]);
+    finishHighlight();
+  }, [cy, finishHighlight, highlightedNodes]);
+
+  /** Highlight edges */
+  useEffect(() => {
+    if (!cy.current) return;
+    if (!highlightedEdges) return;
+    console.log(highlightedEdges);
+    const actualEdges = highlightedEdges.map((h) => graph.edges
+      .find((e) => e.data.id.includes(h.id))!);
+    const ids = actualEdges.map((e) => `[id = '${e.data.id}']`).join(', ');
+    const edges = cy.current.edges(`${ids}`);
+    console.log(ids, edges);
+    cy.current.animate({
+      fit: {
+        eles: edges,
+        padding: Math.round(Math.min(window.innerHeight / 4, window.innerWidth / 4)),
+      },
+    });
+    finishHighlight();
+  }, [cy, finishHighlight, highlightedEdges]);
 
   return (
     <>

@@ -4,7 +4,7 @@ import DomainContextProvider from './DomainContext';
 import VisualizationHistoryProvider from './VisualizationHistory';
 import GraphContextProvider from './GraphContext';
 import VisualizationLayoutContextProvider from './VisualizationLayoutContext';
-import NodeHighlightContextProvider from './NodeHighlightContext';
+import GraphHighlightContextProvider from './GraphHighlightContext';
 import ViolationsContextProvider from './ViolationsContext';
 
 export { LayerContext } from './LayerContext';
@@ -13,7 +13,7 @@ export { VisualizationHistory } from './VisualizationHistory';
 export { ViolationsContext } from './ViolationsContext';
 export { GraphContext } from './GraphContext';
 export { VisualizationLayoutContext } from './VisualizationLayoutContext';
-export { NodeHighlightContext } from './NodeHighlightContext';
+export { GraphHighlightContext } from './GraphHighlightContext';
 
 export function ContextProviders({ children }: PropsWithChildren) {
   return (
@@ -23,9 +23,9 @@ export function ContextProviders({ children }: PropsWithChildren) {
           <ViolationsContextProvider>
             <GraphContextProvider>
               <VisualizationLayoutContextProvider>
-                <NodeHighlightContextProvider>
+                <GraphHighlightContextProvider>
                   {children}
-                </NodeHighlightContextProvider>
+                </GraphHighlightContextProvider>
               </VisualizationLayoutContextProvider>
             </GraphContextProvider>
           </ViolationsContextProvider>
