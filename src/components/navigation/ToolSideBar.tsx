@@ -4,6 +4,7 @@ import {
 import { ReactNode } from 'react';
 import VisualizationSettings from '../toolbox/VisualizationSettings';
 import GraphNavigator from '../toolbox/navigator/GraphNavigator';
+import ToolboxAnalysis from '../toolbox/analysis';
 
 interface Props {
   cardWidth: string | number;
@@ -19,7 +20,7 @@ export default function ToolSideBar({ cardWidth }: Props) {
   const tabs: TabItem[] = [
     { title: 'Navigation', key: 'navigation', children: <GraphNavigator /> },
     { title: 'Visualization', key: 'visualization', children: <VisualizationSettings /> },
-    { title: 'Analysis', key: 'analysis', children: <p className="fst-italic">Nothing here yet</p> },
+    { title: 'Analysis', key: 'analysis', children: <ToolboxAnalysis /> },
   ];
 
   return (

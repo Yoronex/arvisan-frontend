@@ -3,8 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Domain } from '../models/Domain';
-import type { Graph } from '../models/Graph';
 import type { GraphLayer } from '../models/GraphLayer';
+import type { GraphWithViolations } from '../models/GraphWithViolations';
 import type { QueryOptions } from '../models/QueryOptions';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -15,14 +15,12 @@ export class GraphService {
 
     /**
      * @param requestBody 
-     * @returns any Ok
+     * @returns GraphWithViolations Ok
      * @throws ApiError
      */
     public static getNode(
 requestBody: QueryOptions,
-): CancelablePromise<(Graph | {
-message: string;
-})> {
+): CancelablePromise<GraphWithViolations> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/graph/node',

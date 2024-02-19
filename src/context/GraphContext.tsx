@@ -1,8 +1,9 @@
 import React, { createContext, PropsWithChildren } from 'react';
 import { Graph, GraphService } from '../api';
 import { VisualizationHistory } from './VisualizationHistory';
+import { ViolationsContext } from './ViolationsContext';
 
-interface IVisualizationSettings {
+interface IGraphFilterSettings {
   layerDepth: number,
   dependencyLength: number,
   showDependencies: boolean;
@@ -16,9 +17,9 @@ interface IVisualizationSettings {
   selfEdges: boolean;
 }
 
-interface IVisualizationContext {
-  settings: IVisualizationSettings,
-  updateSettings: (settings: IVisualizationSettings) => void;
+interface IGraphSettings {
+  settings: IGraphFilterSettings,
+  updateSettings: (settings: IGraphFilterSettings) => void;
   graph: Graph;
   loading: boolean;
 
@@ -26,7 +27,7 @@ interface IVisualizationContext {
   setEnableMovingNodes: (enable: boolean) => void;
 }
 
-const defaultSettings: IVisualizationSettings = {
+const defaultSettings: IGraphFilterSettings = {
   layerDepth: 1,
   dependencyLength: 1,
   showDependencies: true,
@@ -42,7 +43,7 @@ const defaultSettings: IVisualizationSettings = {
 
 const defaultGraph: Graph = { name: '', nodes: [], edges: [] };
 
-export const VisualizationContext = createContext<IVisualizationContext>({
+export const GraphContext = createContext<IGraphSettings>({
   settings: defaultSettings,
   graph: defaultGraph,
   updateSettings: () => {},
@@ -53,13 +54,14 @@ export const VisualizationContext = createContext<IVisualizationContext>({
 
 interface Props extends PropsWithChildren {}
 
-export default function VisualizationContextProvider({ children }: Props) {
+export default function GraphContextProvider({ children }: Props) {
   const [settings, setSettings] = React.useState(defaultSettings);
   const [graph, setGraph] = React.useState(defaultGraph);
   const [loading, setLoading] = React.useState(true);
   const [enableMovingNodes, setEnableMovingNodes] = React.useState(false);
 
   const { currentNodeId } = React.useContext(VisualizationHistory);
+  const { setViolations } = React.useContext(ViolationsContext);
 
   // Reload graph when selecting a node
   React.useEffect(() => {
@@ -70,7 +72,7 @@ export default function VisualizationContextProvider({ children }: Props) {
       const onlyInternalRelations = !settings.showExternalRelationships;
       const onlyExternalRelations = !settings.showInternalRelationships;
 
-      const g = await GraphService.getNode({
+      const { graph: g, violations } = await GraphService.getNode({
         id: currentNodeId,
         layerDepth: settings.layerDepth,
         dependencyDepth: settings.dependencyLength,
@@ -89,7 +91,7 @@ export default function VisualizationContextProvider({ children }: Props) {
             ? undefined : settings.maxDependents,
         },
         selfEdges: settings.selfEdges,
-      }) as Graph;
+      });
 
       // Cytoscape has issues with removing and adding edges when changing the layer depth. This is
       // because the edge ID does not change when changing the layer depth, but the source and
@@ -102,6 +104,7 @@ export default function VisualizationContextProvider({ children }: Props) {
       });
 
       setGraph(g);
+      setViolations(violations);
       setLoading(false);
     };
 
@@ -112,11 +115,11 @@ export default function VisualizationContextProvider({ children }: Props) {
       .finally(() => setLoading(false));
   }, [currentNodeId, settings]);
 
-  const updateSettings = (newSettings: IVisualizationSettings) => {
+  const updateSettings = (newSettings: IGraphFilterSettings) => {
     setSettings(newSettings);
   };
 
-  const visualizationContext = React.useMemo((): IVisualizationContext => ({
+  const visualizationContext = React.useMemo((): IGraphSettings => ({
     settings,
     graph,
     updateSettings,
@@ -126,8 +129,8 @@ export default function VisualizationContextProvider({ children }: Props) {
   }), [settings, graph, loading, enableMovingNodes]);
 
   return (
-    <VisualizationContext.Provider value={visualizationContext}>
+    <GraphContext.Provider value={visualizationContext}>
       {children}
-    </VisualizationContext.Provider>
+    </GraphContext.Provider>
   );
 }

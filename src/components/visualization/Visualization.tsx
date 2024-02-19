@@ -6,13 +6,13 @@ import CytoscapeComponent from 'react-cytoscapejs';
 import klay from 'cytoscape-klay';
 import cola from 'cytoscape-cola';
 import './Visualization.scss';
-import { VisualizationContext } from '../../context/VisualizationContext';
+import {
+  GraphContext, VisualizationHistory, NodeHighlightContext, ViolationsContext,
+} from '../../context';
 import VisualizationStyle from './VisualizationStyle';
 import { assignEdgeWeights, colorNodes } from '../../cytoscape/operations';
 import { PossibleLayoutOptions, VisualizationLayoutContext } from '../../context/VisualizationLayoutContext';
 import HoverDetailsCard from './HoverDetailsCard';
-import { VisualizationHistory } from '../../context/VisualizationHistory';
-import { NodeHighlightContext } from '../../context/NodeHighlightContext';
 
 cytoscape.use(klay);
 cytoscape.use(cola);
@@ -24,10 +24,12 @@ interface Props {
 export default function Visualization({
   center,
 }: Props) {
-  const { graph, enableMovingNodes } = useContext(VisualizationContext);
+  const { graph, enableMovingNodes } = useContext(GraphContext);
   const { visitNode } = useContext(VisualizationHistory);
   const { node: highlightedNode, finish: finishHighlightNode } = useContext(NodeHighlightContext);
   const { layoutOptions, reloadedAt } = useContext(VisualizationLayoutContext);
+  const { violations } = useContext(ViolationsContext);
+
   const [hoveredNode, setHoveredNode] = useState<cytoscape.NodeSingular | null>(null);
 
   const cy = useRef<cytoscape.Core>();
@@ -70,6 +72,27 @@ export default function Visualization({
     cy.current.edges().forEach(assignEdgeWeights);
   }, [cy, graph]);
 
+  /** Violations */
+  useEffect(() => {
+    if (!cy.current) return;
+    const ids = violations.dependencyCycles.map((c) => c.path.map((p) => p.id)).flat();
+    console.log(ids.sort());
+    cy.current.edges().forEach((e: cytoscape.EdgeSingular) => {
+      e.removeClass('violation');
+
+      const idWithRandom = e.id();
+      const id = idWithRandom.split('--')[0] || '';
+
+      console.log(id);
+
+      if (ids.includes(id)) {
+        console.log('match!');
+        e.addClass('violation');
+      }
+    });
+  }, [cy, violations]);
+
+  /** Highlight node */
   useEffect(() => {
     if (!cy.current) return;
     if (!highlightedNode) return;

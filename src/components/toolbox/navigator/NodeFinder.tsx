@@ -1,11 +1,11 @@
 import { useContext } from 'react';
-import { VisualizationContext } from '../../../context/VisualizationContext';
+import { GraphContext } from '../../../context/GraphContext';
 import { Option } from '../../../helpers/filter';
 import { NodeHighlightContext } from '../../../context/NodeHighlightContext';
 import SearchDropdown from '../../forms/SearchDropdown';
 
 export default function NodeFinder() {
-  const { graph } = useContext(VisualizationContext);
+  const { graph } = useContext(GraphContext);
   const { highlight } = useContext(NodeHighlightContext);
   const { nodes } = graph;
 

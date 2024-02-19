@@ -1,9 +1,9 @@
 import { useContext } from 'react';
-import { LayerContext, VisualizationContext, VisualizationHistory } from '../../../context';
+import { LayerContext, GraphContext, VisualizationHistory } from '../../../context';
 import MultiRangeSlider from '../../forms/MultiRangeSlider';
 
 export default function GraphLayerDepth() {
-  const { settings, updateSettings } = useContext(VisualizationContext);
+  const { settings, updateSettings } = useContext(GraphContext);
   const { layerDepth } = settings;
   const { layers, loading } = useContext(LayerContext);
   const { currentNode } = useContext(VisualizationHistory);

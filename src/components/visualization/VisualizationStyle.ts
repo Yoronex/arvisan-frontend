@@ -19,14 +19,21 @@ const stylesheet: cytoscape.Stylesheet[] = [{
   css: {
     'target-arrow-shape': 'triangle',
     'target-arrow-color': 'black',
-    'source-arrow-color': 'black',
+    'source-arrow-color': 'gray',
     'line-fill': 'linear-gradient',
-    'line-gradient-stop-colors': ['red', 'black'],
+    'line-gradient-stop-colors': ['gray', 'black'],
     'line-gradient-stop-positions': [0, 100],
     'curve-style': 'bezier',
     width: 1.5,
     'control-point-step-size': 200,
     'loop-sweep': '90deg',
+  },
+}, {
+  selector: 'edge.violation, edge[properties.violation = "true"]',
+  css: {
+    'line-gradient-stop-colors': ['#FF8888', '#FF0000'],
+    'target-arrow-color': '#FF0000',
+    'source-arrow-color': '#FF8888',
   },
 }, {
   selector: 'node[properties.selected = "true"]',

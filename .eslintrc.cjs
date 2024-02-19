@@ -26,5 +26,9 @@ module.exports = {
     ],
     'import/no-absolute-path': 'off',
     "react/react-in-jsx-scope": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-return": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
   },
 }

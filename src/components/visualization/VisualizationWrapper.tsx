@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { VisualizationContext } from '../../context/VisualizationContext';
+import { GraphContext } from '../../context/GraphContext';
 import { convertRemToPixels } from '../../helpers/viewport';
 import VisualizationLoading from './VisualizationLoading';
 import Visualization from './Visualization';
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default function VisualizationWrapper({ sidebarWidth: rawSidebarWidth }: Props) {
-  const { loading } = useContext(VisualizationContext);
+  const { loading } = useContext(GraphContext);
 
   let sidebarWidth: number;
   if (typeof rawSidebarWidth === 'string') {

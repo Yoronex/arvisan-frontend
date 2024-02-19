@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { Form, FormCheck } from 'react-bootstrap';
-import { VisualizationContext } from '../../../context/VisualizationContext';
+import { GraphContext } from '../../../context/GraphContext';
 
 export default function GraphInternalExternalRelationshipsSettings() {
-  const { settings, updateSettings } = useContext(VisualizationContext);
+  const { settings, updateSettings } = useContext(GraphContext);
   const { showInternalRelationships, showExternalRelationships, selfEdges } = settings;
 
   const setShowInternalRelationships = (value: boolean) => {
