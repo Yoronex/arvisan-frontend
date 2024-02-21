@@ -14,3 +14,10 @@ visualizer and analysis tool for the graduation project of Roy Kakkenberg.
 - Start the application: `npm run dev`.
 - The frontend can now be found at http://localhost:5173/.
 Requests will automatically be proxied to a running backend instance
+
+## Other problems/questions
+### Generating client
+The backend client is generated using the `openapi-typescript-codegen` library.
+The command to generate the client can be found in `package.json`.
+Note that, in order for the command to work, both the backend repository folder and
+frontend repository folder need to be placed next to each other.
