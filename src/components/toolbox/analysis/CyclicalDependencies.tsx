@@ -6,9 +6,16 @@ import ViolationsList from './ViolationList';
 import CyclicalDependenciesModal from './CyclicalDependenciesModal';
 
 export default function CyclicalDependencies() {
-  const { violations } = useContext(ViolationsContext);
+  const { violations, visibility, setVisibility } = useContext(ViolationsContext);
   const { graph } = useContext(GraphContext);
   const { dependencyCycles } = violations;
+
+  const showViolations = (newVal: boolean) => {
+    setVisibility({
+      ...visibility,
+      dependencyCycles: newVal,
+    });
+  };
 
   const dependencyCycleGroups = dependencyCycles
     .reduce((g: ViolationsGroup<DependencyCycleRender>[], c) => {
@@ -37,6 +44,8 @@ export default function CyclicalDependencies() {
       groupGreyed={cyclicalDepGreyed}
       header="(Indirect) cyclical dependencies"
       Modal={CyclicalDependenciesModal}
+      showInVisualization={visibility.dependencyCycles}
+      setShowInVisualization={showViolations}
     />
   );
 }

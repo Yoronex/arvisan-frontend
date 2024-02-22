@@ -1,5 +1,7 @@
 import React, { ComponentType, useEffect } from 'react';
-import { ListGroup, ListGroupItem, ModalProps } from 'react-bootstrap';
+import {
+  Form, ListGroup, ListGroupItem, ModalProps,
+} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import ViolationsGroup from './group';
@@ -14,12 +16,16 @@ interface Props<T> {
   header: string;
   Modal: ComponentType<ViolationModalProps<T>>;
 
+  showInVisualization: boolean;
+  setShowInVisualization: (visible: boolean) => void;
+
   groupGreyed?: (g: ViolationsGroup<T>) => boolean;
   groupDisabled?: (g: ViolationsGroup<T>) => boolean;
 }
 
 export default function ViolationsList<T>({
   groups, header, Modal,
+  showInVisualization, setShowInVisualization,
   groupGreyed, groupDisabled,
 }: Props<T>) {
   const [selectedIndex, setSelectedIndex] = React.useState<number | undefined>();
@@ -32,7 +38,15 @@ export default function ViolationsList<T>({
   return (
     <div>
       <h4>{header}</h4>
-      <ListGroup>
+      <Form>
+        <Form.Check
+          type="switch"
+          label={`Show ${header.toLowerCase()} in visualization`}
+          checked={showInVisualization}
+          onChange={() => setShowInVisualization(!showInVisualization)}
+        />
+      </Form>
+      <ListGroup className="overflow-y-auto" style={{ maxHeight: '15rem' }}>
         {groups.map((g, index) => {
           const greyed = groupGreyed ? groupGreyed(g) : false;
           const disabled = groupDisabled ? groupDisabled(g) : false;

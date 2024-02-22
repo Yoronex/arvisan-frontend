@@ -3,9 +3,16 @@ import {
 } from 'react';
 import { Violations } from '../api';
 
+export interface ViolationVisibility {
+  dependencyCycles: boolean;
+  subLayers: boolean;
+}
+
 interface IViolationsContext {
   violations: Violations;
   setViolations: (v: Violations) => void;
+  visibility: ViolationVisibility,
+  setVisibility: (v: ViolationVisibility) => void;
 }
 
 export const ViolationsContext = createContext<IViolationsContext>({
@@ -14,6 +21,11 @@ export const ViolationsContext = createContext<IViolationsContext>({
     subLayers: [],
   },
   setViolations: () => {},
+  visibility: {
+    dependencyCycles: true,
+    subLayers: true,
+  },
+  setVisibility: () => {},
 });
 
 export default function ViolationsContextProvider({ children }: PropsWithChildren) {
@@ -21,11 +33,17 @@ export default function ViolationsContextProvider({ children }: PropsWithChildre
     dependencyCycles: [],
     subLayers: [],
   });
+  const [visibility, setVisibility] = useState<ViolationVisibility>({
+    dependencyCycles: true,
+    subLayers: true,
+  });
 
   const violationsContext = useMemo((): IViolationsContext => ({
     violations,
     setViolations,
-  }), [violations]);
+    visibility,
+    setVisibility,
+  }), [violations, visibility]);
 
   return (
     <ViolationsContext.Provider value={violationsContext}>

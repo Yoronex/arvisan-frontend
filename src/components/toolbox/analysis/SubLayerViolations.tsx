@@ -6,8 +6,15 @@ import ViolationsList from './ViolationList';
 import SubLayerViolationsModal from './SubLayerViolationsModal';
 
 export default function SubLayerViolations() {
-  const { violations } = useContext(ViolationsContext);
+  const { violations, visibility, setVisibility } = useContext(ViolationsContext);
   const { subLayers } = violations;
+
+  const showViolations = (newVal: boolean) => {
+    setVisibility({
+      ...visibility,
+      subLayers: newVal,
+    });
+  };
 
   const subLayerGroups = subLayers
     .reduce((g: ViolationsGroup<LayerViolation>[], l) => {
@@ -24,6 +31,12 @@ export default function SubLayerViolations() {
     }, []);
 
   return (
-    <ViolationsList groups={subLayerGroups} header="Sublayer violations" Modal={SubLayerViolationsModal} />
+    <ViolationsList
+      groups={subLayerGroups}
+      header="Sublayer violations"
+      Modal={SubLayerViolationsModal}
+      showInVisualization={visibility.subLayers}
+      setShowInVisualization={showViolations}
+    />
   );
 }

@@ -30,7 +30,7 @@ export default function Visualization({
     nodes: highlightedNodes, edges: highlightedEdges, finish: finishHighlight,
   } = useContext(GraphHighlightContext);
   const { layoutOptions, reloadedAt } = useContext(VisualizationLayoutContext);
-  const { violations } = useContext(ViolationsContext);
+  const { violations, visibility } = useContext(ViolationsContext);
 
   const [hoveredNode, setHoveredNode] = useState<cytoscape.NodeSingular | null>(null);
 
@@ -77,8 +77,15 @@ export default function Visualization({
   /** Violations */
   useEffect(() => {
     if (!cy.current) return;
-    const ids = violations.dependencyCycles.map((c) => c.path.map((p) => p.id)).flat()
-      .concat(violations.subLayers.map((s) => s.id));
+
+    const ids: string[] = [];
+    if (visibility.dependencyCycles) {
+      ids.push(...violations.dependencyCycles.map((c) => c.path.map((p) => p.id)).flat());
+    }
+    if (visibility.subLayers) {
+      ids.push(...violations.subLayers.map((s) => s.id));
+    }
+
     cy.current.edges().forEach((e: cytoscape.EdgeSingular) => {
       e.removeClass('violation');
 
@@ -89,7 +96,7 @@ export default function Visualization({
         e.addClass('violation');
       }
     });
-  }, [cy, violations]);
+  }, [cy, violations, visibility]);
 
   /** Highlight nodes */
   useEffect(() => {
@@ -117,7 +124,7 @@ export default function Visualization({
     cy.current.animate({
       fit: {
         eles: edges,
-        padding: Math.round(Math.min(window.innerHeight / 4, window.innerWidth / 4)),
+        padding: Math.round(Math.min(window.innerHeight / 5, window.innerWidth / 5)),
       },
     });
     finishHighlight();
