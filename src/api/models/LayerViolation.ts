@@ -4,8 +4,10 @@
 /* eslint-disable */
 
 import type { EdgeViolations } from './EdgeViolations';
+import type { ExtendedEdgeData } from './ExtendedEdgeData';
+import type { NodeData } from './NodeData';
 
-export type EdgeData = {
+export type LayerViolation = {
     /**
      * Unique edge identifier
      */
@@ -35,4 +37,13 @@ violations: EdgeViolations;
  */
 weight: number;
 };
+    /**
+     * Source node object
+     */
+    sourceNode: NodeData;
+    /**
+     * Target node object
+     */
+    targetNode: NodeData;
+    actualEdges: Array<ExtendedEdgeData>;
 };

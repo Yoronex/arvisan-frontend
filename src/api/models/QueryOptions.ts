@@ -3,6 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { Partial_Range_ } from './Partial_Range_';
+
 export type QueryOptions = {
     id: string;
     layerDepth: number;
@@ -11,13 +13,7 @@ export type QueryOptions = {
     onlyExternalRelations?: boolean;
     showDependencies?: boolean;
     showDependents?: boolean;
-    dependencyRange?: {
-max?: number;
-min?: number;
-};
-    dependentRange?: {
-max?: number;
-min?: number;
-};
+    dependencyRange?: Partial_Range_;
+    dependentRange?: Partial_Range_;
     selfEdges?: boolean;
 };

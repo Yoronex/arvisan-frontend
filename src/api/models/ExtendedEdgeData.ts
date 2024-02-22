@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { EdgeViolations } from './EdgeViolations';
 import type { NodeData } from './NodeData';
 
 export type ExtendedEdgeData = {
@@ -26,6 +27,10 @@ export type ExtendedEdgeData = {
      * Custom properties
      */
     properties: {
+/**
+ * Whether this edge is some architectural violation
+ */
+violations: EdgeViolations;
 /**
  * Edge weight
  */

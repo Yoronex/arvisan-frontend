@@ -24,6 +24,10 @@ export default function HoverDetailsCard({ node }: Props) {
           <table>
             <tbody>
               <tr>
+                <td className="pe-2 text-end">Internal ID</td>
+                <td>{node.id()}</td>
+              </tr>
+              <tr>
                 <td className="pe-2 text-end">Node:</td>
                 <td>{node.data('label')}</td>
               </tr>

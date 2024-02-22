@@ -1,30 +1,42 @@
-import { useContext, useEffect, useState } from 'react';
-import { ListGroup, ListGroupItem } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+import { useContext } from 'react';
 import { GraphContext, ViolationsContext } from '../../../context';
+import ViolationsGroup from './group';
+import { DependencyCycleRender } from '../../../api';
+import ViolationsList from './ViolationList';
 import CyclicalDependenciesModal from './CyclicalDependenciesModal';
-import { DependencyCycle } from '../../../api';
-import CyclicalDependenciesList, { DependencyCycleGroup } from './CyclicalDependenciesList';
 
 export default function CyclicalDependencies() {
   const { violations } = useContext(ViolationsContext);
+  const { graph } = useContext(GraphContext);
   const { dependencyCycles } = violations;
 
-  const dependencyCycleGroups = dependencyCycles.reduce((g: DependencyCycleGroup[], c) => {
-    const index = g.findIndex((c2) => c2.label === c.node.label);
-    if (index >= 0) {
-      g[index].cycles.push(c);
-    } else {
-      g.push({
-        cycles: [c],
-        label: c.node.label,
-      });
-    }
-    return g;
-  }, []);
+  const dependencyCycleGroups = dependencyCycles
+    .reduce((g: ViolationsGroup<DependencyCycleRender>[], c) => {
+      const index = g.findIndex((c2) => c2.label === c.node.label);
+      if (index >= 0) {
+        g[index].items.push(c);
+      } else {
+        g.push({
+          items: [c],
+          label: c.node.label,
+        });
+      }
+      return g;
+    }, []);
+
+  const cyclicalDepGreyed = (
+    group: ViolationsGroup<DependencyCycleRender>,
+  ) => group.items
+    .some((c) => c.path
+      .some((e1) => !graph.edges
+        .find((e2) => e2.data.id.includes(e1.id))));
 
   return (
-    <CyclicalDependenciesList dependencyCycles={dependencyCycleGroups} />
+    <ViolationsList
+      groups={dependencyCycleGroups}
+      groupGreyed={cyclicalDepGreyed}
+      header="(Indirect) cyclical dependencies"
+      Modal={CyclicalDependenciesModal}
+    />
   );
 }

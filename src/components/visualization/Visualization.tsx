@@ -77,7 +77,8 @@ export default function Visualization({
   /** Violations */
   useEffect(() => {
     if (!cy.current) return;
-    const ids = violations.dependencyCycles.map((c) => c.path.map((p) => p.id)).flat();
+    const ids = violations.dependencyCycles.map((c) => c.path.map((p) => p.id)).flat()
+      .concat(violations.subLayers.map((s) => s.id));
     cy.current.edges().forEach((e: cytoscape.EdgeSingular) => {
       e.removeClass('violation');
 
@@ -109,12 +110,10 @@ export default function Visualization({
   useEffect(() => {
     if (!cy.current) return;
     if (!highlightedEdges) return;
-    console.log(highlightedEdges);
     const actualEdges = highlightedEdges.map((h) => graph.edges
       .find((e) => e.data.id.includes(h.id))!);
     const ids = actualEdges.map((e) => `[id = '${e.data.id}']`).join(', ');
     const edges = cy.current.edges(`${ids}`);
-    console.log(ids, edges);
     cy.current.animate({
       fit: {
         eles: edges,

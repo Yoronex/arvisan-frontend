@@ -4,7 +4,9 @@
 /* eslint-disable */
 
 import type { DependencyCycleRender } from './DependencyCycleRender';
+import type { LayerViolation } from './LayerViolation';
 
 export type Violations = {
     dependencyCycles: Array<DependencyCycleRender>;
+    subLayers: Array<LayerViolation>;
 };

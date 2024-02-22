@@ -4,16 +4,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightLong, faBinoculars } from '@fortawesome/free-solid-svg-icons';
 import { DependencyCycle, DependencyCycleRender } from '../../../api';
 import { GraphContext, GraphHighlightContext } from '../../../context';
+import { ViolationModalProps } from './ViolationList';
 
-interface Props {
-  cyclicalDependencies?: DependencyCycleRender[];
-  onClose: () => void;
-  label?: string,
-}
-
-export default function CyclicalDependenciesModal({ cyclicalDependencies, onClose, label }: Props) {
+export default function CyclicalDependenciesModal({
+  selectedGroup, onClose,
+}: ViolationModalProps<DependencyCycleRender>) {
   const { graph } = useContext(GraphContext);
-  const { highlightEdges, highlightNodes } = useContext(GraphHighlightContext);
+  const { highlightEdges } = useContext(GraphHighlightContext);
+
+  const cyclicalDependencies = selectedGroup?.items;
+  const label = selectedGroup?.label;
 
   const cyclicalDepVisible = (d: DependencyCycle) => {
     const edges = d.path;
@@ -21,7 +21,6 @@ export default function CyclicalDependenciesModal({ cyclicalDependencies, onClos
   };
 
   const onHighlight = (d: DependencyCycleRender) => {
-    // highlightNodes(d.path.map((e) => e.targetNode));
     highlightEdges(d.path);
     onClose();
   };
@@ -42,7 +41,7 @@ export default function CyclicalDependenciesModal({ cyclicalDependencies, onClos
         {cyclicalDependency.path.map((c) => (
           <>
             <FontAwesomeIcon icon={faArrowRightLong} />
-            <div className="">{c.targetNode.label}</div>
+            <div className="">{c.targetNode?.label}</div>
           </>
         ))}
       </h5>
@@ -74,7 +73,7 @@ export default function CyclicalDependenciesModal({ cyclicalDependencies, onClos
               <ol>
                 <li style={{ listStyleType: 'none' }}>{c.node.label}</li>
                 {c.path.map((e, i) => (
-                  <li value={i + 1} key={e.id}>{e.targetNode.label}</li>
+                  <li value={i + 1} key={e.id}>{e.targetNode?.label}</li>
                 ))}
               </ol>
             </li>
@@ -116,6 +115,5 @@ export default function CyclicalDependenciesModal({ cyclicalDependencies, onClos
 }
 
 CyclicalDependenciesModal.defaultProps = ({
-  cyclicalDependencies: undefined,
-  label: '',
+  selectedGroup: undefined,
 });

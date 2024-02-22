@@ -11,6 +11,7 @@ interface IViolationsContext {
 export const ViolationsContext = createContext<IViolationsContext>({
   violations: {
     dependencyCycles: [],
+    subLayers: [],
   },
   setViolations: () => {},
 });
@@ -18,6 +19,7 @@ export const ViolationsContext = createContext<IViolationsContext>({
 export default function ViolationsContextProvider({ children }: PropsWithChildren) {
   const [violations, setViolations] = useState<Violations>({
     dependencyCycles: [],
+    subLayers: [],
   });
 
   const violationsContext = useMemo((): IViolationsContext => ({
