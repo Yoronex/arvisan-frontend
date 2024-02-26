@@ -51,7 +51,7 @@ export default function Visualization({
     cy.current.nodes().forEach(colorNodes);
 
     // Add event listener to select a node once it has been clicked
-    cy.current.on('tap', 'node', (event) => {
+    cy.current.on('cxttap', 'node', (event) => {
       const node = event.target as cytoscape.NodeSingular;
       visitNode({
         type: 'cytoscape',
