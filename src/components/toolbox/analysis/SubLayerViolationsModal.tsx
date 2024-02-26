@@ -42,11 +42,11 @@ export default function SubLayerViolationsModal({
               className="mb-2"
               key={`${c.source}-${c.target}`}
             >
-              {violation.sourceNode.label}
+              {c.sourceNode.label}
               {' '}
               <FontAwesomeIcon icon={faArrowRightLong} />
               {' '}
-              {violation.targetNode.label}
+              {c.targetNode.label}
             </li>
           ))}
         </ul>
