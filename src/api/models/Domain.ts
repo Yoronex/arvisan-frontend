@@ -41,8 +41,8 @@ layer: string;
  */
 kind: string;
 };
-    nrDependencies: number;
-    nrDependents: number;
+    nrOutgoingDependencies: number;
+    nrIncomingDependencies: number;
     nrInternalDependencies: number;
 };
 

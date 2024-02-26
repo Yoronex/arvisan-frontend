@@ -6,12 +6,12 @@ import { ViolationsContext } from './ViolationsContext';
 interface IGraphFilterSettings {
   layerDepth: number,
   dependencyLength: number,
-  showDependencies: boolean;
-  minDependencies: number;
-  maxDependencies: number;
-  showDependents: boolean;
-  minDependents: number;
-  maxDependents: number;
+  showOutgoing: boolean;
+  minOutgoing: number;
+  maxOutgoing: number;
+  showIncoming: boolean;
+  minIncoming: number;
+  maxIncoming: number;
   showInternalRelationships: boolean;
   showExternalRelationships: boolean;
   selfEdges: boolean;
@@ -30,12 +30,12 @@ interface IGraphSettings {
 const defaultSettings: IGraphFilterSettings = {
   layerDepth: 1,
   dependencyLength: 1,
-  showDependencies: true,
-  minDependencies: 0,
-  maxDependencies: Number.POSITIVE_INFINITY,
-  showDependents: false,
-  minDependents: 0,
-  maxDependents: Number.POSITIVE_INFINITY,
+  showOutgoing: true,
+  minOutgoing: 0,
+  maxOutgoing: Number.POSITIVE_INFINITY,
+  showIncoming: false,
+  minIncoming: 0,
+  maxIncoming: Number.POSITIVE_INFINITY,
   showInternalRelationships: true,
   showExternalRelationships: true,
   selfEdges: true,
@@ -78,17 +78,17 @@ export default function GraphContextProvider({ children }: Props) {
         dependencyDepth: settings.dependencyLength,
         onlyInternalRelations,
         onlyExternalRelations,
-        showDependencies: settings.showDependencies,
-        showDependents: settings.showDependents,
-        dependencyRange: {
-          min: settings.minDependencies || undefined,
-          max: settings.maxDependencies === Number.POSITIVE_INFINITY
-            ? undefined : settings.maxDependencies,
+        showOutgoing: settings.showOutgoing,
+        showIncoming: settings.showIncoming,
+        outgoingRange: {
+          min: settings.minOutgoing || undefined,
+          max: settings.maxOutgoing === Number.POSITIVE_INFINITY
+            ? undefined : settings.maxOutgoing,
         },
-        dependentRange: {
-          min: settings.minDependents || undefined,
-          max: settings.maxDependents === Number.POSITIVE_INFINITY
-            ? undefined : settings.maxDependents,
+        incomingRange: {
+          min: settings.minIncoming || undefined,
+          max: settings.maxIncoming === Number.POSITIVE_INFINITY
+            ? undefined : settings.maxIncoming,
         },
         selfEdges: settings.selfEdges,
       });

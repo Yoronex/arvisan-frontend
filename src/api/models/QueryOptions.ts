@@ -11,9 +11,9 @@ export type QueryOptions = {
     dependencyDepth: number;
     onlyInternalRelations?: boolean;
     onlyExternalRelations?: boolean;
-    showDependencies?: boolean;
-    showDependents?: boolean;
-    dependencyRange?: Partial_Range_;
-    dependentRange?: Partial_Range_;
+    showOutgoing?: boolean;
+    showIncoming?: boolean;
+    outgoingRange?: Partial_Range_;
+    incomingRange?: Partial_Range_;
     selfEdges?: boolean;
 };

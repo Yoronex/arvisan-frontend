@@ -13,7 +13,8 @@ export default function WelcomeModal() {
   const { loading, domains, updateDomain } = useContext(DomainContext);
 
   const [show, setShow] = useState(currentNode == null);
-  const sortedDomains = domains.sort((d1, d2) => d2.nrDependencies - d1.nrDependencies);
+  const sortedDomains = domains
+    .sort((d1, d2) => d2.nrOutgoingDependencies - d1.nrOutgoingDependencies);
 
   const handleClose = () => {
     if (currentNode == null) return;
@@ -28,8 +29,8 @@ export default function WelcomeModal() {
         <thead className="fw-bold">
           <tr>
             <td>Name</td>
-            <td># Dependencies</td>
-            <td># Dependents</td>
+            <td># Outgoing Dependencies</td>
+            <td># Incoming Dependencies</td>
             <td># Inner dependencies</td>
             <td aria-label="Select" />
           </tr>
@@ -46,8 +47,8 @@ export default function WelcomeModal() {
                 key={d.id}
               >
                 <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.label}</button></td>
-                <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.nrDependencies}</button></td>
-                <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.nrDependents}</button></td>
+                <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.nrOutgoingDependencies}</button></td>
+                <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.nrIncomingDependencies}</button></td>
                 <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.nrInternalDependencies}</button></td>
                 <td><Button onClick={click} size="sm" title={`Select ${d.label}`}>Select</Button></td>
               </tr>

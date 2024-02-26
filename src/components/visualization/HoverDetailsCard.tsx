@@ -48,19 +48,19 @@ export default function HoverDetailsCard({ node }: Props) {
               {node.isChildless() && (
                 <>
                   <tr>
-                    <td className="pe-2 text-end">Dependency edges:</td>
+                    <td className="pe-2 text-end"># Outgoing edges:</td>
                     <td>{node.outdegree(true)}</td>
                   </tr>
                   <tr>
-                    <td className="pe-2 text-end">Total dependencies:</td>
+                    <td className="pe-2 text-end">Total outgoing dependencies:</td>
                     <td>{outgoers.reduce((total, edge) => total + Number(edge.data('properties.weight')), 0)}</td>
                   </tr>
                   <tr>
-                    <td className="pe-2 text-end">Dependent edges:</td>
+                    <td className="pe-2 text-end"># Incoming edges:</td>
                     <td>{node.indegree(true)}</td>
                   </tr>
                   <tr>
-                    <td className="pe-2 text-end">Total dependents:</td>
+                    <td className="pe-2 text-end">Total incoming dependencies:</td>
                     <td>{incomers.reduce((total, edge) => total + Number(edge.data('properties.weight')), 0)}</td>
                   </tr>
                 </>
