@@ -1,15 +1,39 @@
 import { useContext } from 'react';
 import { Form, FormCheck } from 'react-bootstrap';
-import { GraphContext } from '../../../context/GraphContext';
+import { GraphContext } from '../../../context';
 
 export default function GraphInternalExternalRelationshipsSettings() {
   const { settings, updateSettings } = useContext(GraphContext);
-  const { showInternalRelationships, showExternalRelationships, selfEdges } = settings;
+  const {
+    showSelectionInternalRelationships,
+    showDomainInternalRelationships,
+    showExternalRelationships,
+    selfEdges,
+  } = settings;
 
-  const setShowInternalRelationships = (value: boolean) => {
-    updateSettings({
-      ...settings,
-      showInternalRelationships: value,
+  const setShowSelectionInternalRelationships = (value: boolean) => {
+    updateSettings((s) => {
+      if (!value) {
+        return {
+          ...s,
+          showSelectionInternalRelationships: false,
+          showDomainInternalRelationships: false,
+        };
+      }
+      return { ...s, showSelectionInternalRelationships: value };
+    });
+  };
+
+  const setShowDomainInternalRelationships = (value: boolean) => {
+    updateSettings((s) => {
+      if (value) {
+        return {
+          ...s,
+          showSelectionInternalRelationships: true,
+          showDomainInternalRelationships: true,
+        };
+      }
+      return { ...s, showDomainInternalRelationships: value };
     });
   };
   const setShowExternalRelationships = (value: boolean) => {
@@ -28,10 +52,16 @@ export default function GraphInternalExternalRelationshipsSettings() {
   return (
     <Form>
       <FormCheck
-        onChange={(event) => setShowInternalRelationships(event.target.checked)}
-        checked={showInternalRelationships}
+        onChange={(event) => setShowSelectionInternalRelationships(event.target.checked)}
+        checked={showSelectionInternalRelationships}
         type="switch"
-        label="Show internal relationships"
+        label="Show selection internal relationships"
+      />
+      <FormCheck
+        onChange={(event) => setShowDomainInternalRelationships(event.target.checked)}
+        checked={showDomainInternalRelationships}
+        type="switch"
+        label="Show domain internal relationships"
       />
       <FormCheck
         onChange={(event) => setShowExternalRelationships(event.target.checked)}

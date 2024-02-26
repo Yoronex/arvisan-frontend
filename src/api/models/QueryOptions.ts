@@ -9,8 +9,9 @@ export type QueryOptions = {
     id: string;
     layerDepth: number;
     dependencyDepth: number;
-    onlyInternalRelations?: boolean;
-    onlyExternalRelations?: boolean;
+    showSelectedInternalRelations?: boolean;
+    showDomainInternalRelations?: boolean;
+    showExternalRelations?: boolean;
     showOutgoing?: boolean;
     showIncoming?: boolean;
     outgoingRange?: Partial_Range_;

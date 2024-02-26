@@ -1,4 +1,4 @@
-import React, { createContext, PropsWithChildren } from 'react';
+import React, { createContext, PropsWithChildren, SetStateAction } from 'react';
 import { Graph, GraphService } from '../api';
 import { VisualizationHistory } from './VisualizationHistory';
 import { ViolationsContext } from './ViolationsContext';
@@ -12,14 +12,15 @@ interface IGraphFilterSettings {
   showIncoming: boolean;
   minIncoming: number;
   maxIncoming: number;
-  showInternalRelationships: boolean;
+  showSelectionInternalRelationships: boolean;
+  showDomainInternalRelationships: boolean;
   showExternalRelationships: boolean;
   selfEdges: boolean;
 }
 
 interface IGraphSettings {
   settings: IGraphFilterSettings,
-  updateSettings: (settings: IGraphFilterSettings) => void;
+  updateSettings: (settings: SetStateAction<IGraphFilterSettings>) => void;
   graph: Graph;
   loading: boolean;
 
@@ -36,7 +37,8 @@ const defaultSettings: IGraphFilterSettings = {
   showIncoming: false,
   minIncoming: 0,
   maxIncoming: Number.POSITIVE_INFINITY,
-  showInternalRelationships: true,
+  showSelectionInternalRelationships: true,
+  showDomainInternalRelationships: true,
   showExternalRelationships: true,
   selfEdges: true,
 };
@@ -69,15 +71,13 @@ export default function GraphContextProvider({ children }: Props) {
       if (!currentNodeId) return;
       setLoading(true);
 
-      const onlyInternalRelations = !settings.showExternalRelationships;
-      const onlyExternalRelations = !settings.showInternalRelationships;
-
       const { graph: g, violations } = await GraphService.getNode({
         id: currentNodeId,
         layerDepth: settings.layerDepth,
         dependencyDepth: settings.dependencyLength,
-        onlyInternalRelations,
-        onlyExternalRelations,
+        showSelectedInternalRelations: settings.showSelectionInternalRelationships,
+        showDomainInternalRelations: settings.showDomainInternalRelationships,
+        showExternalRelations: settings.showExternalRelationships,
         showOutgoing: settings.showOutgoing,
         showIncoming: settings.showIncoming,
         outgoingRange: {
@@ -115,7 +115,7 @@ export default function GraphContextProvider({ children }: Props) {
       .finally(() => setLoading(false));
   }, [currentNodeId, settings]);
 
-  const updateSettings = (newSettings: IGraphFilterSettings) => {
+  const updateSettings = (newSettings: SetStateAction<IGraphFilterSettings>) => {
     setSettings(newSettings);
   };
 
