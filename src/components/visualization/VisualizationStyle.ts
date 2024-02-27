@@ -15,6 +15,12 @@ const stylesheet: cytoscape.Stylesheet[] = [{
     'text-wrap': 'wrap',
   },
 }, {
+  selector: 'node:parent',
+  css: {
+    'text-valign': 'top',
+    'font-size': '24',
+  },
+}, {
   selector: 'edge',
   css: {
     'target-arrow-shape': 'triangle',
