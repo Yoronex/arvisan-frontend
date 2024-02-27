@@ -2,6 +2,7 @@ import GraphInternalExternalRelationshipsSettings from './settings/GraphInternal
 import GraphDependencySettings from './settings/GraphDependencySettings';
 import GraphDepthAndLengthSettings from './settings/GraphDepthAndLengthSettings';
 import GraphLayoutAlgorithm from './settings/GraphLayoutAlgorithm';
+import DependencyTypes from './settings/DependencyTypes';
 
 export default function VisualizationSettings() {
   return (
@@ -13,6 +14,8 @@ export default function VisualizationSettings() {
       <GraphInternalExternalRelationshipsSettings />
       <hr />
       <GraphLayoutAlgorithm />
+      <hr />
+      <DependencyTypes />
     </>
   );
 }

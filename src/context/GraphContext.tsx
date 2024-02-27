@@ -16,6 +16,9 @@ interface IGraphFilterSettings {
   showDomainInternalRelationships: boolean;
   showExternalRelationships: boolean;
   selfEdges: boolean;
+  showWeakDependencies: boolean;
+  showStrongDependencies: boolean;
+  showEntityDependencies: boolean;
 }
 
 interface IGraphSettings {
@@ -41,6 +44,9 @@ const defaultSettings: IGraphFilterSettings = {
   showDomainInternalRelationships: true,
   showExternalRelationships: true,
   selfEdges: true,
+  showWeakDependencies: true,
+  showStrongDependencies: true,
+  showEntityDependencies: true,
 };
 
 const defaultGraph: Graph = { name: '', nodes: [], edges: [] };
@@ -91,6 +97,9 @@ export default function GraphContextProvider({ children }: Props) {
             ? undefined : settings.maxIncoming,
         },
         selfEdges: settings.selfEdges,
+        showWeakDependencies: settings.showWeakDependencies,
+        showStrongDependencies: settings.showStrongDependencies,
+        showEntityDependencies: settings.showEntityDependencies,
       });
 
       // Cytoscape has issues with removing and adding edges when changing the layer depth. This is

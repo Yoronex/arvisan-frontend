@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { DependencyType } from './DependencyType';
 import type { EdgeViolations } from './EdgeViolations';
 import type { NodeData } from './NodeData';
 
@@ -28,6 +29,14 @@ export type ExtendedEdgeData = {
      */
     properties: {
 /**
+ * Type of dependency
+ */
+dependencyTypes: Array<DependencyType>;
+/**
+ * Type of reference used within OutSystems
+ */
+referenceTypes: Array<string>;
+/**
  * Whether this edge is some architectural violation
  */
 violations: EdgeViolations;
@@ -35,6 +44,10 @@ violations: EdgeViolations;
  * Edge weight
  */
 weight: number;
+/**
+ * Edge reference key (from OutSystems)
+ */
+referenceKeys: Array<string>;
 };
     /**
      * Source node object

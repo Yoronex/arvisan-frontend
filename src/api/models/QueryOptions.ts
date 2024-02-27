@@ -17,4 +17,7 @@ export type QueryOptions = {
     outgoingRange?: Partial_Range_;
     incomingRange?: Partial_Range_;
     selfEdges?: boolean;
+    showWeakDependencies?: boolean;
+    showStrongDependencies?: boolean;
+    showEntityDependencies?: boolean;
 };

@@ -12,7 +12,7 @@ import {
 import VisualizationStyle from './VisualizationStyle';
 import { assignEdgeWeights, colorNodes } from '../../cytoscape/operations';
 import { PossibleLayoutOptions, VisualizationLayoutContext } from '../../context/VisualizationLayoutContext';
-import HoverDetailsCard from './HoverDetailsCard';
+import { HoverDetailsCard } from '../hover';
 
 cytoscape.use(klay);
 cytoscape.use(cola);
@@ -32,7 +32,7 @@ export default function Visualization({
   const { layoutOptions, reloadedAt } = useContext(VisualizationLayoutContext);
   const { violations, visibility } = useContext(ViolationsContext);
 
-  const [hoveredNode, setHoveredNode] = useState<cytoscape.NodeSingular | null>(null);
+  const [hoveredElement, setHoveredElement] = useState<cytoscape.Singular | null>(null);
 
   const cy = useRef<cytoscape.Core>();
 
@@ -59,12 +59,12 @@ export default function Visualization({
         timestamp: new Date(),
       });
     });
-    cy.current.on('mouseover', 'node', (event) => {
-      const node = event.target as cytoscape.NodeSingular;
-      setHoveredNode(node);
+    cy.current.elements().on('mouseover', (event) => {
+      const node = event.target as cytoscape.Singular;
+      setHoveredElement(node);
     });
-    cy.current.on('mouseout', 'node', () => {
-      setHoveredNode(null);
+    cy.current.elements().on('mouseout', () => {
+      setHoveredElement(null);
     });
   }, [cy, graph, visitNode]);
 
@@ -146,7 +146,7 @@ export default function Visualization({
         boxSelectionEnabled
         userPanningEnabled
       />
-      <HoverDetailsCard node={hoveredNode} />
+      <HoverDetailsCard element={hoveredElement} />
     </>
   );
 }
