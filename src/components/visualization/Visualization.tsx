@@ -12,7 +12,8 @@ import {
 import VisualizationStyle from './VisualizationStyle';
 import { assignEdgeWeights, colorNodes } from '../../cytoscape/operations';
 import { PossibleLayoutOptions, VisualizationLayoutContext } from '../../context/VisualizationLayoutContext';
-import { HoverDetailsCard } from '../hover';
+import { HoverDetailsCard } from './hover';
+import GraphElementDetailsModal from './details/GraphElementDetailsModal';
 
 cytoscape.use(klay);
 cytoscape.use(cola);
@@ -33,6 +34,7 @@ export default function Visualization({
   const { violations, visibility } = useContext(ViolationsContext);
 
   const [hoveredElement, setHoveredElement] = useState<cytoscape.Singular | null>(null);
+  const [selectedElement, setSelectedElement] = useState<cytoscape.Singular | null>(null);
 
   const cy = useRef<cytoscape.Core>();
 
@@ -50,7 +52,14 @@ export default function Visualization({
     if (!cy.current) return;
     cy.current.nodes().forEach(colorNodes);
 
-    // Add event listener to select a node once it has been clicked
+    // Add event listener to select an element once it has been left-clicked
+    cy.current.elements().on('tap', (event) => {
+      const element = event.target as cytoscape.Singular;
+      setSelectedElement(element);
+      setHoveredElement(null);
+    });
+
+    // Add event listener to visit a node once it has been right-clicked
     cy.current.on('cxttap', 'node', (event) => {
       const node = event.target as cytoscape.NodeSingular;
       visitNode({
@@ -59,6 +68,8 @@ export default function Visualization({
         timestamp: new Date(),
       });
     });
+
+    // Add event listener to open a hover card once an element is hovered
     cy.current.elements().on('mouseover', (event) => {
       const node = event.target as cytoscape.Singular;
       setHoveredElement(node);
@@ -147,6 +158,10 @@ export default function Visualization({
         userPanningEnabled
       />
       <HoverDetailsCard element={hoveredElement} />
+      <GraphElementDetailsModal
+        element={selectedElement}
+        onClose={() => setSelectedElement(null)}
+      />
     </>
   );
 }
