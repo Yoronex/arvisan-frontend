@@ -22,7 +22,7 @@ export default function SubLayerViolationsDetails({ violations, onHighlight }: P
     <div>
       <h5 className="d-flex flex-wrap align-items-center gap-2">
         <Button
-          title="Highlight this cyclical dependency"
+          title="Show this cyclical dependency in visualization"
           onClick={() => handleHighlight(violation)}
         >
           <FontAwesomeIcon icon={faBinoculars} size="sm" />
