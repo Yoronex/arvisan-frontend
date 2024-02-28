@@ -26,6 +26,7 @@ export default function ToolboxAnalysis() {
           indeterminate={visibility.nonViolations === VisibilityOptions.VISIBLE}
           checked={false}
           onChange={toggleNonViolationsVisibility}
+          id="non-violations-visibility-checkbox"
         />
       </Form>
       <CyclicalDependencies />

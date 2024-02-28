@@ -14,6 +14,7 @@ export interface ViolationModalProps<T> extends ModalProps {
 }
 
 interface Props<T> {
+  checkboxId: string;
   groups: ViolationsGroup<T>[];
   header: string;
   Modal: ComponentType<ViolationModalProps<T>>;
@@ -26,7 +27,7 @@ interface Props<T> {
 }
 
 export default function ViolationsList<T>({
-  groups, header, Modal,
+  checkboxId, groups, header, Modal,
   showInVisualization, setShowInVisualization,
   groupGreyed, groupDisabled,
 }: Props<T>) {
@@ -57,7 +58,8 @@ export default function ViolationsList<T>({
           label={`Show ${header.toLowerCase()} in visualization`}
           checked={showInVisualization === VisibilityOptions.HIGHLIGHTED}
           indeterminate={showInVisualization === VisibilityOptions.VISIBLE}
-          onChange={onCheckClick}
+          onClick={onCheckClick}
+          id={checkboxId}
         />
       </Form>
       <ListGroup className="overflow-y-auto" style={{ maxHeight: '15rem' }}>

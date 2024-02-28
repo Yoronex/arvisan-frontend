@@ -1,14 +1,37 @@
 import { Modal } from 'react-bootstrap';
+import { useContext } from 'react';
 import { ViolationModalProps } from './ViolationList';
 import { LayerViolation } from '../../../api';
 import SubLayerViolationsDetails from './SubLayerViolationsDetails';
+import { ViolationsContext } from '../../../context';
+import { VisibilityOptions } from '../../../helpers/enums';
 
 export default function SubLayerViolationsModal({
   selectedGroup, onClose,
 }: ViolationModalProps<LayerViolation>) {
+  const { setVisibility } = useContext(ViolationsContext);
+
+  const layerViolations = selectedGroup?.items;
+  const label = selectedGroup?.label;
+
+  const onHighlight = () => {
+    setVisibility((visibility) => {
+      const v = { ...visibility };
+      if (v.subLayers === VisibilityOptions.INVISIBLE) {
+        v.subLayers = VisibilityOptions.HIGHLIGHTED;
+      }
+      return v;
+    });
+  };
+
   const modalContent = () => {
-    if (!selectedGroup) return null;
-    return <SubLayerViolationsDetails violations={selectedGroup.items} />;
+    if (!layerViolations) return null;
+    return (
+      <SubLayerViolationsDetails
+        violations={layerViolations}
+        onHighlight={onHighlight}
+      />
+    );
   };
 
   const open = !!selectedGroup;
@@ -19,7 +42,7 @@ export default function SubLayerViolationsModal({
         <Modal.Title>
           Sublayer violations of
           {' '}
-          {selectedGroup?.label}
+          {label}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>

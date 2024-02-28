@@ -7,15 +7,15 @@ import { LayerViolation } from '../../../api';
 
 interface Props {
   violations: LayerViolation[];
-  onClose?: () => void;
+  onHighlight?: () => void;
 }
 
-export default function SubLayerViolationsDetails({ violations, onClose }: Props) {
+export default function SubLayerViolationsDetails({ violations, onHighlight }: Props) {
   const { highlightEdges } = useContext(GraphHighlightContext);
 
-  const onHighlight = (d: LayerViolation) => {
+  const handleHighlight = (d: LayerViolation) => {
     highlightEdges([d]);
-    if (onClose) onClose();
+    if (onHighlight) onHighlight();
   };
 
   const renderSublayerViolation = (violation: LayerViolation) => (
@@ -23,7 +23,7 @@ export default function SubLayerViolationsDetails({ violations, onClose }: Props
       <h5 className="d-flex flex-wrap align-items-center gap-2">
         <Button
           title="Highlight this cyclical dependency"
-          onClick={() => onHighlight(violation)}
+          onClick={() => handleHighlight(violation)}
         >
           <FontAwesomeIcon icon={faBinoculars} size="sm" />
         </Button>
@@ -76,5 +76,5 @@ export default function SubLayerViolationsDetails({ violations, onClose }: Props
 }
 
 SubLayerViolationsDetails.defaultProps = ({
-  onClose: undefined,
+  onHighlight: undefined,
 });

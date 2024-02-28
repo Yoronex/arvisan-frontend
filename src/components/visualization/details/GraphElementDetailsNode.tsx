@@ -35,11 +35,11 @@ export default function GraphElementDetailsNode({ node, onClose }: Props) {
       <Button onClick={handleVisitNode}>Select this node</Button>
       <div className="w-100">
         <h3>Cyclical dependencies</h3>
-        <CyclicalDependenciesDetails cyclicalDependencies={cyclicalDeps} onClose={onClose} />
+        <CyclicalDependenciesDetails cyclicalDependencies={cyclicalDeps} onHighlight={onClose} />
       </div>
       <div>
         <h3>Sublayer violations</h3>
-        <SubLayerViolationsDetails violations={subLayerViolations} onClose={onClose} />
+        <SubLayerViolationsDetails violations={subLayerViolations} onHighlight={onClose} />
       </div>
     </div>
   );

@@ -41,6 +41,7 @@ export default function CyclicalDependencies() {
 
   return (
     <ViolationsList
+      checkboxId="dependency-cycle-checkbox"
       groups={dependencyCycleGroups}
       groupGreyed={cyclicalDepGreyed}
       header="(Indirect) cyclical dependencies"

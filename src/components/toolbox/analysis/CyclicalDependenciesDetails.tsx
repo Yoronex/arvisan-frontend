@@ -7,10 +7,10 @@ import { GraphContext, GraphHighlightContext } from '../../../context';
 
 interface Props {
   cyclicalDependencies: DependencyCycleRender[];
-  onClose?: () => void;
+  onHighlight?: () => void;
 }
 
-export default function CyclicalDependenciesDetails({ cyclicalDependencies, onClose }: Props) {
+export default function CyclicalDependenciesDetails({ cyclicalDependencies, onHighlight }: Props) {
   const { graph } = useContext(GraphContext);
   const { highlightEdges } = useContext(GraphHighlightContext);
 
@@ -19,9 +19,9 @@ export default function CyclicalDependenciesDetails({ cyclicalDependencies, onCl
     return edges.every((e1) => graph.edges.find((e2) => e2.data.id.includes(e1.id)));
   };
 
-  const onHighlight = (d: DependencyCycleRender) => {
+  const handleHighlight = (d: DependencyCycleRender) => {
     highlightEdges(d.path);
-    if (onClose) onClose();
+    if (onHighlight) onHighlight();
   };
 
   const renderDepCycle = (cyclicalDependency: DependencyCycleRender) => (
@@ -29,7 +29,7 @@ export default function CyclicalDependenciesDetails({ cyclicalDependencies, onCl
       <h5 className="d-flex flex-wrap align-items-center gap-2">
         <Button
           title="Highlight this cyclical dependency"
-          onClick={() => onHighlight(cyclicalDependency)}
+          onClick={() => handleHighlight(cyclicalDependency)}
         >
           <FontAwesomeIcon icon={faBinoculars} size="sm" />
         </Button>
@@ -102,5 +102,5 @@ export default function CyclicalDependenciesDetails({ cyclicalDependencies, onCl
 }
 
 CyclicalDependenciesDetails.defaultProps = ({
-  onClose: undefined,
+  onHighlight: undefined,
 });

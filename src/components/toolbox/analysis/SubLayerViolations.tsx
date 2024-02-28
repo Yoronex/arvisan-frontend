@@ -33,6 +33,7 @@ export default function SubLayerViolations() {
 
   return (
     <ViolationsList
+      checkboxId="sublayer-violations-checkbox"
       groups={subLayerGroups}
       header="Sublayer violations"
       Modal={SubLayerViolationsModal}

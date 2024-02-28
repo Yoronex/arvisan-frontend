@@ -1,5 +1,5 @@
 import {
-  createContext, PropsWithChildren, useMemo, useState,
+  createContext, PropsWithChildren, SetStateAction, useMemo, useState,
 } from 'react';
 import { Violations } from '../api';
 import { VisibilityOptions } from '../helpers/enums';
@@ -12,9 +12,9 @@ export interface ViolationVisibility {
 
 interface IViolationsContext {
   violations: Violations;
-  setViolations: (v: Violations) => void;
+  setViolations: (v: SetStateAction<Violations>) => void;
   visibility: ViolationVisibility,
-  setVisibility: (v: ViolationVisibility) => void;
+  setVisibility: (e: SetStateAction<ViolationVisibility>) => void;
   resetVisibility: () => void;
 }
 
