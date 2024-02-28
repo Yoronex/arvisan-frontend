@@ -3,7 +3,7 @@ import NodeFinder from './NodeFinder';
 import GraphHistory from './GraphHistory';
 import CurrentNodeStack from './CurrentNodeStack';
 
-export default function GraphNavigator() {
+export default function ToolboxNavigation() {
   return (
     <div className="d-flex flex-column gap-3">
       <div>

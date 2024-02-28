@@ -2,8 +2,8 @@ import {
   Card, CardBody, CardHeader, Nav, Tab,
 } from 'react-bootstrap';
 import { ReactNode } from 'react';
-import VisualizationSettings from '../toolbox/VisualizationSettings';
-import GraphNavigator from '../toolbox/navigator/GraphNavigator';
+import ToolboxVisualization from '../toolbox/visualization';
+import ToolboxNavigation from '../toolbox/navigator';
 import ToolboxAnalysis from '../toolbox/analysis';
 
 interface Props {
@@ -18,8 +18,8 @@ interface TabItem {
 
 export default function ToolSideBar({ cardWidth }: Props) {
   const tabs: TabItem[] = [
-    { title: 'Navigation', key: 'navigation', children: <GraphNavigator /> },
-    { title: 'Visualization', key: 'visualization', children: <VisualizationSettings /> },
+    { title: 'Navigation', key: 'navigation', children: <ToolboxNavigation /> },
+    { title: 'Visualization', key: 'visualization', children: <ToolboxVisualization /> },
     { title: 'Analysis', key: 'analysis', children: <ToolboxAnalysis /> },
   ];
 

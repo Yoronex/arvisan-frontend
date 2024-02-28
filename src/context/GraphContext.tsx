@@ -24,6 +24,7 @@ interface IGraphFilterSettings {
 interface IGraphSettings {
   settings: IGraphFilterSettings,
   updateSettings: (settings: SetStateAction<IGraphFilterSettings>) => void;
+  resetSettings: () => void;
   graph: Graph;
   loading: boolean;
 
@@ -55,6 +56,7 @@ export const GraphContext = createContext<IGraphSettings>({
   settings: defaultSettings,
   graph: defaultGraph,
   updateSettings: () => {},
+  resetSettings: () => {},
   loading: true,
   enableMovingNodes: false,
   setEnableMovingNodes: () => {},
@@ -70,6 +72,10 @@ export default function GraphContextProvider({ children }: Props) {
 
   const { currentNodeId } = React.useContext(VisualizationHistory);
   const { setViolations } = React.useContext(ViolationsContext);
+
+  const resetSettings = () => {
+    setSettings(defaultSettings);
+  };
 
   // Reload graph when selecting a node
   React.useEffect(() => {
@@ -132,6 +138,7 @@ export default function GraphContextProvider({ children }: Props) {
     settings,
     graph,
     updateSettings,
+    resetSettings,
     loading,
     enableMovingNodes,
     setEnableMovingNodes,

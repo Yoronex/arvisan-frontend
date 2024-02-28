@@ -1,7 +1,5 @@
 import { ReactNode, useContext } from 'react';
 import { ListGroup } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { HistoryNode, VisualizationHistory } from '../../../context/VisualizationHistory';
 import { NodeData } from '../../../api';
 
