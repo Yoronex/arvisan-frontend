@@ -47,7 +47,6 @@ export default function CurrentNodeStack() {
             onClick={() => { if (!initial) visitNode(node); }}
             type="button"
           >
-            <FontAwesomeIcon icon={faAngleRight} className="me-1" />
             <span className="fw-bold">{data.properties.layer}</span>
             {': '}
             {data.label}
