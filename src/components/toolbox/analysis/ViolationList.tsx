@@ -5,6 +5,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import ViolationsGroup from './group';
+import IntermediateCheckbox from '../../IntermediateCheckbox';
+import { VisibilityOptions } from '../../../helpers/enums';
 
 export interface ViolationModalProps<T> extends ModalProps {
   selectedGroup?: ViolationsGroup<T>;
@@ -16,8 +18,8 @@ interface Props<T> {
   header: string;
   Modal: ComponentType<ViolationModalProps<T>>;
 
-  showInVisualization: boolean;
-  setShowInVisualization: (visible: boolean) => void;
+  showInVisualization: VisibilityOptions;
+  setShowInVisualization: (visible: VisibilityOptions) => void;
 
   groupGreyed?: (g: ViolationsGroup<T>) => boolean;
   groupDisabled?: (g: ViolationsGroup<T>) => boolean;
@@ -35,15 +37,27 @@ export default function ViolationsList<T>({
     setSelectedIndex(undefined);
   }, [groups]);
 
+  const onCheckClick = () => {
+    let newValue: VisibilityOptions;
+    if (showInVisualization === VisibilityOptions.HIGHLIGHTED) {
+      newValue = VisibilityOptions.VISIBLE;
+    } else if (showInVisualization === VisibilityOptions.VISIBLE) {
+      newValue = VisibilityOptions.INVISIBLE;
+    } else {
+      newValue = VisibilityOptions.HIGHLIGHTED;
+    }
+    setShowInVisualization(newValue);
+  };
+
   return (
     <div>
       <h4>{header}</h4>
       <Form>
-        <Form.Check
-          type="switch"
+        <IntermediateCheckbox
           label={`Show ${header.toLowerCase()} in visualization`}
-          checked={showInVisualization}
-          onChange={() => setShowInVisualization(!showInVisualization)}
+          checked={showInVisualization === VisibilityOptions.HIGHLIGHTED}
+          indeterminate={showInVisualization === VisibilityOptions.VISIBLE}
+          onChange={onCheckClick}
         />
       </Form>
       <ListGroup className="overflow-y-auto" style={{ maxHeight: '15rem' }}>

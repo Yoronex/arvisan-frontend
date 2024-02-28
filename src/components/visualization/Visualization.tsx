@@ -7,13 +7,14 @@ import klay from 'cytoscape-klay';
 import cola from 'cytoscape-cola';
 import './Visualization.scss';
 import {
-  GraphContext, VisualizationHistory, GraphHighlightContext, ViolationsContext,
+  GraphContext, GraphHighlightContext, ViolationsContext, VisualizationHistory,
 } from '../../context';
 import VisualizationStyle from './VisualizationStyle';
 import { assignEdgeWeights, colorNodes } from '../../cytoscape/operations';
 import { PossibleLayoutOptions, VisualizationLayoutContext } from '../../context/VisualizationLayoutContext';
 import { HoverDetailsCard } from './hover';
 import GraphElementDetailsModal from './details/GraphElementDetailsModal';
+import { VisibilityOptions } from '../../helpers/enums';
 
 cytoscape.use(klay);
 cytoscape.use(cola);
@@ -89,22 +90,43 @@ export default function Visualization({
   useEffect(() => {
     if (!cy.current) return;
 
-    const ids: string[] = [];
-    if (visibility.dependencyCycles) {
-      ids.push(...violations.dependencyCycles.map((c) => c.path.map((p) => p.id)).flat());
+    const violationIds = {
+      dependencyCycles: violations.dependencyCycles.map((c) => c.path.map((p) => p.id)).flat(),
+      subLayers: violations.subLayers.map((s) => s.id),
+    };
+
+    const allIds = [...violationIds.dependencyCycles, ...violationIds.subLayers];
+    const highlightIds: string[] = [];
+    const visibleIds: string[] = [];
+    if (visibility.dependencyCycles === VisibilityOptions.HIGHLIGHTED) {
+      highlightIds.push(...violationIds.dependencyCycles);
+    } else if (visibility.dependencyCycles === VisibilityOptions.VISIBLE) {
+      visibleIds.push(...violationIds.dependencyCycles);
     }
-    if (visibility.subLayers) {
-      ids.push(...violations.subLayers.map((s) => s.id));
+    if (visibility.subLayers === VisibilityOptions.HIGHLIGHTED) {
+      highlightIds.push(...violationIds.subLayers);
+    } else if (visibility.subLayers === VisibilityOptions.VISIBLE) {
+      visibleIds.push(...violationIds.subLayers);
     }
 
     cy.current.edges().forEach((e: cytoscape.EdgeSingular) => {
       e.removeClass('violation');
+      e.removeClass('hidden');
 
       const idWithRandom = e.id();
       const id = idWithRandom.split('--')[0] || '';
 
-      if (ids.includes(id)) {
+      // Edge should be highlighted
+      if (highlightIds.includes(id)) {
         e.addClass('violation');
+      // Edge is a violation and should not be made visible
+      } else if (allIds.includes(id) && !visibleIds.includes(id)) {
+        e.addClass('hidden');
+      }
+
+      // Edge is not a violation and should be made invisible
+      if (!allIds.includes(id) && visibility.nonViolations === VisibilityOptions.INVISIBLE) {
+        e.addClass('hidden');
       }
     });
   }, [cy, violations, visibility]);
@@ -128,8 +150,11 @@ export default function Visualization({
   useEffect(() => {
     if (!cy.current) return;
     if (!highlightedEdges) return;
-    const actualEdges = highlightedEdges.map((h) => graph.edges
-      .find((e) => e.data.id.includes(h.id))!);
+    const actualEdges = highlightedEdges
+      .map((h) => graph.edges
+        .find((e) => e.data.id.includes(h.id)))
+      .filter((e) => e !== undefined)
+      .map((e) => e!);
     const ids = actualEdges.map((e) => `[id = '${e.data.id}']`).join(', ');
     const edges = cy.current.edges(`${ids}`);
     cy.current.animate({

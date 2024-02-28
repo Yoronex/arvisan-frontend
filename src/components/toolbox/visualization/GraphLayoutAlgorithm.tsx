@@ -1,6 +1,7 @@
 import { Button, Form } from 'react-bootstrap';
 import { useContext } from 'react';
-import { VisualizationAlgorithm, VisualizationLayoutContext } from '../../../context/VisualizationLayoutContext';
+import { VisualizationLayoutContext } from '../../../context/VisualizationLayoutContext';
+import { VisualizationAlgorithm } from '../../../helpers/enums';
 
 export default function GraphLayoutAlgorithm() {
   const { algorithm, setAlgorithm, reload } = useContext(VisualizationLayoutContext);

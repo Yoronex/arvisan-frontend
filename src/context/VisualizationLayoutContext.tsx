@@ -4,12 +4,7 @@ import {
 import cytoscape from 'cytoscape';
 import { KlayLayoutOptions } from 'cytoscape-klay';
 import { ColaLayoutOptions } from '../../local-types/cytoscape-cola';
-
-export enum VisualizationAlgorithm {
-  GRID = 'grid',
-  KLAY = 'klay',
-  COLA = 'cola',
-}
+import { VisualizationAlgorithm } from '../helpers/enums';
 
 export type PossibleLayoutOptions = cytoscape.GridLayoutOptions | KlayLayoutOptions
 | ColaLayoutOptions;

@@ -4,13 +4,14 @@ import ViolationsGroup from './group';
 import { DependencyCycleRender } from '../../../api';
 import ViolationsList from './ViolationList';
 import CyclicalDependenciesModal from './CyclicalDependenciesModal';
+import { VisibilityOptions } from '../../../helpers/enums';
 
 export default function CyclicalDependencies() {
   const { violations, visibility, setVisibility } = useContext(ViolationsContext);
   const { graph } = useContext(GraphContext);
   const { dependencyCycles } = violations;
 
-  const showViolations = (newVal: boolean) => {
+  const showViolations = (newVal: VisibilityOptions) => {
     setVisibility({
       ...visibility,
       dependencyCycles: newVal,

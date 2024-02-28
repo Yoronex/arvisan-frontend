@@ -132,6 +132,11 @@ export default function WelcomeModal() {
               &#34;select this node&#34; button in the node&apos;s details
               menu or right-click it.
             </li>
+            <li>
+              In the &#34;Analysis&#34; tab in the toolbox, you can choose to hide groups
+              of edges from the visualization. You can also highlight them, which colors
+              these edges red (default).
+            </li>
           </ul>
           <h4>
             Select domain

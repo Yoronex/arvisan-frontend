@@ -4,12 +4,13 @@ import ViolationsGroup from './group';
 import { LayerViolation } from '../../../api';
 import ViolationsList from './ViolationList';
 import SubLayerViolationsModal from './SubLayerViolationsModal';
+import { VisibilityOptions } from '../../../helpers/enums';
 
 export default function SubLayerViolations() {
   const { violations, visibility, setVisibility } = useContext(ViolationsContext);
   const { subLayers } = violations;
 
-  const showViolations = (newVal: boolean) => {
+  const showViolations = (newVal: VisibilityOptions) => {
     setVisibility({
       ...visibility,
       subLayers: newVal,

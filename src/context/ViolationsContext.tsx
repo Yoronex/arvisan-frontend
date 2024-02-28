@@ -2,10 +2,12 @@ import {
   createContext, PropsWithChildren, useMemo, useState,
 } from 'react';
 import { Violations } from '../api';
+import { VisibilityOptions } from '../helpers/enums';
 
 export interface ViolationVisibility {
-  dependencyCycles: boolean;
-  subLayers: boolean;
+  dependencyCycles: VisibilityOptions;
+  subLayers: VisibilityOptions;
+  nonViolations: VisibilityOptions;
 }
 
 interface IViolationsContext {
@@ -13,7 +15,14 @@ interface IViolationsContext {
   setViolations: (v: Violations) => void;
   visibility: ViolationVisibility,
   setVisibility: (v: ViolationVisibility) => void;
+  resetVisibility: () => void;
 }
+
+const defaultViolationVisibility: ViolationVisibility = ({
+  dependencyCycles: VisibilityOptions.HIGHLIGHTED,
+  subLayers: VisibilityOptions.HIGHLIGHTED,
+  nonViolations: VisibilityOptions.VISIBLE,
+});
 
 export const ViolationsContext = createContext<IViolationsContext>({
   violations: {
@@ -21,11 +30,9 @@ export const ViolationsContext = createContext<IViolationsContext>({
     subLayers: [],
   },
   setViolations: () => {},
-  visibility: {
-    dependencyCycles: true,
-    subLayers: true,
-  },
+  visibility: defaultViolationVisibility,
   setVisibility: () => {},
+  resetVisibility: () => {},
 });
 
 export default function ViolationsContextProvider({ children }: PropsWithChildren) {
@@ -33,16 +40,18 @@ export default function ViolationsContextProvider({ children }: PropsWithChildre
     dependencyCycles: [],
     subLayers: [],
   });
-  const [visibility, setVisibility] = useState<ViolationVisibility>({
-    dependencyCycles: true,
-    subLayers: true,
-  });
+  const [visibility, setVisibility] = useState<ViolationVisibility>(defaultViolationVisibility);
+
+  const resetVisibility = () => {
+    setVisibility(defaultViolationVisibility);
+  };
 
   const violationsContext = useMemo((): IViolationsContext => ({
     violations,
     setViolations,
     visibility,
     setVisibility,
+    resetVisibility,
   }), [violations, visibility]);
 
   return (
