@@ -22,7 +22,7 @@ type IVisualizationLayoutContext = {
   reloadedAt: Date;
 };
 
-const defaultAlgorithm: VisualizationAlgorithm = VisualizationAlgorithm.GRID;
+const defaultAlgorithm: VisualizationAlgorithm = VisualizationAlgorithm.KLAY;
 const defaultLayoutOptions: PossibleLayoutOptions = {
   name: 'grid', nodeDimensionsIncludeLabels: true,
 };
