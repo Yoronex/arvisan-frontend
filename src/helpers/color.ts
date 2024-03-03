@@ -1,7 +1,8 @@
-// From https://github.com/PimpTrizkit/PJs/wiki/12.-Shade,-Blend-and-Convert-a-Web-Color-(pSBC.js)#--version-2-hex--
-// eslint-disable-next-line import/prefer-default-export
+import cytoscape from 'cytoscape';
 import { GraphColoringMode } from './enums';
 
+// From https://github.com/PimpTrizkit/PJs/wiki/12.-Shade,-Blend-and-Convert-a-Web-Color-(pSBC.js)#--version-2-hex--
+// eslint-disable-next-line import/prefer-default-export
 export function shadeHexColor(color: string, percent: number) {
   const f = parseInt(color.slice(1), 16);
   const t = percent < 0 ? 0 : 255;
@@ -15,29 +16,33 @@ export function shadeHexColor(color: string, percent: number) {
   return `#${(0x1000000 + (Math.round((t - R) * p) + R) * 0x10000 + (Math.round((t - G) * p) + G) * 0x100 + (Math.round((t - B) * p) + B)).toString(16).slice(1)}`;
 }
 
-export interface ColoringModeSettings {
+export interface IColoringModeSettings {
   name: string;
-  hexColors: string[]
+  rangeFunction?: (nodes: cytoscape.NodeCollection) => [number, number];
+  colorFunction: (node: cytoscape.NodeSingular, range: [number, number]) => string;
 }
 
-export const ColoringModeOptions: Map<GraphColoringMode, ColoringModeSettings> = new Map([
-  [GraphColoringMode.STRUCTURE, {
-    name: 'Structure',
-    hexColors: [],
-  }],
-  [GraphColoringMode.INCOMING_DEPENDENCIES, {
-    name: 'Incoming dependencies',
-    hexColors: ['#2081f9', '#f99820'],
-  }],
-  [GraphColoringMode.OUTGOING_DEPENDENCIES, {
-    name: 'Outgoing dependencies',
-    hexColors: ['#2081f9', '#f99820'],
-  }],
-  [GraphColoringMode.INCOMING_OUTGOING_DEPS_RATIO, {
-    name: 'Dependency ratio',
-    hexColors: ['#2081f9', '#f99820'],
-  }],
-]);
+function getNrIncomingDeps(node: cytoscape.NodeSingular): number {
+  // const children = node.children().filter((ele) => ele.isNode()) as cytoscape.NodeCollection;
+  // if (children.length > 0) {
+  //   return children.reduce((total, child) => total + getNrIncomingDeps(child), 0);
+  // }
+  return node.incomers().filter((ele) => ele.isEdge())
+    .reduce((val, edge) => val + Number(edge.data('properties.weight')), 0);
+}
+function getNrOutgoingDeps(node: cytoscape.NodeSingular): number {
+  // const children = node.children().filter((ele) => ele.isNode()) as cytoscape.NodeCollection;
+  // if (children.length > 0) {
+  //   return children.reduce((total, child) => total + getNrOutgoingDeps(child), 0);
+  // }
+  return node.outgoers().filter((ele) => ele.isEdge())
+    .reduce((val, edge) => val + Number(edge.data('properties.weight')), 0);
+}
+function getIncomingOutgoingRatio(node: cytoscape.NodeSingular): number {
+  const incoming = getNrIncomingDeps(node);
+  const outgoing = getNrOutgoingDeps(node);
+  return incoming / outgoing;
+}
 
 /**
  * Parse an Hex color string to its rgb values
@@ -69,7 +74,8 @@ export function getRatioColor(
   secondHexColor: string,
   ...remainingHexColors: string[]
 ): string {
-  const colors = [firstHexColor, secondHexColor, ...remainingHexColors];
+  const colors = [firstHexColor, secondHexColor, ...remainingHexColors]
+    .filter((c) => c !== undefined);
   const absoluteRatio = ratio * (colors.length - 1);
   const colorIndex = Math.floor(absoluteRatio);
   const firstColor = hexToRgb(colors[colorIndex]);
@@ -81,3 +87,89 @@ export function getRatioColor(
 
   return `#${red.toString(16)}${green.toString(16)}${blue.toString(16)}`;
 }
+
+export const ColoringModeColors: Map<GraphColoringMode, string[]> = new Map([
+  [GraphColoringMode.STRUCTURE, []],
+  [GraphColoringMode.INCOMING_DEPENDENCIES, ['#2081f9', '#f99820']],
+  [GraphColoringMode.OUTGOING_DEPENDENCIES, ['#2081f9', '#f99820']],
+  [GraphColoringMode.INCOMING_OUTGOING_DEPS_RATIO, ['#2081f9', '#f99820']],
+]);
+
+export const ColoringModeOptions: Map<GraphColoringMode, IColoringModeSettings> = new Map([
+  [GraphColoringMode.STRUCTURE, {
+    name: 'Structure',
+    colorFunction: (node: cytoscape.NodeSingular) => {
+      const color = node.data('properties.color') as string;
+      console.log(color);
+      return color;
+    },
+  }],
+  [GraphColoringMode.INCOMING_DEPENDENCIES, {
+    name: 'Incoming dependencies',
+    rangeFunction: (nodes: cytoscape.NodeCollection) => {
+      let min = Number.POSITIVE_INFINITY;
+      let max = Number.NEGATIVE_INFINITY;
+
+      nodes.forEach((node) => {
+        const value = getNrIncomingDeps(node);
+        min = Math.min(min, value);
+        max = Math.max(max, value);
+      });
+
+      return [min, max];
+    },
+    colorFunction: (node: cytoscape.NodeSingular, range: [number, number]) => {
+      const [min, max] = range;
+      const incomingDeps = getNrIncomingDeps(node);
+      const [firstColor, secondColor, restColors] = ColoringModeColors
+        .get(GraphColoringMode.INCOMING_DEPENDENCIES) || [];
+
+      return getRatioColor((incomingDeps - min) / (max - min), firstColor, secondColor, restColors);
+    },
+  }],
+  [GraphColoringMode.OUTGOING_DEPENDENCIES, {
+    name: 'Outgoing dependencies',
+    rangeFunction: (nodes: cytoscape.NodeCollection) => {
+      let min = Number.POSITIVE_INFINITY;
+      let max = Number.NEGATIVE_INFINITY;
+
+      nodes.forEach((node) => {
+        const value = getNrOutgoingDeps(node);
+        min = Math.min(min, value);
+        max = Math.max(max, value);
+      });
+
+      return [min, max];
+    },
+    colorFunction: (node: cytoscape.NodeSingular, range: [number, number]) => {
+      const [min, max] = range;
+      const incomingDeps = getNrOutgoingDeps(node);
+      const [firstColor, secondColor, restColors] = ColoringModeColors
+        .get(GraphColoringMode.OUTGOING_DEPENDENCIES) || [];
+      return getRatioColor((incomingDeps - min) / (max - min), firstColor, secondColor, restColors);
+    },
+  }],
+  [GraphColoringMode.INCOMING_OUTGOING_DEPS_RATIO, {
+    name: 'Dependency ratio',
+    hexColors: ['#2081f9', '#f99820'],
+    rangeFunction: (nodes: cytoscape.NodeCollection) => {
+      let min = Number.POSITIVE_INFINITY;
+      let max = Number.NEGATIVE_INFINITY;
+
+      nodes.forEach((node) => {
+        const value = getIncomingOutgoingRatio(node);
+        min = Math.min(min, value);
+        max = Math.max(max, value);
+      });
+
+      return [min, max];
+    },
+    colorFunction: (node: cytoscape.NodeSingular, range: [number, number]) => {
+      const [min, max] = range;
+      const incomingDeps = getIncomingOutgoingRatio(node);
+      const [firstColor, secondColor, restColors] = ColoringModeColors
+        .get(GraphColoringMode.INCOMING_OUTGOING_DEPS_RATIO) || [];
+      return getRatioColor((incomingDeps - min) / (max - min), firstColor, secondColor, restColors);
+    },
+  }],
+]);

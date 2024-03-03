@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import { ColoringContext } from '../../../context/ColoringContext';
-import { ColoringModeOptions } from '../../../helpers/color';
+import { ColoringModeColors } from '../../../helpers/color';
 
 export default function ColoringModeGradient() {
   const { mode } = useContext(ColoringContext);
 
-  const colors = ColoringModeOptions.get(mode)?.hexColors;
+  const colors = ColoringModeColors.get(mode);
 
   let gradient: string;
   if (colors !== undefined && colors.length >= 2) {

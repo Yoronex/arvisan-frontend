@@ -15,6 +15,8 @@ import { PossibleLayoutOptions, VisualizationLayoutContext } from '../../context
 import { HoverDetailsCard } from './hover';
 import GraphElementDetailsModal from './details/GraphElementDetailsModal';
 import { VisibilityOptions } from '../../helpers/enums';
+import { ColoringContext } from '../../context/ColoringContext';
+import { ColoringModeOptions } from '../../helpers/color';
 
 cytoscape.use(klay);
 cytoscape.use(cola);
@@ -33,6 +35,7 @@ export default function Visualization({
   } = useContext(GraphHighlightContext);
   const { layoutOptions, reloadedAt } = useContext(VisualizationLayoutContext);
   const { violations, visibility } = useContext(ViolationsContext);
+  const { mode: coloringMode } = useContext(ColoringContext);
 
   const [hoveredElement, setHoveredElement] = useState<cytoscape.Singular | null>(null);
   const [selectedElement, setSelectedElement] = useState<cytoscape.Singular | null>(null);
@@ -85,6 +88,20 @@ export default function Visualization({
     if (!cy.current) return;
     cy.current.edges().forEach(assignEdgeWeights);
   }, [cy, graph]);
+
+  /** Node coloring operations */
+  useEffect(() => {
+    if (!cy.current) return;
+    const coloringModeSettings = ColoringModeOptions.get(coloringMode)!;
+    const nodes = cy.current.nodes();
+    const range = coloringModeSettings.rangeFunction
+      ? coloringModeSettings.rangeFunction(nodes)
+      : [0, 1] as [number, number];
+    nodes.forEach((n) => {
+      const color = coloringModeSettings.colorFunction(n, range);
+      n.style('background-color', color);
+    });
+  }, [cy, graph, coloringMode]);
 
   /** Violations */
   useEffect(() => {
