@@ -99,9 +99,11 @@ export const ColoringModeOptions: Map<GraphColoringMode, IColoringModeSettings> 
   [GraphColoringMode.STRUCTURE, {
     name: 'Structure',
     colorFunction: (node: cytoscape.NodeSingular) => {
-      const color = node.data('properties.color') as string;
-      console.log(color);
-      return color;
+      const hexColor = node.data('properties.color') as string;
+      if (!hexColor) return '';
+      const depth = Number(node.data('properties.depth'));
+      const alpha = (4 - depth) * 0.15;
+      return shadeHexColor(hexColor, alpha);
     },
   }],
   [GraphColoringMode.INCOMING_DEPENDENCIES, {

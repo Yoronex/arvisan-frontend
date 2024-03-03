@@ -10,7 +10,7 @@ import {
   GraphContext, GraphHighlightContext, ViolationsContext, VisualizationHistory,
 } from '../../context';
 import VisualizationStyle from './VisualizationStyle';
-import { assignEdgeWeights, colorNodes } from '../../cytoscape/operations';
+import { assignEdgeWeights } from '../../cytoscape/operations';
 import { PossibleLayoutOptions, VisualizationLayoutContext } from '../../context/VisualizationLayoutContext';
 import { HoverDetailsCard } from './hover';
 import GraphElementDetailsModal from './details/GraphElementDetailsModal';
@@ -54,7 +54,6 @@ export default function Visualization({
   /** Node operations */
   useEffect(() => {
     if (!cy.current) return;
-    cy.current.nodes().forEach(colorNodes);
 
     // Add event listener to select an element once it has been left-clicked
     cy.current.elements().on('tap', (event) => {
