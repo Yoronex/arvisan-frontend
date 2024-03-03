@@ -52,7 +52,7 @@ export default function ViolationsList<T>({
 
   return (
     <div>
-      <h4>{header}</h4>
+      <h5>{header}</h5>
       <Form>
         <IntermediateCheckbox
           label={`Show ${header.toLowerCase()} in visualization`}

@@ -5,6 +5,7 @@ import SubLayerViolations from './SubLayerViolations';
 import { ViolationsContext } from '../../../context';
 import IntermediateCheckbox from '../../IntermediateCheckbox';
 import { VisibilityOptions } from '../../../helpers/enums';
+import ColoringMode from './ColoringMode';
 
 export default function ToolboxAnalysis() {
   const { visibility, setVisibility } = useContext(ViolationsContext);
@@ -20,6 +21,8 @@ export default function ToolboxAnalysis() {
 
   return (
     <div className="d-flex flex-column gap-3">
+      <ColoringMode />
+      <h4>Violations</h4>
       <Form>
         <IntermediateCheckbox
           label="Show non-violations in visualization"

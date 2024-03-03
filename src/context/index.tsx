@@ -6,6 +6,7 @@ import GraphContextProvider from './GraphContext';
 import VisualizationLayoutContextProvider from './VisualizationLayoutContext';
 import GraphHighlightContextProvider from './GraphHighlightContext';
 import ViolationsContextProvider from './ViolationsContext';
+import ColoringContextProvider from './ColoringContext';
 
 export { LayerContext } from './LayerContext';
 export { DomainContext } from './DomainContext';
@@ -24,7 +25,9 @@ export function ContextProviders({ children }: PropsWithChildren) {
             <GraphContextProvider>
               <VisualizationLayoutContextProvider>
                 <GraphHighlightContextProvider>
-                  {children}
+                  <ColoringContextProvider>
+                    {children}
+                  </ColoringContextProvider>
                 </GraphHighlightContextProvider>
               </VisualizationLayoutContextProvider>
             </GraphContextProvider>
