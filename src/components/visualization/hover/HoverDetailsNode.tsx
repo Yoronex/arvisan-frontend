@@ -1,4 +1,5 @@
 import cytoscape from 'cytoscape';
+import { getNrIncomingDeps, getNrOutgoingDeps } from '../../../cytoscape/operations';
 
 interface Props {
   node: cytoscape.NodeSingular;
@@ -6,8 +7,6 @@ interface Props {
 
 export default function HoverDetailsNode({ node }: Props) {
   const parents = node.parents().toArray();
-  const outgoers = node.outgoers().filter((ele) => ele.isEdge()).toArray();
-  const incomers = node.incomers().filter((ele) => ele.isEdge()).toArray();
 
   return (
     <table>
@@ -42,7 +41,7 @@ export default function HoverDetailsNode({ node }: Props) {
           </tr>
           <tr>
             <td className="pe-2 text-end fw-bold">Total outgoing dependencies:</td>
-            <td>{outgoers.reduce((total, edge) => total + Number(edge.data('properties.weight')), 0)}</td>
+            <td>{getNrOutgoingDeps(node)}</td>
           </tr>
           <tr>
             <td className="pe-2 text-end fw-bold"># Incoming edges:</td>
@@ -50,7 +49,7 @@ export default function HoverDetailsNode({ node }: Props) {
           </tr>
           <tr>
             <td className="pe-2 text-end fw-bold">Total incoming dependencies:</td>
-            <td>{incomers.reduce((total, edge) => total + Number(edge.data('properties.weight')), 0)}</td>
+            <td>{getNrIncomingDeps(node)}</td>
           </tr>
         </>
         )}

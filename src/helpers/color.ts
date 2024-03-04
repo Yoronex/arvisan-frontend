@@ -22,28 +22,6 @@ export interface IColoringModeSettings {
   colorFunction: (node: cytoscape.NodeSingular, range: [number, number]) => string;
 }
 
-function getNrIncomingDeps(node: cytoscape.NodeSingular): number {
-  // const children = node.children().filter((ele) => ele.isNode()) as cytoscape.NodeCollection;
-  // if (children.length > 0) {
-  //   return children.reduce((total, child) => total + getNrIncomingDeps(child), 0);
-  // }
-  return node.incomers().filter((ele) => ele.isEdge())
-    .reduce((val, edge) => val + Number(edge.data('properties.weight')), 0);
-}
-function getNrOutgoingDeps(node: cytoscape.NodeSingular): number {
-  // const children = node.children().filter((ele) => ele.isNode()) as cytoscape.NodeCollection;
-  // if (children.length > 0) {
-  //   return children.reduce((total, child) => total + getNrOutgoingDeps(child), 0);
-  // }
-  return node.outgoers().filter((ele) => ele.isEdge())
-    .reduce((val, edge) => val + Number(edge.data('properties.weight')), 0);
-}
-function getIncomingOutgoingRatio(node: cytoscape.NodeSingular): number {
-  const incoming = getNrIncomingDeps(node);
-  const outgoing = getNrOutgoingDeps(node);
-  return outgoing !== 0 ? incoming / outgoing : 0;
-}
-
 /**
  * Parse an Hex color string to its rgb values
  * @param hex
