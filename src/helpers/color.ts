@@ -77,20 +77,25 @@ export function getRatioColor(
   const colors = [firstHexColor, secondHexColor, ...remainingHexColors]
     .filter((c) => c !== undefined);
   const absoluteRatio = ratio * (colors.length - 1);
-  const colorIndex = Math.floor(absoluteRatio);
+
+  let colorIndex = Math.floor(absoluteRatio);
+  if (colorIndex === colors.length - 1) {
+    colorIndex -= 1;
+  }
+
   const firstColor = hexToRgb(colors[colorIndex]);
   const secondColor = hexToRgb(colors[colorIndex + 1]);
 
-  const red = Math.round(firstColor.r * ratio + secondColor.r * (1 - ratio));
-  const green = Math.round(firstColor.g * ratio + secondColor.g * (1 - ratio));
-  const blue = Math.round(firstColor.b * ratio + secondColor.b * (1 - ratio));
+  const red = Math.round(firstColor.r * (1 - ratio) + secondColor.r * (ratio));
+  const green = Math.round(firstColor.g * (1 - ratio) + secondColor.g * (ratio));
+  const blue = Math.round(firstColor.b * (1 - ratio) + secondColor.b * (ratio));
 
-  return `#${red.toString(16)}${green.toString(16)}${blue.toString(16)}`;
+  return `#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue.toString(16).padStart(2, '0')}`;
 }
 
 export const ColoringModeColors: Map<GraphColoringMode, string[]> = new Map([
   [GraphColoringMode.STRUCTURE, []],
-  [GraphColoringMode.INCOMING_DEPENDENCIES, ['#2081f9', '#f99820']],
+  [GraphColoringMode.INCOMING_DEPENDENCIES, ['#2081f9', '#f99820', '#c40000']],
   [GraphColoringMode.OUTGOING_DEPENDENCIES, ['#2081f9', '#f99820']],
   [GraphColoringMode.INCOMING_OUTGOING_DEPS_RATIO, ['#2081f9', '#f99820']],
 ]);

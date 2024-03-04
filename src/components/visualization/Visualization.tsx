@@ -35,7 +35,7 @@ export default function Visualization({
   } = useContext(GraphHighlightContext);
   const { layoutOptions, reloadedAt } = useContext(VisualizationLayoutContext);
   const { violations, visibility } = useContext(ViolationsContext);
-  const { mode: coloringMode } = useContext(ColoringContext);
+  const { mode: coloringMode, setRange: setColoringRange } = useContext(ColoringContext);
 
   const [hoveredElement, setHoveredElement] = useState<cytoscape.Singular | null>(null);
   const [selectedElement, setSelectedElement] = useState<cytoscape.Singular | null>(null);
@@ -95,11 +95,12 @@ export default function Visualization({
     const nodes = cy.current.nodes();
     const range = coloringModeSettings.rangeFunction
       ? coloringModeSettings.rangeFunction(nodes)
-      : [0, 1] as [number, number];
+      : undefined;
     nodes.forEach((n) => {
-      const color = coloringModeSettings.colorFunction(n, range);
+      const color = coloringModeSettings.colorFunction(n, range ?? [0, 1]);
       n.style('background-color', color);
     });
+    setColoringRange(range);
   }, [cy, graph, coloringMode]);
 
   /** Violations */
