@@ -41,7 +41,7 @@ function getNrOutgoingDeps(node: cytoscape.NodeSingular): number {
 function getIncomingOutgoingRatio(node: cytoscape.NodeSingular): number {
   const incoming = getNrIncomingDeps(node);
   const outgoing = getNrOutgoingDeps(node);
-  return incoming / outgoing;
+  return outgoing !== 0 ? incoming / outgoing : 0;
 }
 
 /**
@@ -95,7 +95,7 @@ export function getRatioColor(
 
 export const ColoringModeColors: Map<GraphColoringMode, string[]> = new Map([
   [GraphColoringMode.STRUCTURE, []],
-  [GraphColoringMode.INCOMING_DEPENDENCIES, ['#2081f9', '#f99820', '#c40000']],
+  [GraphColoringMode.INCOMING_DEPENDENCIES, ['#2081f9', '#f99820']],
   [GraphColoringMode.OUTGOING_DEPENDENCIES, ['#2081f9', '#f99820']],
   [GraphColoringMode.INCOMING_OUTGOING_DEPS_RATIO, ['#2081f9', '#f99820']],
 ]);
