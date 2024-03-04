@@ -8,6 +8,10 @@ visualizer and analysis tool for the graduation project of Roy Kakkenberg.
 - A working instance of the ARVISAN backend https://github.com/Yoronex/arvisan-backend.
 
 ## How to install
+To get started quickly, use docker-compose in the [backend repository](https://github.com/Yoronex/arvisan-backend).
+This stack contains the backend, frontend, and an empty Neo4j database instance.
+The Neo4j database within the Docker stack can also be replaced by a local Neo4j instance (for example Neo4j Desktop).
+
 - Install the ARVISAN backend.
 - Install NodeJS 20.
 - Install all dependencies: `npm install`.

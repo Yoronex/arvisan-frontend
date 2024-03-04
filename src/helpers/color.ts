@@ -1,5 +1,6 @@
 import cytoscape from 'cytoscape';
 import { GraphColoringMode } from './enums';
+import { getIncomingOutgoingRatio, getNrIncomingDeps, getNrOutgoingDeps } from '../cytoscape/operations';
 
 // From https://github.com/PimpTrizkit/PJs/wiki/12.-Shade,-Blend-and-Convert-a-Web-Color-(pSBC.js)#--version-2-hex--
 // eslint-disable-next-line import/prefer-default-export
