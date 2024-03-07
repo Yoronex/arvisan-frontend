@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightLong, faBinoculars } from '@fortawesome/free-solid-svg-icons';
 import { GraphHighlightContext } from '../../../context';
 import { LayerViolation } from '../../../api';
+import { nodeToString } from '../../../helpers/node';
 
 interface Props {
   violations: LayerViolation[];
@@ -29,11 +30,11 @@ export default function SubLayerViolationsDetails({ violations, onHighlight }: P
         </Button>
         <div>Rendered dependency:</div>
         <div className="">
-          {violation.sourceNode?.label}
+          {nodeToString(violation.sourceNode)}
           {' '}
           <FontAwesomeIcon icon={faArrowRightLong} />
           {' '}
-          {violation.targetNode?.label}
+          {nodeToString(violation.targetNode)}
         </div>
       </h5>
       Actual dependencies:
@@ -44,11 +45,11 @@ export default function SubLayerViolationsDetails({ violations, onHighlight }: P
               className="mb-2"
               key={`${c.source}-${c.target}`}
             >
-              {c.sourceNode.label}
+              {nodeToString(c.sourceNode)}
               {' '}
               <FontAwesomeIcon icon={faArrowRightLong} />
               {' '}
-              {c.targetNode.label}
+              {nodeToString(c.targetNode)}
             </li>
           ))}
         </ul>

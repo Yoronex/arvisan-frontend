@@ -4,6 +4,7 @@ import { faArrowRightLong, faBinoculars } from '@fortawesome/free-solid-svg-icon
 import { useContext } from 'react';
 import { DependencyCycle, DependencyCycleRender } from '../../../api';
 import { GraphContext, GraphHighlightContext } from '../../../context';
+import { nodeToString } from '../../../helpers/node';
 
 interface Props {
   cyclicalDependencies: DependencyCycleRender[];
@@ -36,12 +37,12 @@ export default function CyclicalDependenciesDetails({ cyclicalDependencies, onHi
         </Button>
         <div>Rendered dependency:</div>
         <div className="">
-          {cyclicalDependency.node.label}
+          {nodeToString(cyclicalDependency.node)}
         </div>
         {cyclicalDependency.path.map((c) => (
           <>
             <FontAwesomeIcon icon={faArrowRightLong} />
-            <div className="">{c.targetNode?.label}</div>
+            <div className="">{nodeToString(c.targetNode)}</div>
           </>
         ))}
       </h5>
@@ -69,11 +70,11 @@ export default function CyclicalDependenciesDetails({ cyclicalDependencies, onHi
               {' '}
               from/to
               {' '}
-              <span className="fw-bold">{c.node.label}</span>
+              <span className="fw-bold">{nodeToString(c.node)}</span>
               <ol>
-                <li style={{ listStyleType: 'none' }}>{c.node.label}</li>
+                <li style={{ listStyleType: 'none' }}>{nodeToString(c.node)}</li>
                 {c.path.map((e, i) => (
-                  <li value={i + 1} key={e.id}>{e.targetNode?.label}</li>
+                  <li value={i + 1} key={e.id}>{nodeToString(e.targetNode)}</li>
                 ))}
               </ol>
             </li>

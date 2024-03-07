@@ -40,6 +40,10 @@ export default function HoverDetailsEdge({ edge }: Props) {
           <td>{target.data('label')}</td>
         </tr>
         <tr>
+          <td className="pe-2 text-end fw-bold">Actual dependencies:</td>
+          <td>{edge.data('properties.weight')}</td>
+        </tr>
+        <tr>
           <td className="pe-2 text-end fw-bold">Reference key:</td>
           <td className="text-truncate">{referenceKeyText}</td>
         </tr>

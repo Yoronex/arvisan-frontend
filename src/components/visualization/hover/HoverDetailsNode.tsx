@@ -27,7 +27,14 @@ export default function HoverDetailsNode({ node }: Props) {
             <td>
               <ul className="m-0" style={{ marginLeft: '-1rem' }}>
                 {parents.map((p) => (
-                  <li key={p.id()}>{p.data('label')}</li>
+                  <li key={p.id()}>
+                    <span className="fst-italic">
+                      {p.data('properties.layer')}
+                      :
+                      {' '}
+                    </span>
+                    {p.data('label')}
+                  </li>
                 ))}
               </ul>
             </td>
