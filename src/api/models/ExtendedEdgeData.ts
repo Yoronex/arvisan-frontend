@@ -29,23 +29,45 @@ export type ExtendedEdgeData = {
      */
     properties: {
 /**
+ * How many times the "weak" relationships are called in the
+ * database-inserted timeframe. Undefined if no weak relationship
+ */
+nrCalls?: number;
+/**
+ * How many actual, function-level dependencies exist within the source and target node
+ */
+nrFunctionDependencies: number;
+/**
+ * How many module-level dependencies exist within the source and target node
+ */
+nrModuleDependencies: number;
+/**
  * Type of dependency
  */
 dependencyTypes: Array<DependencyType>;
 /**
  * Type of reference used within OutSystems
+ * (e.g. Action, Entity, Integration, WebBlock, etc.)
  */
 referenceTypes: Array<string>;
 /**
+ * Names of the actual references in OutSystems
+ */
+referenceNames: Array<string>;
+/**
  * Whether this edge is some architectural violation
  */
-violations: EdgeViolations;
+violations: (EdgeViolations & {
+any: boolean;
+});
 /**
- * Edge weight
+ * Weight of the edge
+ * @deprecated
  */
 weight: number;
 /**
  * Edge reference key (from OutSystems)
+ * @deprecated
  */
 referenceKeys: Array<string>;
 };

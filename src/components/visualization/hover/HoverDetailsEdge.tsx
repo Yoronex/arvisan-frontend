@@ -9,20 +9,20 @@ export default function HoverDetailsEdge({ edge }: Props) {
   const source = edge.source();
   const target = edge.target();
 
-  const referenceKeys = edge.data('properties.referenceKeys');
-  const referenceKeyText: ReactNode = referenceKeys.length > 1 ? (
+  const referenceNames = edge.data('properties.referenceNames');
+  const referenceNameText: ReactNode = referenceNames.length > 1 ? (
     <>
-      {referenceKeys[0]}
+      {referenceNames[0]}
       {' '}
       <span className="fst-italic">
         and
         {' '}
-        {referenceKeys.length - 1}
+        {referenceNames.length - 1}
         {' '}
         more...
       </span>
     </>
-  ) : referenceKeys[0];
+  ) : referenceNames[0];
 
   return (
     <table>
@@ -40,12 +40,16 @@ export default function HoverDetailsEdge({ edge }: Props) {
           <td>{target.data('label')}</td>
         </tr>
         <tr>
-          <td className="pe-2 text-end fw-bold">Actual dependencies:</td>
-          <td>{edge.data('properties.weight')}</td>
+          <td className="pe-2 text-end fw-bold">Function-level dependencies:</td>
+          <td>{edge.data('properties.nrFunctionDependencies')}</td>
+        </tr>
+        <tr>
+          <td className="pe-2 text-end fw-bold">Module-level dependencies:</td>
+          <td>{edge.data('properties.nrModuleDependencies')}</td>
         </tr>
         <tr>
           <td className="pe-2 text-end fw-bold">Reference key:</td>
-          <td className="text-truncate">{referenceKeyText}</td>
+          <td className="text-truncate">{referenceNameText}</td>
         </tr>
         <tr>
           <td className="pe-2 text-end fw-bold">Reference type:</td>

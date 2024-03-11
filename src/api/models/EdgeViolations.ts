@@ -5,4 +5,5 @@
 
 export type EdgeViolations = {
     subLayer: boolean;
+    dependencyCycle: boolean;
 };

@@ -1,6 +1,6 @@
 import cytoscape from 'cytoscape';
 import { GraphColoringMode } from './enums';
-import { getIncomingOutgoingRatio, getNrIncomingDeps, getNrOutgoingDeps } from '../cytoscape/operations';
+import { getIncomingOutgoingRatio, getNrIncomingFunctionDeps, getNrOutgoingFunctionDeps } from '../cytoscape/operations';
 
 // From https://github.com/PimpTrizkit/PJs/wiki/12.-Shade,-Blend-and-Convert-a-Web-Color-(pSBC.js)#--version-2-hex--
 // eslint-disable-next-line import/prefer-default-export
@@ -97,7 +97,7 @@ export const ColoringModeOptions: Map<GraphColoringMode, IColoringModeSettings> 
       let max = Number.NEGATIVE_INFINITY;
 
       nodes.forEach((node) => {
-        const value = getNrIncomingDeps(node);
+        const value = getNrIncomingFunctionDeps(node);
         min = Math.min(min, value);
         max = Math.max(max, value);
       });
@@ -106,7 +106,7 @@ export const ColoringModeOptions: Map<GraphColoringMode, IColoringModeSettings> 
     },
     colorFunction: (node: cytoscape.NodeSingular, range: [number, number]) => {
       const [min, max] = range;
-      const incomingDeps = getNrIncomingDeps(node);
+      const incomingDeps = getNrIncomingFunctionDeps(node);
       const [firstColor, secondColor, restColors] = ColoringModeColors
         .get(GraphColoringMode.INCOMING_DEPENDENCIES) || [];
 
@@ -120,7 +120,7 @@ export const ColoringModeOptions: Map<GraphColoringMode, IColoringModeSettings> 
       let max = Number.NEGATIVE_INFINITY;
 
       nodes.forEach((node) => {
-        const value = getNrOutgoingDeps(node);
+        const value = getNrOutgoingFunctionDeps(node);
         min = Math.min(min, value);
         max = Math.max(max, value);
       });
@@ -129,7 +129,7 @@ export const ColoringModeOptions: Map<GraphColoringMode, IColoringModeSettings> 
     },
     colorFunction: (node: cytoscape.NodeSingular, range: [number, number]) => {
       const [min, max] = range;
-      const incomingDeps = getNrOutgoingDeps(node);
+      const incomingDeps = getNrOutgoingFunctionDeps(node);
       const [firstColor, secondColor, restColors] = ColoringModeColors
         .get(GraphColoringMode.OUTGOING_DEPENDENCIES) || [];
       return getRatioColor((incomingDeps - min) / (max - min), firstColor, secondColor, restColors);

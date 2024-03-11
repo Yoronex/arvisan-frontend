@@ -40,6 +40,10 @@ layer: string;
  * Type of node
  */
 kind: string;
+/**
+ * Full name of the node (including prefixes)
+ */
+fullName: string;
 };
     nrOutgoingDependencies: number;
     nrIncomingDependencies: number;

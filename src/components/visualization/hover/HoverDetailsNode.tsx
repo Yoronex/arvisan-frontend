@@ -1,5 +1,5 @@
 import cytoscape from 'cytoscape';
-import { getNrIncomingDeps, getNrOutgoingDeps } from '../../../cytoscape/operations';
+import { getNrIncomingFunctionDeps, getNrOutgoingFunctionDeps } from '../../../cytoscape/operations';
 
 interface Props {
   node: cytoscape.NodeSingular;
@@ -47,16 +47,16 @@ export default function HoverDetailsNode({ node }: Props) {
             <td>{node.outdegree(true)}</td>
           </tr>
           <tr>
-            <td className="pe-2 text-end fw-bold">Total outgoing dependencies:</td>
-            <td>{getNrOutgoingDeps(node)}</td>
+            <td className="pe-2 text-end fw-bold">Total outgoing func. dependencies:</td>
+            <td>{getNrOutgoingFunctionDeps(node)}</td>
           </tr>
           <tr>
             <td className="pe-2 text-end fw-bold"># Incoming edges:</td>
             <td>{node.indegree(true)}</td>
           </tr>
           <tr>
-            <td className="pe-2 text-end fw-bold">Total incoming dependencies:</td>
-            <td>{getNrIncomingDeps(node)}</td>
+            <td className="pe-2 text-end fw-bold">Total incoming func. dependencies:</td>
+            <td>{getNrIncomingFunctionDeps(node)}</td>
           </tr>
         </>
         )}

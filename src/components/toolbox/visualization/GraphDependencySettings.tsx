@@ -51,7 +51,7 @@ export default function GraphDependencySettings() {
           values={[minOutgoing, maxOutgoing]}
           min={RANGE_MIN}
           max={RANGE_MAX}
-          label="Number of outgoing relationships"
+          label="Number of outgoing arrows"
           disabled={showOutgoing ? [false, false] : [true, true]}
           infinity
         />
@@ -68,7 +68,7 @@ export default function GraphDependencySettings() {
           values={[minIncoming, maxIncoming]}
           min={RANGE_MIN}
           max={RANGE_MAX}
-          label="Number of incoming relationships"
+          label="Number of incoming arrows"
           disabled={showIncoming ? [false, false] : [true, true]}
           infinity
         />
