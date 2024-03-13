@@ -10,7 +10,7 @@ function App() {
     <>
       <div className="" style={{ }}>
         <MainMenu />
-        <div className="position-absolute vh-100 px-3 pb-3 z-2 d-flex flex-row gap-3" style={{ paddingTop: '6rem' }}>
+        <div className="position-absolute vh-100 px-3 pb-3 d-flex flex-row gap-3" style={{ paddingTop: '6rem' }}>
           <ToolSideBar cardWidth={SIDEBAR_WIDTH} />
           <ReturnButton />
         </div>

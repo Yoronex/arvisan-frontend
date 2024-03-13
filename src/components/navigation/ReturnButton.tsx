@@ -8,7 +8,7 @@ export default function ReturnButton() {
   const { back, canGoBack } = useContext(VisualizationHistory);
 
   return (
-    <div>
+    <div className="z-2" style={{ height: 'fit-content' }}>
       <Button
         title="Go back to previous node"
         disabled={!canGoBack()}

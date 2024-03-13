@@ -24,7 +24,7 @@ export default function ToolSideBar({ cardWidth }: Props) {
   ];
 
   return (
-    <Card className="h-100 shadow overflow-y-auto" style={{ width: cardWidth }}>
+    <Card className="z-2 h-100 shadow overflow-y-auto" style={{ width: cardWidth }}>
       <Tab.Container defaultActiveKey={tabs[1].key}>
         <CardHeader className="">
           <Nav variant="tabs">

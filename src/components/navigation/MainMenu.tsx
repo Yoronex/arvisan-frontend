@@ -11,8 +11,8 @@ export default function MainMenu() {
   const { enableMovingNodes, setEnableMovingNodes } = useContext(GraphContext);
 
   return (
-    <div className="position-absolute p-3 w-100 z-2">
-      <Navbar expand="lg" className="w-100 bg-light rounded-3 shadow">
+    <div className="position-absolute p-3 w-100">
+      <Navbar expand="lg" className="w-100 z-2 bg-light rounded-3 shadow">
         <Container>
           <Navbar.Brand href="#home">Vopak Architecture Visualizer</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
