@@ -8,7 +8,6 @@ export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { Breadcrumb } from './models/Breadcrumb';
-export type { BreadcrumbOption } from './models/BreadcrumbOption';
 export type { DependencyCycle } from './models/DependencyCycle';
 export type { DependencyCycleRender } from './models/DependencyCycleRender';
 export { DependencyType } from './models/DependencyType';

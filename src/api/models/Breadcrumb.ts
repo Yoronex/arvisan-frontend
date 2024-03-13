@@ -3,10 +3,11 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { BreadcrumbOption } from './BreadcrumbOption';
+import type { NodeData } from './NodeData';
 
 export type Breadcrumb = {
+    name: string;
     layerLabel: string;
     id: string;
-    options: Array<BreadcrumbOption>;
+    options: Array<NodeData>;
 };

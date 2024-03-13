@@ -1,23 +1,14 @@
 import {
   Container, Form, Nav, Navbar, NavDropdown,
 } from 'react-bootstrap';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
-import { BreadcrumbsContext } from '../../context/BreadcrumbsContext';
-import DomainSelectorOptions from '../toolbox/navigator/DomainSelectorOptions';
-import { GraphContext } from '../../context/GraphContext';
-import WelcomeModal from '../WelcomeModal';
+import { GraphContext } from '../../context';
+import Breadcrumbs from './Breadcrumbs';
 
 export default function MainMenu() {
-  const [searchKey, setSearchKey] = useState('');
-  const { currentDomain } = useContext(BreadcrumbsContext);
   const { enableMovingNodes, setEnableMovingNodes } = useContext(GraphContext);
-
-  const handleToggle = (nextShow: boolean) => {
-    if (nextShow) return;
-    setSearchKey('');
-  };
 
   return (
     <div className="position-absolute p-3 w-100 z-2">
@@ -26,21 +17,8 @@ export default function MainMenu() {
           <Navbar.Brand href="#home">Vopak Architecture Visualizer</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <WelcomeModal />
-              <NavDropdown
-                title={currentDomain ? currentDomain.label : 'Choose domain'}
-                active={currentDomain != null}
-                onToggle={handleToggle}
-              >
-                <div style={{ maxHeight: '50dvh' }} className="overflow-y-scroll overflow-x-hidden">
-                  <DomainSelectorOptions
-                    searchKey={searchKey}
-                    setSearchKey={setSearchKey}
-                    DropdownComponent={NavDropdown}
-                  />
-                </div>
-              </NavDropdown>
+            <Nav className="me-auto align-items-center">
+              <Breadcrumbs />
             </Nav>
             <Nav>
               <NavDropdown title={<FontAwesomeIcon icon={faGear} title="Settings" />}>
