@@ -4,7 +4,7 @@ import {
 import { ReactNode, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { DomainContext } from '../../../context/DomainContext';
+import { BreadcrumbsContext } from '../../../context/BreadcrumbsContext';
 import { VisualizationHistory } from '../../../context/VisualizationHistory';
 import HighlightSearch from './HighlightSearch';
 import { searchNodes } from '../../../helpers/filter';
@@ -19,14 +19,13 @@ interface Props {
 export default function DomainSelectorOptions({
   searchKey, setSearchKey, DropdownComponent,
 }: Props) {
-  const { domains, loading, updateDomain } = useContext(DomainContext);
+  const { domains, loading } = useContext(BreadcrumbsContext);
   const { currentNodeId, visitNode } = useContext(VisualizationHistory);
 
   const filteredDomains = searchNodes(domains, searchKey);
 
   const onSelect = (data: NodeData) => {
     visitNode({ type: 'backend', data, timestamp: new Date() });
-    updateDomain(data);
   };
 
   const renderOptions = (): ReactNode | ReactNode[] => {

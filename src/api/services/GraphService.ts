@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Breadcrumb } from '../models/Breadcrumb';
 import type { Domain } from '../models/Domain';
 import type { GraphLayer } from '../models/GraphLayer';
 import type { GraphWithViolations } from '../models/GraphWithViolations';
@@ -24,6 +25,24 @@ requestBody: QueryOptions,
         return __request(OpenAPI, {
             method: 'POST',
             url: '/graph/node',
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns Breadcrumb Ok
+     * @throws ApiError
+     */
+    public static getBreadcrumbOptions(
+requestBody: {
+id: string;
+},
+): CancelablePromise<Array<Breadcrumb>> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/graph/breadcrumbs',
             body: requestBody,
             mediaType: 'application/json',
         });

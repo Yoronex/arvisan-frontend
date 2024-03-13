@@ -4,14 +4,14 @@ import {
 import { useContext, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
-import { DomainContext } from '../../context/DomainContext';
+import { BreadcrumbsContext } from '../../context/BreadcrumbsContext';
 import DomainSelectorOptions from '../toolbox/navigator/DomainSelectorOptions';
 import { GraphContext } from '../../context/GraphContext';
 import WelcomeModal from '../WelcomeModal';
 
 export default function MainMenu() {
   const [searchKey, setSearchKey] = useState('');
-  const { currentDomain } = useContext(DomainContext);
+  const { currentDomain } = useContext(BreadcrumbsContext);
   const { enableMovingNodes, setEnableMovingNodes } = useContext(GraphContext);
 
   const handleToggle = (nextShow: boolean) => {

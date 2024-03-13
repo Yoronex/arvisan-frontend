@@ -1,11 +1,11 @@
 import { useContext, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
-import { DomainContext } from '../../../context/DomainContext';
+import { BreadcrumbsContext } from '../../../context';
 import DomainSelectorOptions from './DomainSelectorOptions';
 
 export default function DomainSelector() {
   const [searchKey, setSearchKey] = useState('');
-  const { currentDomain } = useContext(DomainContext);
+  const { currentDomain } = useContext(BreadcrumbsContext);
 
   const handleToggle = (nextShow: boolean) => {
     if (nextShow) return;

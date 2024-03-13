@@ -1,9 +1,8 @@
 import React, {
-  createContext, PropsWithChildren, useContext, useMemo, useState,
+  createContext, PropsWithChildren, useMemo, useState,
 } from 'react';
 import cytoscape from 'cytoscape';
 import { NodeData } from '../api';
-import { DomainContext } from './DomainContext';
 
 export type CytoscapeNode = {
   type: 'cytoscape',
@@ -46,8 +45,6 @@ export default function VisualizationHistoryProvider({ children }: PropsWithChil
   const [historyStackPosition, setHistoryStackPosition] = useState(0);
   const [currentNode, setCurrentNode] = React.useState<HistoryNode | undefined>();
 
-  const { updateDomain } = useContext(DomainContext);
-
   let currentNodeId: string | undefined;
   if (currentNode) {
     switch (currentNode.type) {
@@ -62,12 +59,6 @@ export default function VisualizationHistoryProvider({ children }: PropsWithChil
   }
 
   const historyContext = useMemo((): IVisualizationHistory => {
-    const getDomain = (node: cytoscape.NodeSingular): NodeData => {
-      if (node.isOrphan()) return node.data() as NodeData;
-      const parent = node.parent();
-      return getDomain(parent.first());
-    };
-
     const visitNode = (node: HistoryNode) => {
       const nodeId = node.type === 'cytoscape' ? node.data.id() : node.data.id;
       if (nodeId === currentNodeId) return;
@@ -79,11 +70,6 @@ export default function VisualizationHistoryProvider({ children }: PropsWithChil
       historyCopy.unshift(node);
       setHistory(historyCopy);
       setHistoryStackPosition(0);
-
-      if (node.type === 'cytoscape') {
-        const domain = getDomain(node.data);
-        updateDomain(domain);
-      }
 
       setCurrentNode(node);
     };
@@ -110,7 +96,7 @@ export default function VisualizationHistoryProvider({ children }: PropsWithChil
       history,
       historyStackPosition,
     };
-  }, [currentNode, currentNodeId, history, historyStackPosition, updateDomain]);
+  }, [currentNode, currentNodeId, history, historyStackPosition]);
 
   return (
     <VisualizationHistory.Provider value={historyContext}>

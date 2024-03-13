@@ -4,12 +4,12 @@ import {
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
-import { VisualizationHistory, DomainContext } from '../context';
+import { VisualizationHistory, BreadcrumbsContext } from '../context';
 import BackendVersion from './BackendVersion';
 
 export default function WelcomeModal() {
   const { currentNode, visitNode } = useContext(VisualizationHistory);
-  const { loading, domains, updateDomain } = useContext(DomainContext);
+  const { loading, domains } = useContext(BreadcrumbsContext);
 
   const [show, setShow] = useState(currentNode == null);
   const sortedDomains = domains
@@ -37,7 +37,6 @@ export default function WelcomeModal() {
     return sortedDomains.map((d) => {
       const click = () => {
         visitNode({ type: 'backend', data: d, timestamp: new Date() });
-        updateDomain(d);
         setShow(false);
       };
       return (

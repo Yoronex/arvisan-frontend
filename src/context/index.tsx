@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 import LayerContextProvider from './LayerContext';
-import DomainContextProvider from './DomainContext';
+import BreadcrumbsContextProvider from './BreadcrumbsContext';
 import VisualizationHistoryProvider from './VisualizationHistory';
 import GraphContextProvider from './GraphContext';
 import VisualizationLayoutContextProvider from './VisualizationLayoutContext';
@@ -9,7 +9,7 @@ import ViolationsContextProvider from './ViolationsContext';
 import ColoringContextProvider from './ColoringContext';
 
 export { LayerContext } from './LayerContext';
-export { DomainContext } from './DomainContext';
+export { BreadcrumbsContext } from './BreadcrumbsContext';
 export { VisualizationHistory } from './VisualizationHistory';
 export { ViolationsContext } from './ViolationsContext';
 export { GraphContext } from './GraphContext';
@@ -19,8 +19,8 @@ export { GraphHighlightContext } from './GraphHighlightContext';
 export function ContextProviders({ children }: PropsWithChildren) {
   return (
     <LayerContextProvider>
-      <DomainContextProvider>
-        <VisualizationHistoryProvider>
+      <VisualizationHistoryProvider>
+        <BreadcrumbsContextProvider>
           <ViolationsContextProvider>
             <GraphContextProvider>
               <VisualizationLayoutContextProvider>
@@ -32,8 +32,8 @@ export function ContextProviders({ children }: PropsWithChildren) {
               </VisualizationLayoutContextProvider>
             </GraphContextProvider>
           </ViolationsContextProvider>
-        </VisualizationHistoryProvider>
-      </DomainContextProvider>
+        </BreadcrumbsContextProvider>
+      </VisualizationHistoryProvider>
     </LayerContextProvider>
   );
 }
