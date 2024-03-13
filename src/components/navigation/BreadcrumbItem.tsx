@@ -5,6 +5,7 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { Breadcrumb, NodeData } from '../../api';
 import HighlightSearch from '../toolbox/navigator/HighlightSearch';
 import { VisualizationHistory } from '../../context';
+import { searchNodes } from '../../helpers/filter';
 
 interface Props {
   parentLayerName: string;
@@ -24,6 +25,8 @@ export default function BreadcrumbItem({
     setSearchKey('');
   };
 
+  const filteredOptions = searchNodes(breadcrumb.options, searchKey);
+
   const getOption = (option: NodeData) => ((
     <NavDropdown.Item
       key={option.id}
@@ -31,6 +34,7 @@ export default function BreadcrumbItem({
       onClick={() => {
         visitNode({ type: 'backend', data: option, timestamp: new Date() });
       }}
+      title={option.label}
     >
       <HighlightSearch label={option.label} searchKey={searchKey} />
     </NavDropdown.Item>
@@ -60,7 +64,7 @@ export default function BreadcrumbItem({
           </InputGroup>
         </NavDropdown.Header>
         <NavDropdown.Divider />
-        {breadcrumb.options.map((o) => getOption(o))}
+        {filteredOptions.map((o) => getOption(o))}
       </div>
     </NavDropdown>
   );

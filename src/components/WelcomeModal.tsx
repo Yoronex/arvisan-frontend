@@ -78,7 +78,12 @@ export default function WelcomeModal() {
 
   return (
     <>
-      <NavLink onClick={() => setShow(true)}>Overview</NavLink>
+      <NavLink
+        onClick={() => setShow(true)}
+        title="Open domain overview"
+      >
+        Overview
+      </NavLink>
 
       <Modal show={show} size="xl" onHide={handleClose}>
         <Modal.Header closeButton={currentNode != null}>
