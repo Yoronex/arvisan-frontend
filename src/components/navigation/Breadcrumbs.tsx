@@ -26,10 +26,7 @@ export default function Breadcrumbs() {
         active={index === currentNodeDepth - 1}
         parentLayerName={parentLayerName}
         parentItemName={parentItemName}
-        options={breadcrumb.options}
-        layerLabel={breadcrumb.layerLabel}
-        id={breadcrumb.id}
-        name={breadcrumb.name}
+        breadcrumb={breadcrumb}
       />
     );
   };

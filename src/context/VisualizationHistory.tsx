@@ -113,7 +113,7 @@ export default function VisualizationHistoryProvider({ children }: PropsWithChil
       history,
       historyStackPosition,
     };
-  }, [currentNode, currentNodeId, history, historyStackPosition]);
+  }, [currentNode, currentNodeId, history, historyStackPosition, layers]);
 
   return (
     <VisualizationHistory.Provider value={historyContext}>

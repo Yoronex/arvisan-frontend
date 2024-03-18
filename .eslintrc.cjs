@@ -25,6 +25,7 @@ module.exports = {
       { allowConstantExport: true },
     ],
     'import/no-absolute-path': 'off',
+    'import/prefer-default-export': 'off',
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-unsafe-argument": "off",
     "@typescript-eslint/no-unsafe-call": "off",

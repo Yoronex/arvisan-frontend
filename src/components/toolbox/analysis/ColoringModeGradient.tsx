@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ColoringContext } from '../../../context/ColoringContext';
+import { ColoringContext } from '../../../context';
 import { ColoringModeColors } from '../../../helpers/color';
 
 export default function ColoringModeGradient() {

@@ -90,10 +90,10 @@ export default function GraphContextProvider({ children }: Props) {
   }, [currentNodeId, setViolations, settings]);
 
   const getParents = useCallback((node: NodeData): NodeData[] => {
-    if (node.parent === undefined) return [];
+    if (node.parent === undefined) return [node];
     const parent = graph.nodes.find((n) => n.data.id === node.parent);
-    if (!parent) return [];
-    return [parent.data, ...getParents(parent.data)];
+    if (!parent) return [node];
+    return [node, ...getParents(parent.data)];
   }, [graph]);
 
   const visualizationContext = React.useMemo((): IGraphSettings => ({

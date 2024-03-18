@@ -1,17 +1,16 @@
 import { useContext } from 'react';
 import { Dropdown } from 'react-bootstrap';
-import { ColoringContext } from '../../../context/ColoringContext';
-import { ColoringModeOptions } from '../../../helpers/color';
+import { ColoringContext } from '../../../context';
 
 export default function ColoringModeDropdown() {
-  const { mode, setMode } = useContext(ColoringContext);
+  const { mode, setMode, options: coloringOptions } = useContext(ColoringContext);
 
-  const options = Array.from(ColoringModeOptions.keys()).map((m) => ({
+  const options = Array.from(coloringOptions.keys()).map((m) => ({
     id: m,
-    name: ColoringModeOptions.get(m)?.name ?? '',
+    name: coloringOptions.get(m)?.name ?? '',
   }));
 
-  const currentMode = ColoringModeOptions.get(mode);
+  const currentMode = coloringOptions.get(mode);
 
   return (
     <Dropdown title="Choose coloring mode" className="w-100">
