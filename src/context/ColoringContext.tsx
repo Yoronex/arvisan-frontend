@@ -15,35 +15,38 @@ import {
 } from '../components/coloringModes';
 
 interface IColoringContext {
-  range?: [number, number];
-  setMode: (modeName: string) => void;
-  setRange: (range: [number, number] | undefined) => void;
-
-  options: IColoringSettings[];
   currentMode?: IColoringSettings;
+  setMode: (modeName: string) => void;
+  options: IColoringSettings[];
+  resetColoring: () => void;
+
+  range?: [number, number];
+  setRange: (range: [number, number] | undefined) => void;
 
   shadeColorByDepth: (node: cytoscape.NodeSingular, hexColor: string) => string,
 }
 
 export const ColoringContext = createContext<IColoringContext>({
   setMode: () => {},
-  setRange: () => {},
   options: [],
+  resetColoring: () => {},
+  setRange: () => {},
   shadeColorByDepth: () => '',
 });
 
 interface Props extends PropsWithChildren {}
 
 export default function ColoringContextProvider({ children }: Props) {
-  const [mode, setMode] = useState<string>('Structure');
-  const [range, setRange] = useState<[number, number] | undefined>();
-
   const { shadeColorByDepth } = useColorShading();
   const { coloring: structureColoring } = useStructureColoring();
   const { coloring: incomingDependenciesColoring } = useIncomingDepsColoring();
   const { coloring: outgoingDependenciesColoring } = useOutgoingDepsColoring();
   const { coloring: dependencyDifferenceColoring } = useDependencyDifferenceColoring();
   const { coloring: dependencyProfileColoring } = useDependencyProfileColoring();
+
+  const defaultMode = structureColoring.name;
+  const [mode, setMode] = useState<string>(defaultMode);
+  const [range, setRange] = useState<[number, number] | undefined>();
 
   const coloringContext = useMemo((): IColoringContext => {
     const options: IColoringSettings[] = [
@@ -56,19 +59,22 @@ export default function ColoringContextProvider({ children }: Props) {
 
     const currentMode = options.find((o) => o.name === mode);
 
+    const resetColoring = () => {
+      setMode(defaultMode);
+    };
+
     return {
       currentMode,
-      range,
       setMode,
-      setRange,
       options,
+      resetColoring,
+      range,
+      setRange,
       shadeColorByDepth,
     };
-  }, [
+  }, [structureColoring, incomingDependenciesColoring, outgoingDependenciesColoring,
     dependencyDifferenceColoring, dependencyProfileColoring,
-    incomingDependenciesColoring, outgoingDependenciesColoring,
-    mode, range, shadeColorByDepth, structureColoring,
-  ]);
+    range, shadeColorByDepth, mode, defaultMode]);
 
   return (
     <ColoringContext.Provider value={coloringContext}>

@@ -5,15 +5,17 @@ import GraphDependencySettings from './GraphDependencySettings';
 import GraphDepthAndLengthSettings from './GraphDepthAndLengthSettings';
 import GraphLayoutAlgorithm from './GraphLayoutAlgorithm';
 import DependencyTypes from './DependencyTypes';
-import { GraphSettingsContext, ViolationsContext } from '../../../context';
+import { ColoringContext, GraphSettingsContext, ViolationsContext } from '../../../context';
 
 export default function ToolboxVisualization() {
   const { resetSettings } = useContext(GraphSettingsContext);
   const { resetVisibility } = useContext(ViolationsContext);
+  const { resetColoring } = useContext(ColoringContext);
 
   const reset = () => {
     resetSettings();
     resetVisibility();
+    resetColoring();
   };
 
   return (
