@@ -14,6 +14,7 @@ export default function IntermediateCheckbox({ indeterminate, ...props }: Props)
 
   return (
     <Form.Check
+      onChange={() => {}}
       {...props}
       type="checkbox"
       ref={setCheckboxRef}

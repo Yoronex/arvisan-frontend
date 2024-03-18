@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { Fragment, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import WelcomeModal from '../WelcomeModal';
@@ -22,7 +22,6 @@ export default function Breadcrumbs() {
 
     return (
       <BreadcrumbItem
-        key={breadcrumb.id}
         active={index === currentNodeDepth - 1}
         parentLayerName={parentLayerName}
         parentItemName={parentItemName}
@@ -39,10 +38,10 @@ export default function Breadcrumbs() {
       {separator}
       <BreadcrumbDomain />
       {breadcrumbs.map((b, i) => ((
-        <>
+        <Fragment key={b.id ?? b.name}>
           {separator}
           {renderBreadcrumbItem(b, i)}
-        </>
+        </Fragment>
       )))}
     </>
   );
