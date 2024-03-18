@@ -12,7 +12,7 @@ import HighlightSearch from '../toolbox/navigator/HighlightSearch';
 export default function BreadcrumbDomain() {
   const [searchKey, setSearchKey] = useState('');
   const {
-    currentDomain, domains, breadcrumbs, loading,
+    currentDomain, domains, loading,
   } = useContext(BreadcrumbsContext);
   const { currentNodeId, visitNode } = useContext(VisualizationHistory);
 
@@ -44,7 +44,7 @@ export default function BreadcrumbDomain() {
   return (
     <NavDropdown
       title={currentDomain ? currentDomain.label : 'Choose domain'}
-      active={currentDomain != null && breadcrumbs.length === 0}
+      active={currentDomain != null && currentNodeId === currentDomain.id}
       onToggle={handleToggle}
     >
       <div style={{ maxHeight: '50dvh' }} className="overflow-y-scroll overflow-x-hidden">

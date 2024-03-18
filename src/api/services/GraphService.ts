@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { BaseQueryOptions } from '../models/BaseQueryOptions';
 import type { Breadcrumb } from '../models/Breadcrumb';
 import type { Domain } from '../models/Domain';
 import type { GraphLayer } from '../models/GraphLayer';
@@ -36,9 +37,7 @@ requestBody: QueryOptions,
      * @throws ApiError
      */
     public static getBreadcrumbOptions(
-requestBody: {
-id: string;
-},
+requestBody: BaseQueryOptions,
 ): CancelablePromise<Array<Breadcrumb>> {
         return __request(OpenAPI, {
             method: 'POST',

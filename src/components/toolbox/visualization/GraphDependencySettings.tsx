@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 import { Form, FormCheck } from 'react-bootstrap';
-import { GraphContext } from '../../../context/GraphContext';
+import { GraphSettingsContext } from '../../../context';
 import MultiRangeSlider from '../../forms/MultiRangeSlider';
 
 const RANGE_MIN = 0;
 const RANGE_MAX = 20;
 
 export default function GraphDependencySettings() {
-  const { settings, updateSettings } = useContext(GraphContext);
+  const { settings, updateSettings } = useContext(GraphSettingsContext);
   const {
     showOutgoing, minOutgoing, maxOutgoing,
     showIncoming, minIncoming, maxIncoming,

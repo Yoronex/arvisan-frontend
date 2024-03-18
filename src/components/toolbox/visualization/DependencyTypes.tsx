@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { Form, FormCheck } from 'react-bootstrap';
-import { GraphContext } from '../../../context';
+import { GraphSettingsContext } from '../../../context';
 
 export default function DependencyTypes() {
-  const { settings, updateSettings } = useContext((GraphContext));
+  const { settings, updateSettings } = useContext((GraphSettingsContext));
   const {
     showWeakDependencies,
     showStrongDependencies,

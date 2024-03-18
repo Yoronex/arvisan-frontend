@@ -7,6 +7,7 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { BaseQueryOptions } from './models/BaseQueryOptions';
 export type { Breadcrumb } from './models/Breadcrumb';
 export type { DependencyCycle } from './models/DependencyCycle';
 export type { DependencyCycleRender } from './models/DependencyCycleRender';

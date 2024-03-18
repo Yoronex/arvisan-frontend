@@ -7,6 +7,7 @@ import VisualizationLayoutContextProvider from './VisualizationLayoutContext';
 import GraphHighlightContextProvider from './GraphHighlightContext';
 import ViolationsContextProvider from './ViolationsContext';
 import ColoringContextProvider from './ColoringContext';
+import GraphSettingsContextProvider from './GraphSettingsContext';
 
 export { LayerContext } from './LayerContext';
 export { BreadcrumbsContext } from './BreadcrumbsContext';
@@ -15,25 +16,29 @@ export { ViolationsContext } from './ViolationsContext';
 export { GraphContext } from './GraphContext';
 export { VisualizationLayoutContext } from './VisualizationLayoutContext';
 export { GraphHighlightContext } from './GraphHighlightContext';
+export { ColoringContext } from './ColoringContext';
+export { GraphSettingsContext } from './GraphSettingsContext';
 
 export function ContextProviders({ children }: PropsWithChildren) {
   return (
     <LayerContextProvider>
-      <VisualizationHistoryProvider>
-        <BreadcrumbsContextProvider>
-          <ViolationsContextProvider>
-            <GraphContextProvider>
-              <VisualizationLayoutContextProvider>
-                <GraphHighlightContextProvider>
-                  <ColoringContextProvider>
-                    {children}
-                  </ColoringContextProvider>
-                </GraphHighlightContextProvider>
-              </VisualizationLayoutContextProvider>
-            </GraphContextProvider>
-          </ViolationsContextProvider>
-        </BreadcrumbsContextProvider>
-      </VisualizationHistoryProvider>
+      <GraphSettingsContextProvider>
+        <VisualizationHistoryProvider>
+          <BreadcrumbsContextProvider>
+            <ViolationsContextProvider>
+              <GraphContextProvider>
+                <VisualizationLayoutContextProvider>
+                  <GraphHighlightContextProvider>
+                    <ColoringContextProvider>
+                      {children}
+                    </ColoringContextProvider>
+                  </GraphHighlightContextProvider>
+                </VisualizationLayoutContextProvider>
+              </GraphContextProvider>
+            </ViolationsContextProvider>
+          </BreadcrumbsContextProvider>
+        </VisualizationHistoryProvider>
+      </GraphSettingsContextProvider>
     </LayerContextProvider>
   );
 }

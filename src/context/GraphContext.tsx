@@ -1,32 +1,12 @@
 import React, {
-  createContext, PropsWithChildren, SetStateAction, useCallback,
+  createContext, PropsWithChildren, useCallback,
 } from 'react';
 import { Graph, GraphService, NodeData } from '../api';
 import { VisualizationHistory } from './VisualizationHistory';
 import { ViolationsContext } from './ViolationsContext';
-
-interface IGraphFilterSettings {
-  layerDepth: number,
-  dependencyLength: number,
-  showOutgoing: boolean;
-  minOutgoing: number;
-  maxOutgoing: number;
-  showIncoming: boolean;
-  minIncoming: number;
-  maxIncoming: number;
-  showSelectionInternalRelationships: boolean;
-  showDomainInternalRelationships: boolean;
-  showExternalRelationships: boolean;
-  selfEdges: boolean;
-  showWeakDependencies: boolean;
-  showStrongDependencies: boolean;
-  showEntityDependencies: boolean;
-}
+import { GraphSettingsContext } from './GraphSettingsContext';
 
 interface IGraphSettings {
-  settings: IGraphFilterSettings,
-  updateSettings: (settings: SetStateAction<IGraphFilterSettings>) => void;
-  resetSettings: () => void;
   graph: Graph;
   getParents: (parent: NodeData) => NodeData[],
   loading: boolean;
@@ -35,31 +15,10 @@ interface IGraphSettings {
   setEnableMovingNodes: (enable: boolean) => void;
 }
 
-const defaultSettings: IGraphFilterSettings = {
-  layerDepth: 1,
-  dependencyLength: 1,
-  showOutgoing: true,
-  minOutgoing: 0,
-  maxOutgoing: Number.POSITIVE_INFINITY,
-  showIncoming: false,
-  minIncoming: 0,
-  maxIncoming: Number.POSITIVE_INFINITY,
-  showSelectionInternalRelationships: true,
-  showDomainInternalRelationships: true,
-  showExternalRelationships: true,
-  selfEdges: true,
-  showWeakDependencies: true,
-  showStrongDependencies: true,
-  showEntityDependencies: true,
-};
-
 const defaultGraph: Graph = { name: '', nodes: [], edges: [] };
 
 export const GraphContext = createContext<IGraphSettings>({
-  settings: defaultSettings,
   graph: defaultGraph,
-  updateSettings: () => {},
-  resetSettings: () => {},
   getParents: () => [],
   loading: true,
   enableMovingNodes: false,
@@ -69,17 +28,13 @@ export const GraphContext = createContext<IGraphSettings>({
 interface Props extends PropsWithChildren {}
 
 export default function GraphContextProvider({ children }: Props) {
-  const [settings, setSettings] = React.useState(defaultSettings);
   const [graph, setGraph] = React.useState(defaultGraph);
   const [loading, setLoading] = React.useState(true);
   const [enableMovingNodes, setEnableMovingNodes] = React.useState(false);
 
+  const { settings } = React.useContext(GraphSettingsContext);
   const { currentNodeId } = React.useContext(VisualizationHistory);
   const { setViolations } = React.useContext(ViolationsContext);
-
-  const resetSettings = () => {
-    setSettings(defaultSettings);
-  };
 
   // Reload graph when selecting a node
   React.useEffect(() => {
@@ -134,10 +89,6 @@ export default function GraphContextProvider({ children }: Props) {
       .finally(() => setLoading(false));
   }, [currentNodeId, setViolations, settings]);
 
-  const updateSettings = (newSettings: SetStateAction<IGraphFilterSettings>) => {
-    setSettings(newSettings);
-  };
-
   const getParents = useCallback((node: NodeData): NodeData[] => {
     if (node.parent === undefined) return [];
     const parent = graph.nodes.find((n) => n.data.id === node.parent);
@@ -146,15 +97,12 @@ export default function GraphContextProvider({ children }: Props) {
   }, [graph]);
 
   const visualizationContext = React.useMemo((): IGraphSettings => ({
-    settings,
     graph,
-    updateSettings,
-    resetSettings,
     getParents,
     loading,
     enableMovingNodes,
     setEnableMovingNodes,
-  }), [settings, graph, getParents, loading, enableMovingNodes]);
+  }), [graph, getParents, loading, enableMovingNodes]);
 
   return (
     <GraphContext.Provider value={visualizationContext}>

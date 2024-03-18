@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import { Form } from 'react-bootstrap';
-import { GraphContext } from '../../../context';
+import { GraphSettingsContext } from '../../../context';
 import RangeSlider from '../../forms/RangeSlider';
 import GraphLayerDepth from './GraphLayerDepth';
 
 export default function GraphDepthAndLengthSettings() {
-  const { settings, updateSettings } = useContext(GraphContext);
+  const { settings, updateSettings } = useContext(GraphSettingsContext);
   const { dependencyLength } = settings;
 
   const setDependencyLength = (value: number) => {

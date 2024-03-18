@@ -8,6 +8,6 @@ import type { NodeData } from './NodeData';
 export type Breadcrumb = {
     name: string;
     layerLabel: string;
-    id: string;
+    id?: string;
     options: Array<NodeData>;
 };
