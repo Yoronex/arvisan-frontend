@@ -1,8 +1,9 @@
 import React, {
-  createContext, PropsWithChildren, useMemo, useState,
+  createContext, PropsWithChildren, useContext, useMemo, useState,
 } from 'react';
 import cytoscape from 'cytoscape';
 import { NodeData } from '../api';
+import { LayerContext } from './LayerContext';
 
 export type CytoscapeNode = {
   type: 'cytoscape',
@@ -25,6 +26,7 @@ interface IVisualizationHistory {
 
   currentNode?: HistoryNode;
   currentNodeId?: string;
+  currentNodeDepth: number;
 
   history: HistoryNode[];
   historyStackPosition: number;
@@ -36,11 +38,14 @@ export const VisualizationHistory = createContext<IVisualizationHistory>({
   visitNode: () => {},
   currentNode: undefined,
   currentNodeId: undefined,
+  currentNodeDepth: 0,
   history: [],
   historyStackPosition: 0,
 });
 
 export default function VisualizationHistoryProvider({ children }: PropsWithChildren) {
+  const { layers } = useContext(LayerContext);
+
   const [history, setHistory] = useState<HistoryNode[]>([]);
   const [historyStackPosition, setHistoryStackPosition] = useState(0);
   const [currentNode, setCurrentNode] = React.useState<HistoryNode | undefined>();
@@ -87,12 +92,24 @@ export default function VisualizationHistoryProvider({ children }: PropsWithChil
       setCurrentNode(node);
     };
 
+    let currentNodeDepth = 0;
+    let layer: string | undefined;
+    if (currentNode?.type === 'cytoscape') {
+      layer = currentNode.data.data('properties.layer') as string;
+    } else if (currentNode?.type === 'backend') {
+      layer = currentNode.data.properties.layer;
+    }
+    if (layer !== undefined) {
+      currentNodeDepth = layers.findIndex((l) => layer!.includes(l.label));
+    }
+
     return {
       visitNode,
       canGoBack,
       back,
       currentNode,
       currentNodeId,
+      currentNodeDepth,
       history,
       historyStackPosition,
     };

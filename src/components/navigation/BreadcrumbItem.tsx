@@ -2,7 +2,7 @@ import { Form, InputGroup, NavDropdown } from 'react-bootstrap';
 import { useContext, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { Breadcrumb, NodeData } from '../../api';
+import { NodeData } from '../../api';
 import HighlightSearch from '../toolbox/navigator/HighlightSearch';
 import { VisualizationHistory } from '../../context';
 import { searchNodes } from '../../helpers/filter';
@@ -10,12 +10,17 @@ import { searchNodes } from '../../helpers/filter';
 interface Props {
   parentLayerName: string;
   parentItemName: string;
-  breadcrumb: Breadcrumb;
-  active: boolean;
+  active?: boolean;
+
+  options: NodeData[];
+  layerLabel: string;
+  id?: string;
+  name?: string;
 }
 
 export default function BreadcrumbItem({
-  parentLayerName, parentItemName, breadcrumb, active,
+  parentLayerName, parentItemName, active,
+  options, layerLabel, id, name,
 }: Props) {
   const [searchKey, setSearchKey] = useState('');
   const { visitNode } = useContext(VisualizationHistory);
@@ -25,12 +30,12 @@ export default function BreadcrumbItem({
     setSearchKey('');
   };
 
-  const filteredOptions = searchNodes(breadcrumb.options, searchKey);
+  const filteredOptions = searchNodes(options, searchKey);
 
   const getOption = (option: NodeData) => ((
     <NavDropdown.Item
       key={option.id}
-      active={breadcrumb.id === option.id}
+      active={id === option.id}
       onClick={() => {
         visitNode({ type: 'backend', data: option, timestamp: new Date() });
       }}
@@ -42,7 +47,7 @@ export default function BreadcrumbItem({
 
   return (
     <NavDropdown
-      title={breadcrumb.name}
+      title={name ?? `${layerLabel}s`}
       active={active}
       onToggle={handleToggle}
     >
@@ -50,7 +55,7 @@ export default function BreadcrumbItem({
         <NavDropdown.Header>
           Select
           {' '}
-          {breadcrumb.layerLabel.toLowerCase()}
+          {layerLabel.toLowerCase()}
           {' from '}
           {`${parentLayerName.toLowerCase()} ${parentItemName}`}
         </NavDropdown.Header>
@@ -69,3 +74,9 @@ export default function BreadcrumbItem({
     </NavDropdown>
   );
 }
+
+BreadcrumbItem.defaultProps = ({
+  active: false,
+  id: undefined,
+  name: undefined,
+});

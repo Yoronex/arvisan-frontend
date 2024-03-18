@@ -1,5 +1,7 @@
-import React, { createContext, PropsWithChildren, SetStateAction } from 'react';
-import { Graph, GraphService } from '../api';
+import React, {
+  createContext, PropsWithChildren, SetStateAction, useCallback,
+} from 'react';
+import { Graph, GraphService, NodeData } from '../api';
 import { VisualizationHistory } from './VisualizationHistory';
 import { ViolationsContext } from './ViolationsContext';
 
@@ -26,6 +28,7 @@ interface IGraphSettings {
   updateSettings: (settings: SetStateAction<IGraphFilterSettings>) => void;
   resetSettings: () => void;
   graph: Graph;
+  getParents: (parent: NodeData) => NodeData[],
   loading: boolean;
 
   enableMovingNodes: boolean;
@@ -57,6 +60,7 @@ export const GraphContext = createContext<IGraphSettings>({
   graph: defaultGraph,
   updateSettings: () => {},
   resetSettings: () => {},
+  getParents: () => [],
   loading: true,
   enableMovingNodes: false,
   setEnableMovingNodes: () => {},
@@ -128,21 +132,29 @@ export default function GraphContextProvider({ children }: Props) {
     getSelectedNodeGraph()
       .catch((e) => console.error(e))
       .finally(() => setLoading(false));
-  }, [currentNodeId, settings]);
+  }, [currentNodeId, setViolations, settings]);
 
   const updateSettings = (newSettings: SetStateAction<IGraphFilterSettings>) => {
     setSettings(newSettings);
   };
+
+  const getParents = useCallback((node: NodeData): NodeData[] => {
+    if (node.parent === undefined) return [];
+    const parent = graph.nodes.find((n) => n.data.id === node.parent);
+    if (!parent) return [];
+    return [parent.data, ...getParents(parent.data)];
+  }, [graph]);
 
   const visualizationContext = React.useMemo((): IGraphSettings => ({
     settings,
     graph,
     updateSettings,
     resetSettings,
+    getParents,
     loading,
     enableMovingNodes,
     setEnableMovingNodes,
-  }), [settings, graph, loading, enableMovingNodes]);
+  }), [settings, graph, getParents, loading, enableMovingNodes]);
 
   return (
     <GraphContext.Provider value={visualizationContext}>
