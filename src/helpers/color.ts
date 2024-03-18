@@ -1,7 +1,7 @@
 import cytoscape from 'cytoscape';
-import { GraphColoringMode } from './enums';
 
 export const DEFAULT_NODE_COLOR = '#7B7D7D';
+export const DEFAULT_NODE_COLOR_RATIO = ['#2081f9', '#f99820'];
 
 type IBaseColoring = {
   name: string;
@@ -9,6 +9,7 @@ type IBaseColoring = {
 
 export type IRatioColoring = IBaseColoring & {
   type: 'ratio',
+  colors: string[],
   rangeFunction?: (nodes: cytoscape.NodeCollection) => [number, number];
   colorFunction: (node: cytoscape.NodeSingular, range: [number, number]) => string;
 };
@@ -85,11 +86,3 @@ export function getRatioColor(
 
   return `#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue.toString(16).padStart(2, '0')}`;
 }
-
-export const ColoringModeColors: Map<GraphColoringMode, string[]> = new Map([
-  [GraphColoringMode.STRUCTURE, []],
-  [GraphColoringMode.INCOMING_DEPENDENCIES, ['#2081f9', '#f99820']],
-  [GraphColoringMode.OUTGOING_DEPENDENCIES, ['#2081f9', '#f99820']],
-  [GraphColoringMode.INCOMING_OUTGOING_DEPS_RATIO, ['#2081f9', '#f99820']],
-  [GraphColoringMode.DEPENDENCY_PROFILE, ['#999999', '#ff0000', '#00ff00', '#0000ff', '#ffff00']],
-]);

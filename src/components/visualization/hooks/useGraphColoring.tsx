@@ -8,26 +8,25 @@ export default function useGraphColoring(
 ) {
   const { graph } = useContext(GraphContext);
   const {
-    mode, setRange, options, shadeColorByDepth,
+    currentMode, setRange, options, shadeColorByDepth,
   } = useContext(ColoringContext);
 
   return useEffect(() => {
-    if (!cy.current) return;
-    const coloringModeSettings = options.get(mode);
+    if (!cy.current || !currentMode) return;
     const nodes = cy.current.nodes();
 
-    if (coloringModeSettings?.type === 'ratio') {
-      const range = coloringModeSettings.rangeFunction
-        ? coloringModeSettings.rangeFunction(nodes)
+    if (currentMode?.type === 'ratio') {
+      const range = currentMode.rangeFunction
+        ? currentMode.rangeFunction(nodes)
         : undefined;
       nodes.forEach((n) => {
-        const color = coloringModeSettings.colorFunction(n, range ?? [0, 1]);
+        const color = currentMode.colorFunction(n, range ?? [0, 1]);
         n.style('background-color', color);
       });
       setRange(range);
-    } else if (coloringModeSettings?.type === 'category') {
+    } else if (currentMode?.type === 'category') {
       nodes.forEach((n) => {
-        const color = coloringModeSettings.colorFunction(n);
+        const color = currentMode.colorFunction(n);
         n.style('background-color', color);
       });
     } else {
@@ -36,5 +35,5 @@ export default function useGraphColoring(
         n.style('background-color', color);
       });
     }
-  }, [cy, graph, mode, options, setRange, shadeColorByDepth]);
+  }, [cy, graph, currentMode, options, setRange, shadeColorByDepth]);
 }

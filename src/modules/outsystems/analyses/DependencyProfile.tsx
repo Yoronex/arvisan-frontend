@@ -4,7 +4,7 @@ import { DependencyProfile, OutSystemsDataLayers } from '../helpers/enums';
 import { getParents } from '../../../helpers/node';
 import { NodeData } from '../../../api';
 import useColorShading from '../../../hooks/useColorShading';
-import { DEFAULT_NODE_COLOR } from '../../../helpers/color';
+import { DEFAULT_NODE_COLOR, ICategoryColoring } from '../../../helpers/color';
 import { VisualizationHistory } from '../../../context/VisualizationHistory';
 
 /**
@@ -74,28 +74,13 @@ export function useDependencyProfileColoring() {
   const { shadeColorByDepth } = useColorShading();
   const { currentNodeId } = useContext(VisualizationHistory);
 
-  const coloring = useMemo(() => ({
-    name: 'Dependency Profile',
+  const coloring: ICategoryColoring = useMemo(() => ({
+    name: 'Dependency profile',
     type: 'category',
     colorFunction: (node: cytoscape.NodeSingular) => {
       const dependencyProfile = getDependencyProfile(node, currentNodeId);
       if (dependencyProfile == null) return shadeColorByDepth(node, DEFAULT_NODE_COLOR);
-
       return dependencyProfileColor[dependencyProfile];
-      // const [firstColor, secondColor, ...restColors] = ColoringModeColors
-      //   .get(GraphColoringMode.DEPENDENCY_PROFILE) || [];
-      // const hexColor = getRatioColor(
-      //   dependencyProfileValue / 4,
-      //   firstColor,
-      //   secondColor,
-      //   ...restColors,
-      // );
-      // if (dependencyProfile === null) {
-      //   const depth = Number(node.data('properties.depth'));
-      //   const alpha = (4 - depth) * 0.15;
-      //   return shadeHexColor(hexColor, alpha);
-      // }
-      // return hexColor;
     },
     legend: new Map([
       [dependencyProfileColor[DependencyProfile.HIDDEN], 'Hidden dependency'],

@@ -9,11 +9,3 @@ export enum VisualizationAlgorithm {
   KLAY = 'klay',
   COLA = 'cola',
 }
-
-export enum GraphColoringMode {
-  STRUCTURE,
-  INCOMING_DEPENDENCIES,
-  OUTGOING_DEPENDENCIES,
-  INCOMING_OUTGOING_DEPS_RATIO,
-  DEPENDENCY_PROFILE,
-}
