@@ -12,7 +12,7 @@ import {
   useIncomingDepsColoring,
   useOutgoingDepsColoring,
   useStructureColoring,
-} from '../components/coloringModes';
+} from '../hooks/coloringModes';
 
 interface IColoringContext {
   currentMode?: IColoringSettings;

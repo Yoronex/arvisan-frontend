@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import cytoscape from 'cytoscape';
-import useColorShading from '../../hooks/useColorShading';
+import useColorShading from '../useColorShading';
 import { ICategoryColoring } from '../../helpers/color';
 
 export default function useStructureColoring() {

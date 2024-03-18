@@ -1,21 +1,23 @@
 import { useMemo } from 'react';
 import cytoscape from 'cytoscape';
-import { getIncomingOutgoingRatio } from '../../cytoscape/operations';
+import { getNrIncomingFunctionDeps } from '../../cytoscape/operations';
 import { DEFAULT_NODE_COLOR_RATIO, getRatioColor, IRatioColoring } from '../../helpers/color';
 
-export const dependencyDifferenceColors = DEFAULT_NODE_COLOR_RATIO;
+export const incomingDependenciesColors = DEFAULT_NODE_COLOR_RATIO;
 
-export default function useOutgoingDepsColoring() {
+export default function useIncomingDepsColoring() {
+  const log10 = (val: number) => Math.log10(val + 1);
+
   const coloring: IRatioColoring = useMemo(() => ({
-    name: 'Dependency ratio',
+    name: 'Incoming dependencies (log scale)',
     type: 'ratio',
-    colors: dependencyDifferenceColors,
+    colors: incomingDependenciesColors,
     rangeFunction: (nodes: cytoscape.NodeCollection) => {
       let min = Number.POSITIVE_INFINITY;
       let max = Number.NEGATIVE_INFINITY;
 
       nodes.forEach((node) => {
-        const value = getIncomingOutgoingRatio(node);
+        const value = getNrIncomingFunctionDeps(node);
         min = Math.min(min, value);
         max = Math.max(max, value);
       });
@@ -24,10 +26,13 @@ export default function useOutgoingDepsColoring() {
     },
     colorFunction: (node: cytoscape.NodeSingular, range2: [number, number]) => {
       const [min, max] = range2;
-      const incomingDeps = getIncomingOutgoingRatio(node);
-      const [firstColor, secondColor, ...restColors] = dependencyDifferenceColors;
+      const logMin = log10(min);
+      const logMax = log10(max);
+      const incomingDeps = log10(getNrIncomingFunctionDeps(node));
+      const [firstColor, secondColor, ...restColors] = incomingDependenciesColors;
+
       return getRatioColor(
-        (incomingDeps - min) / (max - min),
+        (incomingDeps - logMin) / (logMax - logMin),
         firstColor,
         secondColor,
         ...restColors,
