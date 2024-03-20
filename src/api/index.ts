@@ -23,6 +23,7 @@ export type { Graph } from './models/Graph';
 export type { GraphLayer } from './models/GraphLayer';
 export type { GraphWithViolations } from './models/GraphWithViolations';
 export type { LayerViolation } from './models/LayerViolation';
+export { ModuleDependencyProfileCategory } from './models/ModuleDependencyProfileCategory';
 export type { Node } from './models/Node';
 export { NodeData } from './models/NodeData';
 export type { Partial_Range_ } from './models/Partial_Range_';

@@ -1,8 +1,10 @@
 import cytoscape from 'cytoscape';
 import { useMemo } from 'react';
-import { DependencyProfile } from '../helpers/enums';
+import { DependencyProfileCategory } from '../helpers/enums';
 import useColorShading from '../../../hooks/useColorShading';
 import { DEFAULT_NODE_COLOR, ICategoryColoring } from '../../../helpers/color';
+
+export type DependencyProfile = [number, number, number, number];
 
 /**
  * Given a node, get its dependency profile categorization. This function cannot be generalized for
@@ -11,21 +13,46 @@ import { DEFAULT_NODE_COLOR, ICategoryColoring } from '../../../helpers/color';
  * (sub)layers are only categorizations of module types, but have no true architectural value.
  *
  * @param node
- * @returns DependencyProfile
+ * @returns DependencyProfileCategory
  * @returns null if node not on the "Module" layer
  */
-export default function getDependencyProfileCategory(
+export function getDependencyProfileCategory(
   node: cytoscape.NodeSingular,
-): DependencyProfile | null {
+): DependencyProfileCategory | null {
   return node.data('properties.dependencyProfileCategory') ?? null;
 }
 
 const dependencyProfileColor = {
-  [DependencyProfile.HIDDEN]: '#ff0000',
-  [DependencyProfile.INBOUND]: '#00ff00',
-  [DependencyProfile.OUTBOUND]: '#0099ff',
-  [DependencyProfile.TRANSIT]: '#ffff00',
+  [DependencyProfileCategory.HIDDEN]: '#ff0000',
+  [DependencyProfileCategory.INBOUND]: '#00ff00',
+  [DependencyProfileCategory.OUTBOUND]: '#0099ff',
+  [DependencyProfileCategory.TRANSIT]: '#ffff00',
 };
+
+/**
+ * Get the dependency profile of the given node
+ * @param node
+ * @returns Quadruple of four categories [hidden, inbound, outbound, transit]
+ * @return null if leaf node
+ */
+export function getDependencyProfile(
+  node: cytoscape.NodeSingular,
+): [number, number, number, number] {
+  if (node.isChildless()) {
+    switch (getDependencyProfileCategory(node)) {
+      case DependencyProfileCategory.HIDDEN: return [1, 0, 0, 0];
+      case DependencyProfileCategory.INBOUND: return [0, 1, 0, 0];
+      case DependencyProfileCategory.OUTBOUND: return [0, 0, 1, 0];
+      case DependencyProfileCategory.TRANSIT: return [0, 0, 0, 1];
+      default: return [0, 0, 0, 0];
+    }
+  }
+
+  return node.children().reduce((totalProfile: DependencyProfile, child) => {
+    const childProfile: DependencyProfile = getDependencyProfile(child);
+    return totalProfile.map((a, i) => a + childProfile[i]) as DependencyProfile;
+  }, [0, 0, 0, 0]);
+}
 
 /**
  * Dependency profile coloring object required for the coloring function of the graph
@@ -42,10 +69,10 @@ export function useDependencyProfileColoring() {
       return dependencyProfileColor[dependencyProfile];
     },
     legend: new Map([
-      [dependencyProfileColor[DependencyProfile.HIDDEN], 'Hidden dependency'],
-      [dependencyProfileColor[DependencyProfile.INBOUND], 'Inbound dependency'],
-      [dependencyProfileColor[DependencyProfile.OUTBOUND], 'Outbound dependency'],
-      [dependencyProfileColor[DependencyProfile.TRANSIT], 'Transit dependency'],
+      [dependencyProfileColor[DependencyProfileCategory.HIDDEN], 'Hidden dependency'],
+      [dependencyProfileColor[DependencyProfileCategory.INBOUND], 'Inbound dependency'],
+      [dependencyProfileColor[DependencyProfileCategory.OUTBOUND], 'Outbound dependency'],
+      [dependencyProfileColor[DependencyProfileCategory.TRANSIT], 'Transit dependency'],
     ]),
   }), [shadeColorByDepth]);
 

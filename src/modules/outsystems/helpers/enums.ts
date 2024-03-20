@@ -12,7 +12,7 @@ export enum OutSystemsDataLayers {
  * Bouwers, Eric, Arie van Deursen, and Joost Visser. "Dependency profiles for software architecture
  * evaluations." 2011 27th IEEE International Conference on Software Maintenance (ICSM). IEEE, 2011.
  */
-export enum DependencyProfile {
+export enum DependencyProfileCategory {
   /** Modules which only have dependencies (either incoming or outgoing) involving modules
    *  inside the component. */
   HIDDEN = 'hidden', // Modules which only have dependencies (either incoming or outgoing

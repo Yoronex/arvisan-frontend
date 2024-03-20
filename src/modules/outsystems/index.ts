@@ -1,2 +1,2 @@
-export { default as getDependencyProfile, useDependencyProfileColoring } from './analyses/DependencyProfile';
-export { DependencyProfile } from './helpers/enums';
+export { getDependencyProfile, getDependencyProfileCategory, useDependencyProfileColoring } from './analyses/DependencyProfile';
+export { DependencyProfileCategory } from './helpers/enums';

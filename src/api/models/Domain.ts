@@ -3,6 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { ModuleDependencyProfileCategory } from './ModuleDependencyProfileCategory';
+
 export type Domain = {
     /**
      * Unique node identifier
@@ -20,6 +22,15 @@ export type Domain = {
      * Custom properties of node
      */
     properties: {
+/**
+ * Dependency profile of the given node. Quadruple of four categories
+ * [hidden, inbound, outbound, transit] if internal (tree) node. Undefined if leaf node.
+ */
+dependencyProfile?: Array<number>;
+/**
+ * The type of dependency profile this node is. Only for bottom-layer nodes
+ */
+dependencyProfileCategory?: ModuleDependencyProfileCategory;
 /**
  * Whether this node is selected or not
  */
