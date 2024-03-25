@@ -2,6 +2,7 @@
   "name": "arvisan-frontend",
   "version": "0.2.0",
   "type": "module",
+  "main": "src/index.ts",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

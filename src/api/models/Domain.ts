@@ -26,7 +26,7 @@ export type Domain = {
  * Dependency profile of the given node. Quadruple of four categories
  * [hidden, inbound, outbound, transit] if internal (tree) node. Undefined if leaf node.
  */
-dependencyProfile?: Array<number>;
+dependencyProfile: Array<number>;
 /**
  * The type of dependency profile this node is. Only for bottom-layer nodes
  */
@@ -47,10 +47,6 @@ color: string;
  * Layer this node is in
  */
 layer: string;
-/**
- * Type of node
- */
-kind: string;
 /**
  * Full name of the node (including prefixes)
  */

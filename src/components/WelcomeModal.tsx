@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { VisualizationHistory, BreadcrumbsContext } from '../context';
 import BackendVersion from './BackendVersion';
+import { getInboundEncapsulation, getOutboundEncapsulation } from '../helpers/metrics';
 
 export default function WelcomeModal() {
   const { currentNode, visitNode } = useContext(VisualizationHistory);
@@ -39,6 +40,10 @@ export default function WelcomeModal() {
         visitNode({ type: 'backend', data: d, timestamp: new Date() });
         setShow(false);
       };
+
+      const inboundEncapsulation = getInboundEncapsulation(d.properties.dependencyProfile);
+      const outboundEncapsulation = getOutboundEncapsulation(d.properties.dependencyProfile);
+
       return (
         <tr
           key={d.id}
@@ -47,6 +52,8 @@ export default function WelcomeModal() {
           <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.nrOutgoingDependencies}</button></td>
           <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.nrIncomingDependencies}</button></td>
           <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.nrInternalDependencies}</button></td>
+          <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{inboundEncapsulation.toFixed(4)}</button></td>
+          <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{outboundEncapsulation.toFixed(4)}</button></td>
           <td><Button onClick={click} size="sm" title={`Select ${d.label}`}>Select</Button></td>
         </tr>
       );
@@ -58,9 +65,11 @@ export default function WelcomeModal() {
       <thead className="fw-bold">
         <tr>
           <td>Name</td>
-          <td># Outgoing Dependencies</td>
-          <td># Incoming Dependencies</td>
-          <td># Inner dependencies</td>
+          <td>Nr Outgoing Dependencies</td>
+          <td>Nr Incoming Dependencies</td>
+          <td>Nr Inner dependencies</td>
+          <td>Avg Inbound encapsulation score</td>
+          <td>Avg Outbound encapsulation score</td>
           <td aria-label="Select" />
         </tr>
       </thead>

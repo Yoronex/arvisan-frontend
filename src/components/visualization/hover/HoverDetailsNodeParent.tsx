@@ -1,5 +1,6 @@
 import cytoscape from 'cytoscape';
 import { getDependencyProfile } from '../../../modules/outsystems';
+import { getInboundEncapsulation, getOutboundEncapsulation } from '../../../helpers/metrics';
 
 interface Props {
   node: cytoscape.NodeSingular;
@@ -7,12 +8,8 @@ interface Props {
 
 export default function HoverDetailsNodeParent({ node }: Props) {
   const dependencyProfile = getDependencyProfile(node);
-  const dependencyProfileSum = dependencyProfile.reduce((total, x) => total + x, 0);
-
-  const inboundEncapsulation = (dependencyProfile[1] + dependencyProfile[3])
-    / dependencyProfileSum;
-  const outboundEncapsulation = (dependencyProfile[2] + dependencyProfile[3])
-    / dependencyProfileSum;
+  const inboundEncapsulation = getInboundEncapsulation(dependencyProfile);
+  const outboundEncapsulation = getOutboundEncapsulation(dependencyProfile);
 
   return (
     <>
