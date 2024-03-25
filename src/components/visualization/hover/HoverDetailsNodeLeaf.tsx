@@ -1,11 +1,20 @@
 import cytoscape from 'cytoscape';
-import { getNrIncomingFunctionDeps, getNrOutgoingFunctionDeps } from '../../../cytoscape/operations';
+import {
+  getInboundEncapsulation,
+  getNrIncomingFunctionDeps,
+  getNrOutgoingFunctionDeps,
+  getOutboundEncapsulation,
+} from '../../../helpers/metrics';
 
 interface Props {
   node: cytoscape.NodeSingular;
 }
 
 export default function HoverDetailsNodeLeaf({ node }: Props) {
+  const dependencyProfile = node.data('properties.dependencyProfile');
+  const inboundEncapsulation = getInboundEncapsulation(dependencyProfile);
+  const outboundEncapsulation = getOutboundEncapsulation(dependencyProfile);
+
   return (
     <>
       <tr>
@@ -23,6 +32,10 @@ export default function HoverDetailsNodeLeaf({ node }: Props) {
       <tr>
         <td className="pe-2 text-end fw-bold">Total incoming func. dependencies:</td>
         <td>{getNrIncomingFunctionDeps(node)}</td>
+      </tr>
+      <tr>
+        <td className="pe-2 text-end fw-bold">Inbound/Outbound encapsulation</td>
+        <td>{`<${inboundEncapsulation.toFixed(4)}, ${outboundEncapsulation.toFixed(4)}>`}</td>
       </tr>
     </>
   );

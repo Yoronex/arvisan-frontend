@@ -8,10 +8,9 @@ import {
 import { useDependencyProfileColoring } from '../modules/outsystems';
 import useColorShading from '../hooks/useColorShading';
 import {
-  useDependencyDifferenceColoring,
-  useIncomingDepsColoring,
-  useOutgoingDepsColoring,
   useStructureColoring,
+  useDependencyColoring,
+  useEncapsulationColoring,
 } from '../hooks/coloringModes';
 
 interface IColoringContext {
@@ -39,10 +38,9 @@ interface Props extends PropsWithChildren {}
 export default function ColoringContextProvider({ children }: Props) {
   const { shadeColorByDepth } = useColorShading();
   const { coloring: structureColoring } = useStructureColoring();
-  const { coloring: incomingDependenciesColoring } = useIncomingDepsColoring();
-  const { coloring: outgoingDependenciesColoring } = useOutgoingDepsColoring();
-  const { coloring: dependencyDifferenceColoring } = useDependencyDifferenceColoring();
+  const { colorings: dependencyColorings } = useDependencyColoring();
   const { coloring: dependencyProfileColoring } = useDependencyProfileColoring();
+  const { colorings: encapsulationColorings } = useEncapsulationColoring();
 
   const defaultMode = structureColoring.name;
   const [mode, setMode] = useState<string>(defaultMode);
@@ -51,10 +49,9 @@ export default function ColoringContextProvider({ children }: Props) {
   const coloringContext = useMemo((): IColoringContext => {
     const options: IColoringSettings[] = [
       structureColoring,
-      incomingDependenciesColoring,
-      outgoingDependenciesColoring,
-      dependencyDifferenceColoring,
+      ...dependencyColorings,
       dependencyProfileColoring,
+      ...encapsulationColorings,
     ];
 
     const currentMode = options.find((o) => o.name === mode);
@@ -72,8 +69,9 @@ export default function ColoringContextProvider({ children }: Props) {
       setRange,
       shadeColorByDepth,
     };
-  }, [structureColoring, incomingDependenciesColoring, outgoingDependenciesColoring,
-    dependencyDifferenceColoring, dependencyProfileColoring,
+  }, [
+    structureColoring, dependencyColorings,
+    dependencyProfileColoring, encapsulationColorings,
     range, shadeColorByDepth, mode, defaultMode]);
 
   return (

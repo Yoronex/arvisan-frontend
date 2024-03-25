@@ -1,5 +1,4 @@
 import cytoscape from 'cytoscape';
-import { getDependencyProfile } from '../../../modules/outsystems';
 import { getInboundEncapsulation, getOutboundEncapsulation } from '../../../helpers/metrics';
 
 interface Props {
@@ -7,7 +6,7 @@ interface Props {
 }
 
 export default function HoverDetailsNodeParent({ node }: Props) {
-  const dependencyProfile = getDependencyProfile(node);
+  const dependencyProfile = node.data('properties.dependencyProfile');
   const inboundEncapsulation = getInboundEncapsulation(dependencyProfile);
   const outboundEncapsulation = getOutboundEncapsulation(dependencyProfile);
 
@@ -18,7 +17,7 @@ export default function HoverDetailsNodeParent({ node }: Props) {
         <td>{`<${dependencyProfile.join(', ')}>`}</td>
       </tr>
       <tr>
-        <td className="pe-2 text-end fw-bold">Encapsulation score:</td>
+        <td className="pe-2 text-end fw-bold">Inbound/Outbound encapsulation</td>
         <td>{`<${inboundEncapsulation.toFixed(4)}, ${outboundEncapsulation.toFixed(4)}>`}</td>
       </tr>
     </>
