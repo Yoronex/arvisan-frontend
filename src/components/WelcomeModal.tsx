@@ -26,10 +26,12 @@ export default function WelcomeModal() {
       return [20, 18, 17, 21, 15].map((x) => (
         <Placeholder as="tr" key={x} animation="glow">
           <td aria-label="loading"><Placeholder style={{ width: `${x}rem` }} /></td>
-          <td aria-label="loading"><Placeholder xs={2} /></td>
-          <td aria-label="loading"><Placeholder xs={2} /></td>
-          <td aria-label="loading"><Placeholder xs={2} /></td>
-          <td aria-label="loading"><Placeholder style={{ width: '2rem' }} /></td>
+          <td aria-label="loading"><Placeholder xs={Math.round(x / 5)} /></td>
+          <td aria-label="loading"><Placeholder xs={Math.round(x / 4)} /></td>
+          <td aria-label="loading"><Placeholder xs={Math.round(x / 4.5)} /></td>
+          <td aria-label="loading"><Placeholder xs={4} /></td>
+          <td aria-label="loading"><Placeholder xs={4} /></td>
+          <td aria-label="loading"><Placeholder style={{ width: '5rem' }} /></td>
         </Placeholder>
       ));
     }
