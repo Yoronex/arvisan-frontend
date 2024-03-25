@@ -55,3 +55,11 @@ export function getIncomingOutgoingDifference(node: cytoscape.NodeSingular): num
   const outgoing = getNrOutgoingFunctionDeps(node);
   return outgoing !== 0 ? incoming / outgoing : 0;
 }
+
+/**
+ * Given a node, get its (total) file size in KB
+ * @param node
+ */
+export function getFileSizeKB(node: cytoscape.NodeSingular): number {
+  return node.data('properties.fileSizeKB') ?? Number.NaN;
+}

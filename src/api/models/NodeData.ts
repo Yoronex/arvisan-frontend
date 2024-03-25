@@ -23,6 +23,18 @@ export type NodeData = {
      */
     properties: {
 /**
+ * How many lowest-layer nodes are contained in this node.
+ * 1 if node itself is a leaf.
+ * Undefined if it cannot be calculated
+ */
+nrLeaves?: number;
+nrRESTProducers?: number;
+nrRESTConsumers?: number;
+nrPublicElements?: number;
+nrEntities?: number;
+nrScreens?: number;
+fileSizeKB?: number;
+/**
  * Dependency profile of the given node. Quadruple of four categories
  * [hidden, inbound, outbound, transit] if internal (tree) node. Undefined if leaf node.
  */

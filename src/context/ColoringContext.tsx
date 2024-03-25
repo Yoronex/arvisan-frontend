@@ -9,7 +9,7 @@ import { useDependencyProfileColoring } from '../modules/outsystems';
 import useColorShading from '../hooks/useColorShading';
 import {
   useStructureColoring,
-  useDependencyColoring,
+  useSimpleLeafPropertyColoring,
   useEncapsulationColoring,
 } from '../hooks/coloringModes';
 
@@ -38,7 +38,7 @@ interface Props extends PropsWithChildren {}
 export default function ColoringContextProvider({ children }: Props) {
   const { shadeColorByDepth } = useColorShading();
   const { coloring: structureColoring } = useStructureColoring();
-  const { colorings: dependencyColorings } = useDependencyColoring();
+  const { colorings: simpleLeafColorings } = useSimpleLeafPropertyColoring();
   const { coloring: dependencyProfileColoring } = useDependencyProfileColoring();
   const { colorings: encapsulationColorings } = useEncapsulationColoring();
 
@@ -49,7 +49,7 @@ export default function ColoringContextProvider({ children }: Props) {
   const coloringContext = useMemo((): IColoringContext => {
     const options: IColoringSettings[] = [
       structureColoring,
-      ...dependencyColorings,
+      ...simpleLeafColorings,
       dependencyProfileColoring,
       ...encapsulationColorings,
     ];
@@ -70,7 +70,7 @@ export default function ColoringContextProvider({ children }: Props) {
       shadeColorByDepth,
     };
   }, [
-    structureColoring, dependencyColorings,
+    structureColoring, simpleLeafColorings,
     dependencyProfileColoring, encapsulationColorings,
     range, shadeColorByDepth, mode, defaultMode]);
 

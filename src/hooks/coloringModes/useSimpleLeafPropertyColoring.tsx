@@ -1,19 +1,20 @@
 import cytoscape from 'cytoscape';
 import { useMemo } from 'react';
-import { DEFAULT_NODE_COLOR_RATIO, getRatioColor, IRatioColoring } from '../../helpers/color';
+import {
+  DEFAULT_NODE_COLOR, DEFAULT_NODE_COLOR_RATIO, getRatioColor, IRatioColoring,
+} from '../../helpers/color';
 import useColorShading from '../useColorShading';
 import {
+  getFileSizeKB,
   getIncomingOutgoingDifference,
   getNrIncomingFunctionDeps,
   getNrOutgoingFunctionDeps,
 } from '../../helpers/metrics';
 
-export const dependencyColors = DEFAULT_NODE_COLOR_RATIO;
-
-export default function useDependencyColoring(): { colorings: IRatioColoring[] } {
+export default function useSimpleLeafPropertyColoring(): { colorings: IRatioColoring[] } {
   const { shadeColorByDepth } = useColorShading();
 
-  const colors = dependencyColors;
+  const colors = DEFAULT_NODE_COLOR_RATIO;
   const log10 = (val: number) => Math.log10(val + 1);
 
   const colorings: IRatioColoring[] = useMemo(() => {
@@ -36,7 +37,7 @@ export default function useDependencyColoring(): { colorings: IRatioColoring[] }
       getValueFunction: (node: cytoscape.NodeSingular) => number,
     ) => (node: cytoscape.NodeSingular, range2: [number, number]) => {
       if (node.isParent()) {
-        return shadeColorByDepth(node, '#7B7D7D');
+        return shadeColorByDepth(node, DEFAULT_NODE_COLOR);
       }
 
       const [min, max] = range2;
@@ -71,6 +72,12 @@ export default function useDependencyColoring(): { colorings: IRatioColoring[] }
       colors,
       rangeFunction: getRangeFunction(getIncomingOutgoingDifference),
       colorFunction: getColorFunction(getIncomingOutgoingDifference),
+    }, {
+      name: 'File Size (KB log scale)',
+      type: 'ratio',
+      colors,
+      rangeFunction: getRangeFunction(getFileSizeKB),
+      colorFunction: getColorFunction(getFileSizeKB),
     }];
   }, [colors, shadeColorByDepth]);
 

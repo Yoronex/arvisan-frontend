@@ -16,6 +16,28 @@ import { request as __request } from '../core/request';
 export class GraphService {
 
     /**
+     * @returns Domain Ok
+     * @throws ApiError
+     */
+    public static getDomains(): CancelablePromise<Array<Domain>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/graph/domains',
+        });
+    }
+
+    /**
+     * @returns GraphLayer Ok
+     * @throws ApiError
+     */
+    public static getLayers(): CancelablePromise<Array<GraphLayer>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/graph/layers',
+        });
+    }
+
+    /**
      * @param requestBody 
      * @returns GraphWithViolations Ok
      * @throws ApiError
@@ -44,28 +66,6 @@ requestBody: BaseQueryOptions,
             url: '/graph/breadcrumbs',
             body: requestBody,
             mediaType: 'application/json',
-        });
-    }
-
-    /**
-     * @returns Domain Ok
-     * @throws ApiError
-     */
-    public static getDomains(): CancelablePromise<Array<Domain>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/graph/domains',
-        });
-    }
-
-    /**
-     * @returns GraphLayer Ok
-     * @throws ApiError
-     */
-    public static getLayers(): CancelablePromise<Array<GraphLayer>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/graph/layers',
         });
     }
 

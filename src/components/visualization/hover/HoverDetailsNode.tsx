@@ -1,6 +1,7 @@
 import cytoscape from 'cytoscape';
 import HoverDetailsNodeLeaf from './HoverDetailsNodeLeaf';
 import HoverDetailsNodeParent from './HoverDetailsNodeParent';
+import { getFileSizeKB } from '../../../helpers/metrics';
 
 interface Props {
   node: cytoscape.NodeSingular;
@@ -40,6 +41,14 @@ export default function HoverDetailsNode({ node }: Props) {
               </ul>
             </td>
           )}
+        </tr>
+        <tr>
+          <td className="pe-2 text-end fw-bold">Size:</td>
+          <td>
+            {getFileSizeKB(node).toLocaleString()}
+            {' '}
+            KB
+          </td>
         </tr>
         {node.isChildless() && (<HoverDetailsNodeLeaf node={node} />)}
         {node.isParent() && (<HoverDetailsNodeParent node={node} />)}

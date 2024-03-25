@@ -25,13 +25,16 @@ export default function WelcomeModal() {
     if (loading) {
       return [20, 18, 17, 21, 15].map((x) => (
         <Placeholder as="tr" key={x} animation="glow">
-          <td aria-label="loading"><Placeholder style={{ width: `${x}rem` }} /></td>
+          <td aria-label="loading"><Placeholder style={{ width: `${Math.round(x / 2)}rem` }} /></td>
+          <td aria-label="loading"><Placeholder xs={Math.round(x / 5)} /></td>
+          <td aria-label="loading"><Placeholder xs={Math.round(x / 6)} /></td>
+          <td aria-label="loading"><Placeholder xs={Math.round(x / 6)} /></td>
           <td aria-label="loading"><Placeholder xs={Math.round(x / 5)} /></td>
           <td aria-label="loading"><Placeholder xs={Math.round(x / 4)} /></td>
           <td aria-label="loading"><Placeholder xs={Math.round(x / 4.5)} /></td>
           <td aria-label="loading"><Placeholder xs={4} /></td>
           <td aria-label="loading"><Placeholder xs={4} /></td>
-          <td aria-label="loading"><Placeholder style={{ width: '5rem' }} /></td>
+          <td aria-label="loading"><Placeholder style={{ width: '4rem' }} /></td>
         </Placeholder>
       ));
     }
@@ -46,11 +49,19 @@ export default function WelcomeModal() {
       const inboundEncapsulation = getInboundEncapsulation(d.properties.dependencyProfile);
       const outboundEncapsulation = getOutboundEncapsulation(d.properties.dependencyProfile);
 
+      const fileSizeMb = d.properties.fileSizeKB ? d.properties.fileSizeKB.toLocaleString() : '';
+      const avgModuleSize = d.properties.fileSizeKB && d.properties.nrLeaves
+        ? (d.properties.fileSizeKB / d.properties.nrLeaves).toFixed(1)
+        : '';
+
       return (
         <tr
           key={d.id}
         >
-          <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.label}</button></td>
+          <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent text-start">{d.label}</button></td>
+          <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{fileSizeMb}</button></td>
+          <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.properties.nrLeaves}</button></td>
+          <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{avgModuleSize}</button></td>
           <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.nrOutgoingDependencies}</button></td>
           <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.nrIncomingDependencies}</button></td>
           <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.nrInternalDependencies}</button></td>
@@ -67,8 +78,11 @@ export default function WelcomeModal() {
       <thead className="fw-bold">
         <tr>
           <td>Name</td>
-          <td>Nr Outgoing Dependencies</td>
-          <td>Nr Incoming Dependencies</td>
+          <td className="text-nowrap">Size (KB)</td>
+          <td>Nr Modules</td>
+          <td>Avg Module size (KB)</td>
+          <td>Nr Outgoing dependencies</td>
+          <td>Nr Incoming dependencies</td>
           <td>Nr Inner dependencies</td>
           <td>Avg Inbound encapsulation score</td>
           <td>Avg Outbound encapsulation score</td>
