@@ -13,6 +13,9 @@ interface IGraphSettings {
 
   enableMovingNodes: boolean;
   setEnableMovingNodes: (enable: boolean) => void;
+
+  enableHoverDetails: boolean,
+  setEnableHoverDetails: (enable: boolean) => void;
 }
 
 const defaultGraph: Graph = { name: '', nodes: [], edges: [] };
@@ -21,8 +24,11 @@ export const GraphContext = createContext<IGraphSettings>({
   graph: defaultGraph,
   getParents: () => [],
   loading: true,
+
   enableMovingNodes: false,
   setEnableMovingNodes: () => {},
+  enableHoverDetails: true,
+  setEnableHoverDetails: () => {},
 });
 
 interface Props extends PropsWithChildren {}
@@ -31,6 +37,7 @@ export default function GraphContextProvider({ children }: Props) {
   const [graph, setGraph] = React.useState(defaultGraph);
   const [loading, setLoading] = React.useState(true);
   const [enableMovingNodes, setEnableMovingNodes] = React.useState(false);
+  const [enableHoverDetails, setEnableHoverDetails] = React.useState(true);
 
   const { settings } = React.useContext(GraphSettingsContext);
   const { currentNodeId } = React.useContext(VisualizationHistory);
@@ -102,7 +109,9 @@ export default function GraphContextProvider({ children }: Props) {
     loading,
     enableMovingNodes,
     setEnableMovingNodes,
-  }), [graph, getParents, loading, enableMovingNodes]);
+    enableHoverDetails,
+    setEnableHoverDetails,
+  }), [graph, getParents, loading, enableMovingNodes, enableHoverDetails]);
 
   return (
     <GraphContext.Provider value={visualizationContext}>

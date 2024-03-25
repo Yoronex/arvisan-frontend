@@ -1,15 +1,10 @@
 import {
-  Container, Form, Nav, Navbar, NavDropdown,
+  Container, Nav, Navbar,
 } from 'react-bootstrap';
-import { useContext } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear } from '@fortawesome/free-solid-svg-icons';
-import { GraphContext } from '../../context';
 import Breadcrumbs from './Breadcrumbs';
+import MainMenuSettings from './MainMenuSettings';
 
 export default function MainMenu() {
-  const { enableMovingNodes, setEnableMovingNodes } = useContext(GraphContext);
-
   return (
     <div className="position-absolute p-3 w-100">
       <Navbar expand="lg" className="w-100 z-2 bg-light rounded-3 shadow">
@@ -21,17 +16,7 @@ export default function MainMenu() {
               <Breadcrumbs />
             </Nav>
             <Nav>
-              <NavDropdown title={<FontAwesomeIcon icon={faGear} title="Settings" />}>
-                <Form className="dropdown-item-text text-nowrap">
-                  <Form.Check
-                    type="switch"
-                    label="Enable moving nodes"
-                    id="enable-moving-nodes"
-                    checked={enableMovingNodes}
-                    onChange={() => setEnableMovingNodes(!enableMovingNodes)}
-                  />
-                </Form>
-              </NavDropdown>
+              <MainMenuSettings />
             </Nav>
           </Navbar.Collapse>
         </Container>
