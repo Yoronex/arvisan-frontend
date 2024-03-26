@@ -35,8 +35,10 @@ export default function useDependencyProfileColoring() {
 
   const coloring: ICategoryColoring = useMemo(() => ({
     name: 'Dependency profile',
+    nodeDetailsTitle: 'Dependency profile',
+    nodeDetailsValue: getDependencyProfileCategory,
     type: 'category',
-    colorFunction: (node: cytoscape.NodeSingular) => {
+    colorFunction(node: cytoscape.NodeSingular) {
       const dependencyProfile = getDependencyProfileCategory(node);
       if (dependencyProfile == null) return shadeColorByDepth(node, DEFAULT_NODE_COLOR);
       return dependencyProfileColor[dependencyProfile];

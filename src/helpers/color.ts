@@ -5,6 +5,9 @@ export const DEFAULT_NODE_COLOR_RATIO = ['#2081f9', '#f99820'];
 
 type IBaseColoring = {
   name: string;
+  nodeDetailsTitle: string;
+  /** The value that needs to be shown in the node details list. NULL if hidden */
+  nodeDetailsValue: (node: cytoscape.NodeSingular) => number | string | null;
 };
 
 export type IRatioColoring = IBaseColoring & {

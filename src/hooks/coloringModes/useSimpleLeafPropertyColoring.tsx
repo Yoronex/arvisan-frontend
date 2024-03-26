@@ -41,13 +41,12 @@ export default function useSimpleLeafPropertyColoring(): { colorings: IRatioColo
       }
 
       const [min, max] = range2;
-      const logMin = log10(min);
-      const logMax = log10(max);
-      const incomingDeps = log10(getValueFunction(node));
+      const logMax = log10(max - min);
+      const value = log10(getValueFunction(node) - min);
       const [firstColor, secondColor, ...restColors] = colors;
 
       return getRatioColor(
-        (incomingDeps - logMin) / (logMax - logMin),
+        (value) / (logMax),
         firstColor,
         secondColor,
         ...restColors,
@@ -56,24 +55,67 @@ export default function useSimpleLeafPropertyColoring(): { colorings: IRatioColo
 
     return [{
       name: 'Incoming dependencies (log scale)',
+      nodeDetailsTitle: 'Incoming dependencies',
+      nodeDetailsValue() { return null; },
       type: 'ratio',
       colors,
       rangeFunction: getRangeFunction(getNrIncomingFunctionDeps),
       colorFunction: getColorFunction(getNrIncomingFunctionDeps),
     }, {
       name: 'Outgoing dependencies (log scale)',
+      nodeDetailsTitle: 'Incoming dependencies',
+      nodeDetailsValue() { return null; },
       type: 'ratio',
       colors,
       rangeFunction: getRangeFunction(getNrOutgoingFunctionDeps),
       colorFunction: getColorFunction(getNrOutgoingFunctionDeps),
     }, {
       name: 'Dependency difference (log scale)',
+      nodeDetailsTitle: 'Dependency difference',
+      nodeDetailsValue: getIncomingOutgoingDifference,
       type: 'ratio',
       colors,
       rangeFunction: getRangeFunction(getIncomingOutgoingDifference),
-      colorFunction: getColorFunction(getIncomingOutgoingDifference),
+      colorFunction(node: cytoscape.NodeSingular, range: [number, number]) {
+        const [min, max] = range;
+        // No negative logarithm, so we can use the general color function
+        if (min >= 0) return getColorFunction(getIncomingOutgoingDifference)(node, range);
+        // Only negative logarithms, so inverse the difference function
+        if (max <= 0) {
+          return getColorFunction(
+            (node2) => -getIncomingOutgoingDifference(node2),
+          )(node, range);
+        }
+
+        // Ratio which has a difference of 0, i.e. the border value
+        const borderRatio = (-min) / (max - min);
+        const logMin = log10(-min);
+        const logMax = log10(max);
+        const value = getIncomingOutgoingDifference(node);
+        let ratio: number;
+        if (value === 0) {
+          ratio = borderRatio;
+        } else if (value < 0) {
+          ratio = (1 - (Math.log10(-value) / logMin)) * borderRatio;
+        } else {
+          ratio = (Math.log10(value) / logMax) * (1 - borderRatio) + borderRatio;
+        }
+
+        const [firstColor, secondColor, ...restColors] = colors;
+        return getRatioColor(
+          ratio,
+          firstColor,
+          secondColor,
+          ...restColors,
+        );
+      },
     }, {
       name: 'File Size (KB log scale)',
+      nodeDetailsTitle: 'File Size',
+      nodeDetailsValue(node: cytoscape.NodeSingular) {
+        const fileSize = getFileSizeKB(node);
+        return `${fileSize} KB`;
+      },
       type: 'ratio',
       colors,
       rangeFunction: getRangeFunction(getFileSizeKB),

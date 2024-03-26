@@ -1,13 +1,32 @@
 import cytoscape from 'cytoscape';
+import { useContext } from 'react';
 import HoverDetailsNodeLeaf from './HoverDetailsNodeLeaf';
 import HoverDetailsNodeParent from './HoverDetailsNodeParent';
+import { ColoringContext } from '../../../context';
 
 interface Props {
   node: cytoscape.NodeSingular;
 }
 
 export default function HoverDetailsNode({ node }: Props) {
+  const { currentMode } = useContext(ColoringContext);
+
   const parents = node.parents().toArray();
+
+  const renderColorModeProperty = () => {
+    if (!currentMode) return null;
+    const value = currentMode.nodeDetailsValue(node);
+    if (value == null) return null;
+    return (
+      <tr>
+        <td className="pe-2 text-end fw-bold">
+          {currentMode.nodeDetailsTitle}
+          :
+        </td>
+        <td>{value}</td>
+      </tr>
+    );
+  };
 
   return (
     <>
@@ -42,6 +61,7 @@ export default function HoverDetailsNode({ node }: Props) {
       </tr>
       {node.isChildless() && (<HoverDetailsNodeLeaf node={node} />)}
       {node.isParent() && (<HoverDetailsNodeParent node={node} />)}
+      {renderColorModeProperty()}
     </>
   );
 }

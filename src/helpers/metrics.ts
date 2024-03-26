@@ -53,7 +53,7 @@ export function getNrOutgoingFunctionDeps(node: cytoscape.NodeSingular): number 
 export function getIncomingOutgoingDifference(node: cytoscape.NodeSingular): number {
   const incoming = getNrIncomingFunctionDeps(node);
   const outgoing = getNrOutgoingFunctionDeps(node);
-  return outgoing !== 0 ? incoming / outgoing : 0;
+  return outgoing !== 0 ? incoming - outgoing : 0;
 }
 
 /**

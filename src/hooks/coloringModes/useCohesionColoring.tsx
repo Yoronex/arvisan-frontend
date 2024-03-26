@@ -4,22 +4,31 @@ import {
   DEFAULT_NODE_COLOR, DEFAULT_NODE_COLOR_RATIO, getRatioColor, IRatioColoring,
 } from '../../helpers/color';
 import useColorShading from '../useColorShading';
+import { NodeData } from '../../api';
 
 export const cohesionColors = DEFAULT_NODE_COLOR_RATIO;
 
 export default function useCohesionColoring(): { coloring: IRatioColoring } {
   const { shadeColorByDepth } = useColorShading();
 
+  const getCohesion = (node: cytoscape.NodeSingular) => node.data('properties.cohesion') as NodeData['properties']['cohesion'];
+
   const coloring: IRatioColoring = useMemo(() => ({
     name: 'Cohesion',
+    nodeDetailsTitle: 'Cohesion',
+    nodeDetailsValue(node: cytoscape.NodeSingular) {
+      const cohesion = getCohesion(node);
+      if (cohesion == null) return null;
+      return cohesion;
+    },
     type: 'ratio',
     colors: cohesionColors,
-    rangeFunction: (nodes: cytoscape.NodeCollection) => {
+    rangeFunction(nodes: cytoscape.NodeCollection) {
       let min = Number.POSITIVE_INFINITY;
       let max = Number.NEGATIVE_INFINITY;
 
-      nodes.forEach((node) => {
-        const value = node.data('properties.cohesion');
+      nodes.forEach((node: cytoscape.NodeSingular) => {
+        const value = getCohesion(node);
         if (value == null) return;
         min = Math.min(min, value);
         max = Math.max(max, value);
@@ -27,8 +36,8 @@ export default function useCohesionColoring(): { coloring: IRatioColoring } {
 
       return [min, max];
     },
-    colorFunction: (node: cytoscape.NodeSingular, range) => {
-      const cohesion = node.data('properties.cohesion');
+    colorFunction(node: cytoscape.NodeSingular, range) {
+      const cohesion = getCohesion(node);
       if (cohesion == null) {
         return shadeColorByDepth(node, DEFAULT_NODE_COLOR);
       }

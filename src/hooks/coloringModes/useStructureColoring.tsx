@@ -8,6 +8,8 @@ export default function useStructureColoring() {
 
   const coloring: ICategoryColoring = useMemo(() => ({
     name: 'Structure',
+    nodeDetailsTitle: 'Structure',
+    nodeDetailsValue() { return null; },
     type: 'category',
     colorFunction: (node: cytoscape.NodeSingular) => {
       const hexColor = node.data('properties.color') as string;
