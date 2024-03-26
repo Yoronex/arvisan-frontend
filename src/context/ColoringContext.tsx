@@ -12,6 +12,7 @@ import {
   useSimpleLeafPropertyColoring,
   useEncapsulationColoring,
 } from '../hooks/coloringModes';
+import useCohesionColoring from '../hooks/coloringModes/useCohesionColoring';
 
 interface IColoringContext {
   currentMode?: IColoringSettings;
@@ -41,19 +42,24 @@ export default function ColoringContextProvider({ children }: Props) {
   const { colorings: simpleLeafColorings } = useSimpleLeafPropertyColoring();
   const { coloring: dependencyProfileColoring } = useDependencyProfileColoring();
   const { colorings: encapsulationColorings } = useEncapsulationColoring();
+  const { coloring: cohesionColoring } = useCohesionColoring();
 
   const defaultMode = structureColoring.name;
   const [mode, setMode] = useState<string>(defaultMode);
   const [range, setRange] = useState<[number, number] | undefined>();
 
-  const coloringContext = useMemo((): IColoringContext => {
-    const options: IColoringSettings[] = [
-      structureColoring,
-      ...simpleLeafColorings,
-      dependencyProfileColoring,
-      ...encapsulationColorings,
-    ];
+  const options: IColoringSettings[] = useMemo(() => ([
+    structureColoring,
+    ...simpleLeafColorings,
+    dependencyProfileColoring,
+    ...encapsulationColorings,
+    cohesionColoring,
+  ]), [
+    dependencyProfileColoring, encapsulationColorings, simpleLeafColorings,
+    structureColoring, cohesionColoring,
+  ]);
 
+  const coloringContext = useMemo((): IColoringContext => {
     const currentMode = options.find((o) => o.name === mode);
 
     const resetColoring = () => {
@@ -69,10 +75,7 @@ export default function ColoringContextProvider({ children }: Props) {
       setRange,
       shadeColorByDepth,
     };
-  }, [
-    structureColoring, simpleLeafColorings,
-    dependencyProfileColoring, encapsulationColorings,
-    range, shadeColorByDepth, mode, defaultMode]);
+  }, [options, range, shadeColorByDepth, mode, defaultMode]);
 
   return (
     <ColoringContext.Provider value={coloringContext}>

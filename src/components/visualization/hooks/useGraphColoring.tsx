@@ -8,7 +8,7 @@ export default function useGraphColoring(
 ) {
   const { graph } = useContext(GraphContext);
   const {
-    currentMode, setRange, options, shadeColorByDepth,
+    currentMode, setRange, shadeColorByDepth,
   } = useContext(ColoringContext);
 
   return useEffect(() => {
@@ -35,5 +35,5 @@ export default function useGraphColoring(
         n.style('background-color', color);
       });
     }
-  }, [cy, graph, currentMode, options, setRange, shadeColorByDepth]);
+  }, [cy, graph, currentMode, setRange, shadeColorByDepth]);
 }

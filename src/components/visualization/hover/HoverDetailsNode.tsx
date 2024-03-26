@@ -50,6 +50,10 @@ export default function HoverDetailsNode({ node }: Props) {
             KB
           </td>
         </tr>
+        <tr>
+          <td className="pe-2 text-end fw-bold">Cohesion</td>
+          <td>{node.data('properties.cohesion')}</td>
+        </tr>
         {node.isChildless() && (<HoverDetailsNodeLeaf node={node} />)}
         {node.isParent() && (<HoverDetailsNodeParent node={node} />)}
       </tbody>

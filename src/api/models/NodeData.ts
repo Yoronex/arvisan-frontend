@@ -35,6 +35,10 @@ nrEntities?: number;
 nrScreens?: number;
 fileSizeKB?: number;
 /**
+ * Cohesion metric of leaves within this node
+ */
+cohesion?: number;
+/**
  * Dependency profile of the given node. Quadruple of four categories
  * [hidden, inbound, outbound, transit] if internal (tree) node. Undefined if leaf node.
  */

@@ -11,7 +11,7 @@ export function getInboundEncapsulation(dependencyProfile: number[]): number {
   if (dependencyProfile.length !== 4) throw new Error(`Invalid dependency profile supplied. Should have 4 values, but received ${dependencyProfile.length} instead.`);
   const dependencyProfileSum = dependencyProfile.reduce((total, x) => total + x, 0);
 
-  return 1 - (dependencyProfile[1] + dependencyProfile[3]) / dependencyProfileSum;
+  return (dependencyProfile[1] + dependencyProfile[3]) / dependencyProfileSum;
 }
 
 /**
@@ -25,7 +25,7 @@ export function getOutboundEncapsulation(dependencyProfile: number[]): number {
   if (dependencyProfile.length !== 4) throw new Error(`Invalid dependency profile supplied. Should have 4 values, but received ${dependencyProfile.length} instead.`);
   const dependencyProfileSum = dependencyProfile.reduce((total, x) => total + x, 0);
 
-  return 1 - (dependencyProfile[2] + dependencyProfile[3]) / dependencyProfileSum;
+  return (dependencyProfile[2] + dependencyProfile[3]) / dependencyProfileSum;
 }
 
 /**
