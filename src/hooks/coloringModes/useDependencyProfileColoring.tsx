@@ -1,10 +1,8 @@
 import cytoscape from 'cytoscape';
 import { useMemo } from 'react';
-import { DependencyProfileCategory } from '../helpers/enums';
-import useColorShading from '../../../hooks/useColorShading';
-import { DEFAULT_NODE_COLOR, ICategoryColoring } from '../../../helpers/color';
-
-export type DependencyProfile = [number, number, number, number];
+import { DependencyProfileCategory } from '../../helpers/enums';
+import useColorShading from '../useColorShading';
+import { DEFAULT_NODE_COLOR, ICategoryColoring } from '../../helpers/color';
 
 /**
  * Given a node, get its dependency profile categorization. This function cannot be generalized for
@@ -30,34 +28,9 @@ const dependencyProfileColor = {
 };
 
 /**
- * Get the dependency profile of the given node
- * @param node
- * @returns Quadruple of four categories [hidden, inbound, outbound, transit]
- * @return null if leaf node
- */
-export function getDependencyProfile(
-  node: cytoscape.NodeSingular,
-): [number, number, number, number] {
-  if (node.isChildless()) {
-    switch (getDependencyProfileCategory(node)) {
-      case DependencyProfileCategory.HIDDEN: return [1, 0, 0, 0];
-      case DependencyProfileCategory.INBOUND: return [0, 1, 0, 0];
-      case DependencyProfileCategory.OUTBOUND: return [0, 0, 1, 0];
-      case DependencyProfileCategory.TRANSIT: return [0, 0, 0, 1];
-      default: return [0, 0, 0, 0];
-    }
-  }
-
-  return node.children().reduce((totalProfile: DependencyProfile, child) => {
-    const childProfile: DependencyProfile = getDependencyProfile(child);
-    return totalProfile.map((a, i) => a + childProfile[i]) as DependencyProfile;
-  }, [0, 0, 0, 0]);
-}
-
-/**
  * Dependency profile coloring object required for the coloring function of the graph
  */
-export function useDependencyProfileColoring() {
+export default function useDependencyProfileColoring() {
   const { shadeColorByDepth } = useColorShading();
 
   const coloring: ICategoryColoring = useMemo(() => ({

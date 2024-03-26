@@ -1,6 +1,6 @@
 import { MutableRefObject, useContext, useEffect } from 'react';
 import cytoscape from 'cytoscape';
-import { GraphContext, VisualizationHistory } from '../../../context';
+import { GraphContext, VisualizationHistory } from '../../context';
 
 export default function useOperationsClick(
   cy: MutableRefObject<cytoscape.Core | undefined>,

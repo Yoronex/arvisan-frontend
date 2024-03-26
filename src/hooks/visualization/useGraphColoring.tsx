@@ -1,7 +1,7 @@
 import cytoscape from 'cytoscape';
 import { MutableRefObject, useContext, useEffect } from 'react';
-import { ColoringContext, GraphContext } from '../../../context';
-import { DEFAULT_NODE_COLOR } from '../../../helpers/color';
+import { ColoringContext, GraphContext } from '../../context';
+import { DEFAULT_NODE_COLOR } from '../../helpers/color';
 
 export default function useGraphColoring(
   cy: MutableRefObject<cytoscape.Core | undefined>,

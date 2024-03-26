@@ -5,14 +5,14 @@ import cytoscape from 'cytoscape';
 import {
   IColoringSettings,
 } from '../helpers/color';
-import { useDependencyProfileColoring } from '../modules/outsystems';
 import useColorShading from '../hooks/useColorShading';
 import {
   useStructureColoring,
   useSimpleLeafPropertyColoring,
   useEncapsulationColoring,
+  useDependencyProfileColoring,
+  useCohesionColoring,
 } from '../hooks/coloringModes';
-import useCohesionColoring from '../hooks/coloringModes/useCohesionColoring';
 
 interface IColoringContext {
   currentMode?: IColoringSettings;

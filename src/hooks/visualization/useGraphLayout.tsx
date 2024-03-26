@@ -1,7 +1,7 @@
 import { MutableRefObject, useContext, useEffect } from 'react';
 import cytoscape from 'cytoscape';
-import { GraphContext, VisualizationLayoutContext } from '../../../context';
-import { PossibleLayoutOptions } from '../../../context/VisualizationLayoutContext';
+import { GraphContext, VisualizationLayoutContext } from '../../context';
+import { PossibleLayoutOptions } from '../../context/VisualizationLayoutContext';
 
 export default function useGraphLayout(cy: MutableRefObject<cytoscape.Core | undefined>) {
   const { layoutOptions, reloadedAt } = useContext(VisualizationLayoutContext);

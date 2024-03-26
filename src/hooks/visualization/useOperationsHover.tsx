@@ -2,7 +2,7 @@ import {
   MutableRefObject, useCallback, useContext, useEffect,
 } from 'react';
 import cytoscape from 'cytoscape';
-import { GraphContext } from '../../../context';
+import { GraphContext } from '../../context';
 
 export default function useOperationsHover(
   cy: MutableRefObject<cytoscape.Core | undefined>,
@@ -15,7 +15,7 @@ export default function useOperationsHover(
     setHoveredElement(element);
   }, [setHoveredElement]);
 
-  // Show hover details
+  // Show hover clickModal
   useEffect(() => {
     if (!cy.current) return;
 
@@ -27,7 +27,7 @@ export default function useOperationsHover(
     }
   }, [cy, graph, enableHoverDetails, handleHoverElement]);
 
-  // Always hide hover details
+  // Always hide hover clickModal
   useEffect(() => {
     if (!cy.current) return;
 

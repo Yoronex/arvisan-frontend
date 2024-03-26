@@ -9,14 +9,14 @@ import './Visualization.scss';
 import { GraphContext } from '../../context';
 import VisualizationStyle from './VisualizationStyle';
 import { HoverDetailsCard } from './hover';
-import GraphElementDetailsModal from './details/GraphElementDetailsModal';
-import useGraphLayout from './hooks/useGraphLayout';
-import useOperationsClick from './hooks/useOperationsClick';
-import useOperationsHover from './hooks/useOperationsHover';
-import useGraphColoring from './hooks/useGraphColoring';
-import useGraphViolations from './hooks/useGraphViolations';
-import useGraphElementHighlight from './hooks/useGraphElementHighlight';
-import useGraphPostProcessing from './hooks/useGraphPostProcessing';
+import GraphElementDetailsModal from './clickModal/GraphElementDetailsModal';
+import {
+  useGraphColoring, useGraphElementHighlight,
+  useGraphLayout, useGraphPostProcessing,
+  useGraphViolations,
+  useOperationsClick,
+  useOperationsHover,
+} from '../../hooks/visualization';
 
 cytoscape.use(klay);
 cytoscape.use(cola);

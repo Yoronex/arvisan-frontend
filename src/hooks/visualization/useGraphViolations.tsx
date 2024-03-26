@@ -1,7 +1,7 @@
 import { MutableRefObject, useContext, useEffect } from 'react';
 import cytoscape from 'cytoscape';
-import { VisibilityOptions } from '../../../helpers/enums';
-import { ViolationsContext } from '../../../context';
+import { VisibilityOptions } from '../../helpers/enums';
+import { ViolationsContext } from '../../context';
 
 export default function useGraphViolations(
   cy: MutableRefObject<cytoscape.Core | undefined>,

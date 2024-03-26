@@ -1,6 +1,6 @@
 import { MutableRefObject, useContext, useEffect } from 'react';
 import cytoscape from 'cytoscape';
-import { GraphContext, GraphHighlightContext } from '../../../context';
+import { GraphContext, GraphHighlightContext } from '../../context';
 
 export default function useGraphElementHighlight(
   cy: MutableRefObject<cytoscape.Core | undefined>,

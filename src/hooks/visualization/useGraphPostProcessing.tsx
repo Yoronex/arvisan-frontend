@@ -1,7 +1,7 @@
 import { MutableRefObject, useContext, useEffect } from 'react';
 import cytoscape from 'cytoscape';
-import { assignEdgeWeights } from '../../../cytoscape/operations';
-import { GraphContext } from '../../../context';
+import { GraphContext } from '../../context';
+import { EdgeData } from '../../api';
 
 export default function useGraphPostProcessing(
   cy: MutableRefObject<cytoscape.Core | undefined>,
@@ -10,6 +10,10 @@ export default function useGraphPostProcessing(
 
   return useEffect(() => {
     if (!cy.current) return;
-    cy.current.edges().forEach(assignEdgeWeights);
+    cy.current.edges().forEach((e) => {
+      const weight = e.data('properties.weight') as EdgeData['properties']['weight'];
+      if (!weight) return;
+      e.style('width', Math.sqrt(weight));
+    });
   }, [cy, graph]);
 }
