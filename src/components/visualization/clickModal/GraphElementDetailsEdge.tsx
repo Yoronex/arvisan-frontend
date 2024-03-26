@@ -22,7 +22,11 @@ export default function GraphElementDetailsEdge({ edge, onClose }: Props) {
 
   return (
     <div className="d-flex flex-column gap-5">
-      <HoverDetailsEdge edge={edge} />
+      <table>
+        <tbody>
+          <HoverDetailsEdge edge={edge} allReferenceKeys />
+        </tbody>
+      </table>
       <div className="w-100">
         <h3>Cyclical dependencies</h3>
         <CyclicalDependenciesDetails cyclicalDependencies={cyclicalDeps} onHighlight={onClose} />

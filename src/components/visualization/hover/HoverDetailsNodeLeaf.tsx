@@ -5,15 +5,14 @@ import {
   getNrOutgoingFunctionDeps,
   getOutboundEncapsulation,
 } from '../../../helpers/metrics';
+import { getDependencyProfileCategory } from '../../../hooks/coloringModes/useDependencyProfileColoring';
 
 interface Props {
   node: cytoscape.NodeSingular;
 }
 
 export default function HoverDetailsNodeLeaf({ node }: Props) {
-  const dependencyProfile = node.data('properties.dependencyProfile');
-  const inboundEncapsulation = getInboundEncapsulation(dependencyProfile);
-  const outboundEncapsulation = getOutboundEncapsulation(dependencyProfile);
+  const dependencyProfileCategory = getDependencyProfileCategory(node);
 
   return (
     <>
@@ -33,10 +32,12 @@ export default function HoverDetailsNodeLeaf({ node }: Props) {
         <td className="pe-2 text-end fw-bold">Total incoming func. dependencies:</td>
         <td>{getNrIncomingFunctionDeps(node)}</td>
       </tr>
-      <tr>
-        <td className="pe-2 text-end fw-bold">Inbound/Outbound encapsulation</td>
-        <td>{`<${inboundEncapsulation.toFixed(4)}, ${outboundEncapsulation.toFixed(4)}>`}</td>
-      </tr>
+      {dependencyProfileCategory && (
+        <tr>
+          <td className="pe-2 text-end fw-bold">Dependency profile:</td>
+          <td>{dependencyProfileCategory}</td>
+        </tr>
+      )}
     </>
   );
 }

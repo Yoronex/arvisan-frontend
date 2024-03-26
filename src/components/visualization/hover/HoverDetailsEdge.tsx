@@ -1,16 +1,23 @@
 import cytoscape from 'cytoscape';
 import { ReactNode } from 'react';
+import { getParents } from '../../../helpers/node';
+import { EdgeData, NodeData } from '../../../api';
 
 interface Props {
   edge: cytoscape.EdgeSingular;
+  allReferenceKeys?: boolean,
 }
 
-export default function HoverDetailsEdge({ edge }: Props) {
+export default function HoverDetailsEdge({ edge, allReferenceKeys }: Props) {
   const source = edge.source();
   const target = edge.target();
 
-  const referenceNames = edge.data('properties.referenceNames');
-  const referenceNameText: ReactNode = referenceNames.length > 1 ? (
+  const allNodes = edge.cy().nodes().map((n): NodeData => n.data());
+  const sourceParents = getParents(source.data(), allNodes).slice(1);
+  const targetParents = getParents(target.data(), allNodes).slice(1);
+
+  const referenceNames = edge.data('properties.referenceNames') as EdgeData['properties']['referenceNames'];
+  const referenceNameText: ReactNode = referenceNames.length > 1 && !allReferenceKeys ? (
     <>
       {referenceNames[0]}
       {' '}
@@ -22,44 +29,62 @@ export default function HoverDetailsEdge({ edge }: Props) {
         more...
       </span>
     </>
-  ) : referenceNames[0];
+  ) : referenceNames.join(', ');
 
   return (
-    <table>
-      <tbody>
-        <tr>
-          <td className="pe-2 text-end fw-bold">Internal ID:</td>
-          <td>{edge.id().split('--')[0]}</td>
-        </tr>
-        <tr>
-          <td className="pe-2 text-end fw-bold">Source:</td>
-          <td>{source.data('label')}</td>
-        </tr>
-        <tr>
-          <td className="pe-2 text-end fw-bold">Target:</td>
-          <td>{target.data('label')}</td>
-        </tr>
-        <tr>
-          <td className="pe-2 text-end fw-bold">Function-level dependencies:</td>
-          <td>{edge.data('properties.nrFunctionDependencies')}</td>
-        </tr>
-        <tr>
-          <td className="pe-2 text-end fw-bold">Module-level dependencies:</td>
-          <td>{edge.data('properties.nrModuleDependencies')}</td>
-        </tr>
-        <tr>
-          <td className="pe-2 text-end fw-bold">Reference key:</td>
-          <td className="text-truncate">{referenceNameText}</td>
-        </tr>
-        <tr>
-          <td className="pe-2 text-end fw-bold">Reference type:</td>
-          <td className="text-truncate">{edge.data('properties.referenceTypes').join(', ')}</td>
-        </tr>
-        <tr>
-          <td className="pe-2 text-end fw-bold">Dependency type:</td>
-          <td className="text-truncate">{edge.data('properties.dependencyTypes').join(', ')}</td>
-        </tr>
-      </tbody>
-    </table>
+    <>
+      <tr>
+        <td className="pe-2 text-end fw-bold text-nowrap">Internal ID:</td>
+        <td>{edge.id().split('--')[0]}</td>
+      </tr>
+      <tr>
+        <td className="pe-2 text-end fw-bold">Source:</td>
+        <td>
+          {source.data('label')}
+          {' '}
+          <span className="fst-italic">
+            (
+            {sourceParents.map((p) => p.label).join(', ')}
+            )
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td className="pe-2 text-end fw-bold">Target:</td>
+        <td>
+          {target.data('label')}
+          {' '}
+          <span className="fst-italic">
+            (
+            {targetParents.map((p) => p.label).join(', ')}
+            )
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td className="pe-2 text-end fw-bold text-nowrap">Function-level dependencies:</td>
+        <td>{edge.data('properties.nrFunctionDependencies')}</td>
+      </tr>
+      <tr>
+        <td className="pe-2 text-end fw-bold text-nowrap">Module-level dependencies:</td>
+        <td>{edge.data('properties.nrModuleDependencies')}</td>
+      </tr>
+      <tr>
+        <td className="pe-2 text-end fw-bold text-nowrap">Reference key:</td>
+        <td className="text-break">{referenceNameText}</td>
+      </tr>
+      <tr>
+        <td className="pe-2 text-end fw-bold text-nowrap">Reference types:</td>
+        <td className="text-truncate">{(edge.data('properties.referenceTypes') as EdgeData['properties']['referenceTypes']).join(', ')}</td>
+      </tr>
+      <tr>
+        <td className="pe-2 text-end fw-bold text-nowrap">Dependency types:</td>
+        <td className="text-truncate">{(edge.data('properties.dependencyTypes') as EdgeData['properties']['dependencyTypes']).join(', ')}</td>
+      </tr>
+    </>
   );
 }
+
+HoverDetailsEdge.defaultProps = ({
+  allReferenceKeys: false,
+});
