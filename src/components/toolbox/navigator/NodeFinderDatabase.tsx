@@ -6,9 +6,10 @@ import { GraphService, Node } from '../../../api';
 
 interface Props {
   loading?: boolean;
+  onSelect?: () => void;
 }
 
-export default function NodeFinderDatabase({ loading: parentLoading }: Props) {
+export default function NodeFinderDatabase({ loading: parentLoading, onSelect }: Props) {
   const { visitNode } = useContext(VisualizationHistory);
   const [loading, setLoading] = useState(false);
   const [refreshTimeout, setRefreshTimeout] = useState<NodeJS.Timeout | undefined>();
@@ -49,6 +50,7 @@ export default function NodeFinderDatabase({ loading: parentLoading }: Props) {
     const node = nodes.find((n) => n.data.id === option.id);
     if (!node) return;
     visitNode({ type: 'backend', timestamp: new Date(), data: node.data });
+    if (onSelect) onSelect();
   };
 
   return (
@@ -65,4 +67,5 @@ export default function NodeFinderDatabase({ loading: parentLoading }: Props) {
 
 NodeFinderDatabase.defaultProps = ({
   loading: false,
+  onSelect: undefined,
 });

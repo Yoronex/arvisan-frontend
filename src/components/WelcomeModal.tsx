@@ -185,7 +185,7 @@ export default function WelcomeModal() {
           </h4>
           <p>To begin visualizing, choose a functional domain or find a node directly:</p>
           <div className="mb-3">
-            <NodeFinderDatabase loading={loading} />
+            <NodeFinderDatabase loading={loading} onSelect={() => setShow(false)} />
           </div>
           <div>
             {getDomainTable()}
