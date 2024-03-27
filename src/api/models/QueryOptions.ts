@@ -3,19 +3,18 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { Partial_Range_ } from './Partial_Range_';
-
 export type QueryOptions = {
-    id: string;
     layerDepth: number;
-    dependencyDepth: number;
+    dependencyLength: number;
     showSelectedInternalRelations?: boolean;
     showDomainInternalRelations?: boolean;
     showExternalRelations?: boolean;
     showOutgoing?: boolean;
     showIncoming?: boolean;
-    outgoingRange?: Partial_Range_;
-    incomingRange?: Partial_Range_;
+    outgoingRangeMin?: number;
+    outgoingRangeMax?: number;
+    incomingRangeMin?: number;
+    incomingRangeMax?: number;
     selfEdges?: boolean;
     showWeakDependencies?: boolean;
     showStrongDependencies?: boolean;

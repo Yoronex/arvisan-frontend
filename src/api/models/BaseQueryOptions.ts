@@ -4,6 +4,5 @@
 /* eslint-disable */
 
 export type BaseQueryOptions = {
-    id: string;
     layerDepth: number;
 };

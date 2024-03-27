@@ -3,10 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-/**
- * Make all properties in T optional
- */
-export type Partial_Range_ = {
-    min?: number;
-    max?: number;
+export type GetNodesResponse = {
+    elementId: string;
+    fullName: string;
+    label: string;
 };

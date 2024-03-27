@@ -52,22 +52,18 @@ export default function GraphContextProvider({ children }: Props) {
       const { graph: g, violations } = await GraphService.getNode({
         id: currentNodeId,
         layerDepth: settings.layerDepth,
-        dependencyDepth: settings.dependencyLength,
+        dependencyLength: settings.dependencyLength,
         showSelectedInternalRelations: settings.showSelectionInternalRelationships,
         showDomainInternalRelations: settings.showDomainInternalRelationships,
         showExternalRelations: settings.showExternalRelationships,
         showOutgoing: settings.showOutgoing,
         showIncoming: settings.showIncoming,
-        outgoingRange: {
-          min: settings.minOutgoing || undefined,
-          max: settings.maxOutgoing === Number.POSITIVE_INFINITY
-            ? undefined : settings.maxOutgoing,
-        },
-        incomingRange: {
-          min: settings.minIncoming || undefined,
-          max: settings.maxIncoming === Number.POSITIVE_INFINITY
-            ? undefined : settings.maxIncoming,
-        },
+        outgoingRangeMin: settings.minOutgoing || undefined,
+        outgoingRangeMax: settings.maxOutgoing === Number.POSITIVE_INFINITY
+          ? undefined : settings.maxOutgoing,
+        incomingRangeMin: settings.minIncoming || undefined,
+        incomingRangeMax: settings.maxIncoming === Number.POSITIVE_INFINITY
+          ? undefined : settings.maxIncoming,
         selfEdges: settings.selfEdges,
         showWeakDependencies: settings.showWeakDependencies,
         showStrongDependencies: settings.showStrongDependencies,

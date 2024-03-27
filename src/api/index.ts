@@ -18,6 +18,7 @@ export type { EdgeData } from './models/EdgeData';
 export type { EdgeViolations } from './models/EdgeViolations';
 export type { ErrorResponse } from './models/ErrorResponse';
 export type { ExtendedEdgeData } from './models/ExtendedEdgeData';
+export type { GetNodesResponse } from './models/GetNodesResponse';
 export type { GitCommitInfo } from './models/GitCommitInfo';
 export type { Graph } from './models/Graph';
 export type { GraphLayer } from './models/GraphLayer';
@@ -26,7 +27,6 @@ export type { LayerViolation } from './models/LayerViolation';
 export { ModuleDependencyProfileCategory } from './models/ModuleDependencyProfileCategory';
 export type { Node } from './models/Node';
 export { NodeData } from './models/NodeData';
-export type { Partial_Range_ } from './models/Partial_Range_';
 export type { QueryOptions } from './models/QueryOptions';
 export type { Violations } from './models/Violations';
 

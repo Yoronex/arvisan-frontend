@@ -2,12 +2,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { BaseQueryOptions } from '../models/BaseQueryOptions';
 import type { Breadcrumb } from '../models/Breadcrumb';
 import type { Domain } from '../models/Domain';
+import type { GetNodesResponse } from '../models/GetNodesResponse';
 import type { GraphLayer } from '../models/GraphLayer';
 import type { GraphWithViolations } from '../models/GraphWithViolations';
-import type { QueryOptions } from '../models/QueryOptions';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -38,34 +37,108 @@ export class GraphService {
     }
 
     /**
-     * @param requestBody 
-     * @returns GraphWithViolations Ok
+     * @returns GetNodesResponse Ok
      * @throws ApiError
      */
-    public static getNode(
-requestBody: QueryOptions,
-): CancelablePromise<GraphWithViolations> {
+    public static getNodes({
+name = '',
+}: {
+name?: string,
+}): CancelablePromise<Array<GetNodesResponse>> {
         return __request(OpenAPI, {
-            method: 'POST',
-            url: '/graph/node',
-            body: requestBody,
-            mediaType: 'application/json',
+            method: 'GET',
+            url: '/graph/nodes',
+            query: {
+                'name': name,
+            },
         });
     }
 
     /**
-     * @param requestBody 
+     * @returns GraphWithViolations Ok
+     * @throws ApiError
+     */
+    public static getNode({
+id,
+layerDepth,
+dependencyLength,
+showSelectedInternalRelations,
+showDomainInternalRelations,
+showExternalRelations,
+showOutgoing,
+showIncoming,
+outgoingRangeMin,
+outgoingRangeMax,
+incomingRangeMin,
+incomingRangeMax,
+selfEdges,
+showWeakDependencies,
+showStrongDependencies,
+showEntityDependencies,
+}: {
+id: string,
+layerDepth: number,
+dependencyLength: number,
+showSelectedInternalRelations?: boolean,
+showDomainInternalRelations?: boolean,
+showExternalRelations?: boolean,
+showOutgoing?: boolean,
+showIncoming?: boolean,
+outgoingRangeMin?: number,
+outgoingRangeMax?: number,
+incomingRangeMin?: number,
+incomingRangeMax?: number,
+selfEdges?: boolean,
+showWeakDependencies?: boolean,
+showStrongDependencies?: boolean,
+showEntityDependencies?: boolean,
+}): CancelablePromise<GraphWithViolations> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/graph/nodes/{id}',
+            path: {
+                'id': id,
+            },
+            query: {
+                'layerDepth': layerDepth,
+                'dependencyLength': dependencyLength,
+                'showSelectedInternalRelations': showSelectedInternalRelations,
+                'showDomainInternalRelations': showDomainInternalRelations,
+                'showExternalRelations': showExternalRelations,
+                'showOutgoing': showOutgoing,
+                'showIncoming': showIncoming,
+                'outgoingRangeMin': outgoingRangeMin,
+                'outgoingRangeMax': outgoingRangeMax,
+                'incomingRangeMin': incomingRangeMin,
+                'incomingRangeMax': incomingRangeMax,
+                'selfEdges': selfEdges,
+                'showWeakDependencies': showWeakDependencies,
+                'showStrongDependencies': showStrongDependencies,
+                'showEntityDependencies': showEntityDependencies,
+            },
+        });
+    }
+
+    /**
      * @returns Breadcrumb Ok
      * @throws ApiError
      */
-    public static getBreadcrumbOptions(
-requestBody: BaseQueryOptions,
-): CancelablePromise<Array<Breadcrumb>> {
+    public static getBreadcrumbOptions({
+id,
+layerDepth,
+}: {
+id: string,
+layerDepth: number,
+}): CancelablePromise<Array<Breadcrumb>> {
         return __request(OpenAPI, {
-            method: 'POST',
-            url: '/graph/breadcrumbs',
-            body: requestBody,
-            mediaType: 'application/json',
+            method: 'GET',
+            url: '/graph/nodes/{id}/breadcrumbs',
+            path: {
+                'id': id,
+            },
+            query: {
+                'layerDepth': layerDepth,
+            },
         });
     }
 
