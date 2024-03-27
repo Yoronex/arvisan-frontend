@@ -1,5 +1,5 @@
 import {
-  Dropdown, FloatingLabel, Form, InputGroup,
+  Dropdown, FloatingLabel, Form, InputGroup, Spinner,
 } from 'react-bootstrap';
 import {
   useCallback, useEffect, useRef, useState,
@@ -13,9 +13,17 @@ interface Props {
   options: Option[];
   onSelect: (option: Option) => void;
   label: string;
+
+  remoteSearch?: boolean;
+  onSearchKeyChange?: (key: string) => void;
+  loading?: boolean;
+  nrOptions?: number;
 }
 
-export default function SearchDropdown({ options, onSelect, label }: Props) {
+export default function SearchDropdown({
+  options, onSelect, label,
+  remoteSearch, onSearchKeyChange, loading, nrOptions,
+}: Props) {
   const [searchKey, setSearchKey] = useState('');
   const [showOptions, setShowOptions] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -26,7 +34,7 @@ export default function SearchDropdown({ options, onSelect, label }: Props) {
     setShowOptions(ref.current.contains(target));
   }, [ref]);
 
-  const filteredOptions = searchNodes(options, searchKey);
+  const filteredOptions = remoteSearch ? options : searchNodes(options, searchKey);
 
   const selectOption = (option: Option) => {
     setShowOptions(false);
@@ -46,14 +54,19 @@ export default function SearchDropdown({ options, onSelect, label }: Props) {
   }, [ref, showOptions, handleClickOrFocus, options]);
 
   return (
-    <div ref={ref}>
+    <div ref={ref} className="position-relative">
       <InputGroup>
-        <InputGroup.Text><FontAwesomeIcon icon={faMagnifyingGlass} /></InputGroup.Text>
+        <InputGroup.Text>
+          {loading ? <Spinner size="sm" />
+            : <FontAwesomeIcon icon={faMagnifyingGlass} />}
+        </InputGroup.Text>
         <FloatingLabel label={label}>
           <Form.Control
             value={searchKey}
             onChange={(event) => {
-              setSearchKey(event.target.value);
+              const search = event.target.value;
+              setSearchKey(search);
+              if (onSearchKeyChange) onSearchKeyChange(search);
             }}
             ref={textBoxRef}
             placeholder={label}
@@ -81,13 +94,29 @@ export default function SearchDropdown({ options, onSelect, label }: Props) {
           <div className="overflow-x-hidden overflow-y-scroll" style={{ height: '20rem', width: ref.current?.clientWidth }}>
             <Dropdown.Header>Found nodes:</Dropdown.Header>
             {filteredOptions.map((o) => (
-              <Dropdown.Item key={o.id} onClick={() => selectOption(o)}>
+              <Dropdown.Item key={o.id} onClick={() => selectOption(o)} disabled={loading}>
                 <HighlightSearch label={o.label} searchKey={searchKey} />
               </Dropdown.Item>
             ))}
+            {nrOptions !== undefined && nrOptions > options.length && (
+              <Dropdown.Header>
+                ...and
+                {' '}
+                {nrOptions - options.length}
+                {' '}
+                more matches.
+              </Dropdown.Header>
+            )}
           </div>
         </Dropdown.Menu>
       </div>
     </div>
   );
 }
+
+SearchDropdown.defaultProps = ({
+  remoteSearch: false,
+  onSearchKeyChange: undefined,
+  loading: false,
+  nrOptions: undefined,
+});

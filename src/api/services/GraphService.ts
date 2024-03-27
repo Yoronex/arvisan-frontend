@@ -4,9 +4,9 @@
 /* eslint-disable */
 import type { Breadcrumb } from '../models/Breadcrumb';
 import type { Domain } from '../models/Domain';
-import type { GetNodesResponse } from '../models/GetNodesResponse';
 import type { GraphLayer } from '../models/GraphLayer';
 import type { GraphWithViolations } from '../models/GraphWithViolations';
+import type { NodeData } from '../models/NodeData';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -37,14 +37,19 @@ export class GraphService {
     }
 
     /**
-     * @returns GetNodesResponse Ok
+     * @returns any Ok
      * @throws ApiError
      */
     public static getNodes({
 name = '',
 }: {
 name?: string,
-}): CancelablePromise<Array<GetNodesResponse>> {
+}): CancelablePromise<{
+count: number;
+records: Array<{
+data: NodeData;
+}>;
+}> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/graph/nodes',

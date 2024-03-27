@@ -7,6 +7,7 @@ import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { VisualizationHistory, BreadcrumbsContext } from '../context';
 import BackendVersion from './BackendVersion';
 import { getInboundEncapsulation, getOutboundEncapsulation } from '../helpers/metrics';
+import NodeFinderDatabase from './toolbox/navigator/NodeFinderDatabase';
 
 export default function WelcomeModal() {
   const { currentNode, visitNode } = useContext(VisualizationHistory);
@@ -168,9 +169,12 @@ export default function WelcomeModal() {
             </li>
           </ul>
           <h4>
-            Select domain
+            Select visualization starting point
           </h4>
-          <p>To begin visualizing, choose a functional domain as a starting point:</p>
+          <p>To begin visualizing, choose a functional domain or find a node directly:</p>
+          <div className="mb-3">
+            <NodeFinderDatabase loading={loading} />
+          </div>
           <div>
             {getDomainTable()}
           </div>

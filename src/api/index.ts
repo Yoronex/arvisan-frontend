@@ -18,7 +18,6 @@ export type { EdgeData } from './models/EdgeData';
 export type { EdgeViolations } from './models/EdgeViolations';
 export type { ErrorResponse } from './models/ErrorResponse';
 export type { ExtendedEdgeData } from './models/ExtendedEdgeData';
-export type { GetNodesResponse } from './models/GetNodesResponse';
 export type { GitCommitInfo } from './models/GitCommitInfo';
 export type { Graph } from './models/Graph';
 export type { GraphLayer } from './models/GraphLayer';
