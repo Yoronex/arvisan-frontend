@@ -50,7 +50,7 @@ export default function GraphElementDetailsNode({ node, onClose }: Props) {
             <td>
               {getFileSizeKB(node).toLocaleString()}
               {' '}
-              KB
+              kB
             </td>
           </tr>
           <tr>

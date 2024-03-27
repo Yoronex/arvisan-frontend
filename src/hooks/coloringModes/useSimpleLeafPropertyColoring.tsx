@@ -110,11 +110,11 @@ export default function useSimpleLeafPropertyColoring(): { colorings: IRatioColo
         );
       },
     }, {
-      name: 'File Size (KB log scale)',
+      name: 'File Size (kB log scale)',
       nodeDetailsTitle: 'File Size',
       nodeDetailsValue(node: cytoscape.NodeSingular) {
         const fileSize = getFileSizeKB(node);
-        return `${fileSize} KB`;
+        return `${fileSize.toLocaleString()} kB`;
       },
       type: 'ratio',
       colors,

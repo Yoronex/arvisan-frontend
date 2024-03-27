@@ -29,8 +29,8 @@ export default function ColoringModeGradient() {
           </div>
         ) : (
           <>
-            <div>{range[0]}</div>
-            <div>{range[1]}</div>
+            <div>{range[0].toLocaleString()}</div>
+            <div>{range[1].toLocaleString()}</div>
           </>
         )}
       </div>
