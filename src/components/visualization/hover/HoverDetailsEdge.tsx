@@ -75,11 +75,11 @@ export default function HoverDetailsEdge({ edge, allReferenceKeys }: Props) {
       </tr>
       <tr>
         <td className="pe-2 text-end fw-bold text-nowrap">Reference types:</td>
-        <td className="text-truncate">{(edge.data('properties.referenceTypes') as EdgeData['properties']['referenceTypes']).join(', ')}</td>
+        <td className="text-wrap">{(edge.data('properties.referenceTypes') as EdgeData['properties']['referenceTypes']).join(', ')}</td>
       </tr>
       <tr>
         <td className="pe-2 text-end fw-bold text-nowrap">Dependency types:</td>
-        <td className="text-truncate">{(edge.data('properties.dependencyTypes') as EdgeData['properties']['dependencyTypes']).join(', ')}</td>
+        <td className="text-wrap">{(edge.data('properties.dependencyTypes') as EdgeData['properties']['dependencyTypes']).join(', ')}</td>
       </tr>
     </>
   );

@@ -25,7 +25,7 @@ export default function HoverDetailsCard({ element }: Props) {
   if (!content) return null;
 
   return (
-    <div className="position-absolute z-2 bottom-0 end-0 mb-3 me-3" style={{ maxWidth: 'max(50%, 650px)' }}>
+    <div className="position-absolute z-2 bottom-0 end-0 mb-3 me-3" style={{ maxWidth: 'max(45%, 650px)' }}>
       <Card>
         <CardHeader>
           <CardTitle>Details</CardTitle>
