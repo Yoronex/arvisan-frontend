@@ -12,7 +12,7 @@ const stylesheet: cytoscape.Stylesheet[] = [{
     shape: 'round-rectangle',
     label: 'data(label)',
     'text-valign': 'center',
-    'text-wrap': 'wrap',
+    'text-wrap': 'ellipsis',
   },
 }, {
   selector: 'node:parent',

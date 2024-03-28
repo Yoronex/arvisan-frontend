@@ -1,30 +1,5 @@
-import cytoscape from 'cytoscape';
-
 export const DEFAULT_NODE_COLOR = '#7B7D7D';
 export const DEFAULT_NODE_COLOR_RATIO = ['#2081f9', '#f99820'];
-
-type IBaseColoring = {
-  name: string;
-  nodeDetailsTitle: string;
-  /** The value that needs to be shown in the node details list. NULL if hidden */
-  nodeDetailsValue: (node: cytoscape.NodeSingular) => number | string | null;
-};
-
-export type IRatioColoring = IBaseColoring & {
-  type: 'ratio',
-  colors: string[],
-  rangeFunction?: (nodes: cytoscape.NodeCollection) => [number, number];
-  colorFunction: (node: cytoscape.NodeSingular, range: [number, number]) => string;
-};
-
-export type ICategoryColoring = IBaseColoring & {
-  type: 'category',
-  /** Mapping (hex color => label) */
-  legend: Map<string, string>;
-  colorFunction: (node: cytoscape.NodeSingular) => string;
-};
-
-export type IColoringSettings = (IRatioColoring | ICategoryColoring);
 
 // From https://github.com/PimpTrizkit/PJs/wiki/12.-Shade,-Blend-and-Convert-a-Web-Color-(pSBC.js)#--version-2-hex--
 

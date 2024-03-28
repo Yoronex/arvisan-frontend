@@ -12,7 +12,7 @@ import { HoverDetailsCard } from './hover';
 import GraphElementDetailsModal from './clickModal/GraphElementDetailsModal';
 import {
   useGraphColoring, useGraphElementHighlight,
-  useGraphLayout, useGraphPostProcessing,
+  useGraphLayout, useGraphNodeSizing, useGraphPostProcessing,
   useGraphViolations,
   useOperationsClick,
   useOperationsHover,
@@ -35,13 +35,14 @@ export default function Visualization({
 
   const cy = useRef<cytoscape.Core>();
 
-  useGraphLayout(cy);
+  useGraphNodeSizing(cy);
   useOperationsClick(cy, setSelectedElement, setHoveredElement);
   useOperationsHover(cy, setHoveredElement);
   useGraphColoring(cy);
   useGraphViolations(cy);
   useGraphElementHighlight(cy);
   useGraphPostProcessing(cy);
+  useGraphLayout(cy);
 
   return (
     <>

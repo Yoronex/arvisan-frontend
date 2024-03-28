@@ -1,8 +1,8 @@
-import { ICategoryColoring } from '../../../helpers/color';
 import ColorBox from '../../ColorBox';
+import { ICategoryMetric } from '../../../helpers/metrics';
 
 interface Props {
-  coloring: ICategoryColoring;
+  coloring: ICategoryMetric;
 }
 
 export default function ColoringModeCategories({ coloring }: Props) {

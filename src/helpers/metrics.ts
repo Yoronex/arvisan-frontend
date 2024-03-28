@@ -63,3 +63,30 @@ export function getIncomingOutgoingDifference(node: cytoscape.NodeSingular): num
 export function getFileSizeKB(node: cytoscape.NodeSingular): number {
   return node.data('properties.fileSizeKB') ?? Number.NaN;
 }
+
+type IBaseMetric = {
+  name: string;
+  nodeDetailsTitle: string;
+  /** The value that needs to be shown in the node details list. NULL if hidden */
+  nodeDetailsValue: (node: cytoscape.NodeSingular) => number | string | null;
+};
+export type IRatioMetric = IBaseMetric & {
+  type: 'ratio',
+  colors: string[],
+  /** Function that defines the min and max values. Undefined if between [0, 1] */
+  rangeFunction?: (nodes: cytoscape.NodeCollection) => [number, number];
+  /** Function that determines a node's color, undefined if not applicable */
+  colorFunction?: (node: cytoscape.NodeSingular, range: [number, number]) => string;
+  /** Function that determines a node's size, undefined if not applicable, i.e. when parent-only */
+  sizeFunction?: (node: cytoscape.NodeSingular, range: [number, number]) => string | number;
+};
+export type ICategoryMetric = IBaseMetric & {
+  type: 'category',
+  /** Mapping (hex color => label) */
+  legend: Map<string, string>;
+  /** Function that determines a node's color, undefined if not applicable */
+  colorFunction?: (node: cytoscape.NodeSingular) => string;
+  /** Function that determines a node's size, undefined if not applicable, i.e. when parent-only */
+  sizeFunction?: (node: cytoscape.NodeSingular) => string | number;
+};
+export type IMetricSettings = (IRatioMetric | ICategoryMetric);

@@ -2,7 +2,8 @@ import cytoscape from 'cytoscape';
 import { useMemo } from 'react';
 import { DependencyProfileCategory } from '../../helpers/enums';
 import useColorShading from '../useColorShading';
-import { DEFAULT_NODE_COLOR, ICategoryColoring } from '../../helpers/color';
+import { DEFAULT_NODE_COLOR } from '../../helpers/color';
+import { ICategoryMetric } from '../../helpers/metrics';
 
 /**
  * Given a node, get its dependency profile categorization. This function cannot be generalized for
@@ -33,7 +34,7 @@ const dependencyProfileColor = {
 export default function useDependencyProfileColoring() {
   const { shadeColorByDepth } = useColorShading();
 
-  const coloring: ICategoryColoring = useMemo(() => ({
+  const coloring: ICategoryMetric = useMemo(() => ({
     name: 'Dependency profile',
     nodeDetailsTitle: 'Dependency profile',
     nodeDetailsValue: getDependencyProfileCategory,

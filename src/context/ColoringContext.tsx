@@ -2,22 +2,20 @@ import {
   createContext, PropsWithChildren, useMemo, useState,
 } from 'react';
 import cytoscape from 'cytoscape';
-import {
-  IColoringSettings,
-} from '../helpers/color';
 import useColorShading from '../hooks/useColorShading';
 import {
-  useStructureColoring,
   useSimpleLeafPropertyColoring,
   useEncapsulationColoring,
   useDependencyProfileColoring,
   useCohesionColoring,
 } from '../hooks/coloringModes';
+import { ICategoryMetric, IMetricSettings } from '../helpers/metrics';
+import { DEFAULT_NODE_COLOR } from '../helpers/color';
 
 interface IColoringContext {
-  currentMode?: IColoringSettings;
+  currentMode: IMetricSettings;
   setMode: (modeName: string) => void;
-  options: IColoringSettings[];
+  options: IMetricSettings[];
   resetColoring: () => void;
 
   range?: [number, number];
@@ -26,7 +24,18 @@ interface IColoringContext {
   shadeColorByDepth: (node: cytoscape.NodeSingular, hexColor: string) => string,
 }
 
+const initStructureColoring: ICategoryMetric = {
+  name: 'Structure',
+  nodeDetailsTitle: 'Structure',
+  nodeDetailsValue() { return null; },
+  type: 'category',
+  colorFunction: () => DEFAULT_NODE_COLOR,
+  sizeFunction: () => 'label',
+  legend: new Map([]),
+};
+
 export const ColoringContext = createContext<IColoringContext>({
+  currentMode: initStructureColoring,
   setMode: () => {},
   options: [],
   resetColoring: () => {},
@@ -38,29 +47,38 @@ interface Props extends PropsWithChildren {}
 
 export default function ColoringContextProvider({ children }: Props) {
   const { shadeColorByDepth } = useColorShading();
-  const { coloring: structureColoring } = useStructureColoring();
   const { colorings: simpleLeafColorings } = useSimpleLeafPropertyColoring();
   const { coloring: dependencyProfileColoring } = useDependencyProfileColoring();
   const { colorings: encapsulationColorings } = useEncapsulationColoring();
   const { coloring: cohesionColoring } = useCohesionColoring();
 
+  const structureColoring: ICategoryMetric = useMemo(() => ({
+    ...initStructureColoring,
+    colorFunction: (node: cytoscape.NodeSingular) => {
+      const hexColor = node.data('properties.color') as string;
+      if (!hexColor) return '';
+      return shadeColorByDepth(node, hexColor);
+    },
+  }), [shadeColorByDepth]);
+
   const defaultMode = structureColoring.name;
+
   const [mode, setMode] = useState<string>(defaultMode);
   const [range, setRange] = useState<[number, number] | undefined>();
 
-  const options: IColoringSettings[] = useMemo(() => ([
+  const options: IMetricSettings[] = useMemo(() => ([
     structureColoring,
     ...simpleLeafColorings,
     dependencyProfileColoring,
     ...encapsulationColorings,
     cohesionColoring,
-  ]), [
+  ].filter((c) => c.colorFunction !== undefined)), [
     dependencyProfileColoring, encapsulationColorings, simpleLeafColorings,
     structureColoring, cohesionColoring,
   ]);
 
   const coloringContext = useMemo((): IColoringContext => {
-    const currentMode = options.find((o) => o.name === mode);
+    const currentMode = options.find((o) => o.name === mode) ?? structureColoring;
 
     const resetColoring = () => {
       setMode(defaultMode);

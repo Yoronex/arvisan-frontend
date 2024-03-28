@@ -1,19 +1,20 @@
 import { useMemo } from 'react';
 import cytoscape from 'cytoscape';
 import {
-  DEFAULT_NODE_COLOR, DEFAULT_NODE_COLOR_RATIO, getRatioColor, IRatioColoring,
+  DEFAULT_NODE_COLOR, DEFAULT_NODE_COLOR_RATIO, getRatioColor,
 } from '../../helpers/color';
 import useColorShading from '../useColorShading';
 import { NodeData } from '../../api';
+import { IRatioMetric } from '../../helpers/metrics';
 
 export const cohesionColors = DEFAULT_NODE_COLOR_RATIO;
 
-export default function useCohesionColoring(): { coloring: IRatioColoring } {
+export default function useCohesionColoring(): { coloring: IRatioMetric } {
   const { shadeColorByDepth } = useColorShading();
 
   const getCohesion = (node: cytoscape.NodeSingular) => node.data('properties.cohesion') as NodeData['properties']['cohesion'];
 
-  const coloring: IRatioColoring = useMemo(() => ({
+  const coloring: IRatioMetric = useMemo(() => ({
     name: 'Cohesion',
     nodeDetailsTitle: 'Cohesion',
     nodeDetailsValue(node: cytoscape.NodeSingular) {

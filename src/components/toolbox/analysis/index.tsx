@@ -6,6 +6,7 @@ import { ViolationsContext } from '../../../context';
 import IntermediateCheckbox from '../../IntermediateCheckbox';
 import { VisibilityOptions } from '../../../helpers/enums';
 import ColoringMode from './ColoringMode';
+import NodeSizingMode from './NodeSizingMode';
 
 export default function ToolboxAnalysis() {
   const { visibility, setVisibility } = useContext(ViolationsContext);
@@ -22,6 +23,7 @@ export default function ToolboxAnalysis() {
   return (
     <div className="d-flex flex-column gap-3">
       <ColoringMode />
+      <NodeSizingMode />
       <h4>Violations</h4>
       <Form>
         <IntermediateCheckbox

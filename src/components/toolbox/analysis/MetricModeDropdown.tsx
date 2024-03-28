@@ -1,17 +1,23 @@
-import { useContext } from 'react';
 import { Dropdown } from 'react-bootstrap';
-import { ColoringContext } from '../../../context';
+import { IMetricSettings } from '../../../helpers/metrics';
 
-export default function ColoringModeDropdown() {
-  const { setMode, options: coloringOptions, currentMode } = useContext(ColoringContext);
+interface Props {
+  title: string;
+  setMode: (name: string) => void;
+  options: IMetricSettings[],
+  currentMode: IMetricSettings | undefined,
+}
 
-  const options = coloringOptions.map((m) => ({
+export default function MetricModeDropdown({
+  title, setMode, options: metricOptions, currentMode,
+}: Props) {
+  const options = metricOptions.map((m) => ({
     id: m.name,
     name: m.name,
   }));
 
   return (
-    <Dropdown title="Choose coloring mode" className="w-100">
+    <Dropdown title={title} className="w-100">
       <Dropdown.Toggle className="w-100">{currentMode?.name}</Dropdown.Toggle>
       <Dropdown.Menu className="overflow-x-hidden overflow-y-scroll" style={{ maxHeight: '20rem' }}>
         {options.map((o) => (

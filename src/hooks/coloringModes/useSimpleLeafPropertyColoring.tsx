@@ -1,23 +1,23 @@
 import cytoscape from 'cytoscape';
 import { useMemo } from 'react';
 import {
-  DEFAULT_NODE_COLOR, DEFAULT_NODE_COLOR_RATIO, getRatioColor, IRatioColoring,
+  DEFAULT_NODE_COLOR, DEFAULT_NODE_COLOR_RATIO, getRatioColor,
 } from '../../helpers/color';
 import useColorShading from '../useColorShading';
 import {
   getFileSizeKB,
   getIncomingOutgoingDifference,
   getNrIncomingFunctionDeps,
-  getNrOutgoingFunctionDeps,
+  getNrOutgoingFunctionDeps, IRatioMetric,
 } from '../../helpers/metrics';
 
-export default function useSimpleLeafPropertyColoring(): { colorings: IRatioColoring[] } {
+export default function useSimpleLeafPropertyColoring(): { colorings: IRatioMetric[] } {
   const { shadeColorByDepth } = useColorShading();
 
   const colors = DEFAULT_NODE_COLOR_RATIO;
   const log10 = (val: number) => Math.log10(val + 1);
 
-  const colorings: IRatioColoring[] = useMemo(() => {
+  const colorings: IRatioMetric[] = useMemo(() => {
     const getRangeFunction = (
       getValueFunction: (node: cytoscape.NodeSingular) => number,
     ) => (nodes: cytoscape.NodeCollection): [number, number] => {
@@ -53,6 +53,16 @@ export default function useSimpleLeafPropertyColoring(): { colorings: IRatioColo
       );
     };
 
+    const getSizeFunction = (
+      getValueFunction: (node: cytoscape.NodeSingular) => number,
+    ) => (node: cytoscape.NodeSingular, range2: [number, number]) => {
+      const [min, max] = range2;
+      const logMax = log10(max - min);
+      const value = log10(getValueFunction(node) - min);
+
+      return (value / logMax) * 300;
+    };
+
     return [{
       name: 'Incoming dependencies (log scale)',
       nodeDetailsTitle: 'Incoming dependencies',
@@ -61,6 +71,7 @@ export default function useSimpleLeafPropertyColoring(): { colorings: IRatioColo
       colors,
       rangeFunction: getRangeFunction(getNrIncomingFunctionDeps),
       colorFunction: getColorFunction(getNrIncomingFunctionDeps),
+      sizeFunction: getSizeFunction(getNrIncomingFunctionDeps),
     }, {
       name: 'Outgoing dependencies (log scale)',
       nodeDetailsTitle: 'Incoming dependencies',
@@ -69,6 +80,7 @@ export default function useSimpleLeafPropertyColoring(): { colorings: IRatioColo
       colors,
       rangeFunction: getRangeFunction(getNrOutgoingFunctionDeps),
       colorFunction: getColorFunction(getNrOutgoingFunctionDeps),
+      sizeFunction: getSizeFunction(getNrOutgoingFunctionDeps),
     }, {
       name: 'Dependency difference (log scale)',
       nodeDetailsTitle: 'Dependency difference',
@@ -120,6 +132,7 @@ export default function useSimpleLeafPropertyColoring(): { colorings: IRatioColo
       colors,
       rangeFunction: getRangeFunction(getFileSizeKB),
       colorFunction: getColorFunction(getFileSizeKB),
+      sizeFunction: getSizeFunction(getFileSizeKB),
     }];
   }, [colors, shadeColorByDepth]);
 

@@ -8,6 +8,7 @@ import GraphHighlightContextProvider from './GraphHighlightContext';
 import ViolationsContextProvider from './ViolationsContext';
 import ColoringContextProvider from './ColoringContext';
 import GraphSettingsContextProvider from './GraphSettingsContext';
+import NodeSizingContextProvider from './NodeSizingContext';
 
 export { LayerContext } from './LayerContext';
 export { BreadcrumbsContext } from './BreadcrumbsContext';
@@ -18,6 +19,7 @@ export { VisualizationLayoutContext } from './VisualizationLayoutContext';
 export { GraphHighlightContext } from './GraphHighlightContext';
 export { ColoringContext } from './ColoringContext';
 export { GraphSettingsContext } from './GraphSettingsContext';
+export { NodeSizingContext } from './NodeSizingContext';
 
 export function ContextProviders({ children }: PropsWithChildren) {
   return (
@@ -30,7 +32,9 @@ export function ContextProviders({ children }: PropsWithChildren) {
                 <VisualizationLayoutContextProvider>
                   <GraphHighlightContextProvider>
                     <ColoringContextProvider>
-                      {children}
+                      <NodeSizingContextProvider>
+                        {children}
+                      </NodeSizingContextProvider>
                     </ColoringContextProvider>
                   </GraphHighlightContextProvider>
                 </VisualizationLayoutContextProvider>
