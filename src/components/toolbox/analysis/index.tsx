@@ -21,9 +21,11 @@ export default function ToolboxAnalysis() {
   };
 
   return (
-    <div className="d-flex flex-column gap-3">
+    <div className="d-flex flex-column gap-1">
       <ColoringMode />
+      <hr />
       <NodeSizingMode />
+      <hr />
       <h4>Violations</h4>
       <Form>
         <IntermediateCheckbox

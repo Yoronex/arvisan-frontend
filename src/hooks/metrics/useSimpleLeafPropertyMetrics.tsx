@@ -78,6 +78,7 @@ export default function useSimpleLeafPropertyMetrics(): { colorings: IRatioMetri
 
     return [[linearScale, sqrtScale, logScale].map((scale) => ({
       name: scale.name ? `Incoming dependencies (${scale.name} scale)` : 'Incoming dependencies',
+      context: 'visualization',
       nodeDetailsTitle: 'Incoming dependencies',
       nodeDetailsValue() { return null; },
       type: 'ratio',
@@ -87,6 +88,7 @@ export default function useSimpleLeafPropertyMetrics(): { colorings: IRatioMetri
       sizeFunction: scale.name === 'sqrt' ? getSizeFunction(getNrIncomingFunctionDeps, scale.mapper) : undefined,
     })), [linearScale, sqrtScale, logScale].map((scale) => ({
       name: scale.name ? `Outgoing dependencies (${scale.name} scale)` : 'Outgoing dependencies',
+      context: 'visualization',
       nodeDetailsTitle: 'Outgoing dependencies',
       nodeDetailsValue() { return null; },
       type: 'ratio',
@@ -96,6 +98,7 @@ export default function useSimpleLeafPropertyMetrics(): { colorings: IRatioMetri
       sizeFunction: scale.name === 'sqrt' ? getSizeFunction(getNrOutgoingFunctionDeps, scale.mapper) : undefined,
     })), [{
       name: 'Dependency difference (log scale)',
+      context: 'visualization',
       nodeDetailsTitle: 'Dependency difference',
       nodeDetailsValue: getIncomingOutgoingDifference,
       type: 'ratio',
@@ -136,6 +139,7 @@ export default function useSimpleLeafPropertyMetrics(): { colorings: IRatioMetri
       },
     }], [linearScale, sqrtScale, logScale].map((scale) => ({
       name: scale.name ? `File Size (kB, ${scale.name} scale)` : 'File Size (kB)',
+      context: 'graph',
       nodeDetailsTitle: 'File Size',
       nodeDetailsValue(node: cytoscape.NodeSingular) {
         const fileSize = getFileSizeKB(node);
@@ -148,6 +152,7 @@ export default function useSimpleLeafPropertyMetrics(): { colorings: IRatioMetri
       sizeFunction: scale.name === 'sqrt' ? getSizeFunction(getFileSizeKB, scale.mapper) : undefined,
     })), [linearScale, sqrtScale, logScale].map((scale) => ({
       name: scale.name ? `Nr of screens (${scale.name} scale)` : 'Nr of screens',
+      context: 'graph',
       nodeDetailsTitle: 'Number of screens',
       nodeDetailsValue: getNrScreens,
       type: 'ratio',
@@ -157,6 +162,7 @@ export default function useSimpleLeafPropertyMetrics(): { colorings: IRatioMetri
       sizeFunction: scale.name === 'sqrt' ? getSizeFunction(getNrScreens, scale.mapper) : undefined,
     })), [linearScale, sqrtScale, logScale].map((scale) => ({
       name: scale.name ? `Nr of entities (${scale.name} scale)` : 'Nr of entities',
+      context: 'graph',
       nodeDetailsTitle: 'Number of entities',
       nodeDetailsValue: getNrEntities,
       type: 'ratio',

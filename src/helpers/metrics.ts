@@ -75,6 +75,12 @@ export function getNrEntities(node: cytoscape.NodeSingular): number {
 
 type IBaseMetric = {
   name: string;
+  /**
+   * Whether the metric is calculated in context of the visualization or the complete graph.
+   * If the former, the result will depend on the user's visualization settings.
+   */
+  context: 'visualization' | 'graph',
+  description?: string;
   nodeDetailsTitle: string;
   /** The value that needs to be shown in the node details list. NULL if hidden */
   nodeDetailsValue: (node: cytoscape.NodeSingular) => number | string | null;

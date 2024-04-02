@@ -12,11 +12,15 @@ export default function NodeSizingMode() {
   return (
     <div>
       <h4>Node sizing modes</h4>
-      <div className="d-flex flex-column gap-2">
-        <h6>Node height</h6>
-        <MetricModeDropdown title="Choose node height" setMode={setHorizontalMode} options={options} currentMode={horizontalSizingMode} />
-        <h6>Node width</h6>
-        <MetricModeDropdown title="Node width" setMode={setVerticalMode} options={options} currentMode={verticalSizingMode} />
+      <div className="d-flex flex-column gap-3">
+        <div>
+          <h6 className="mb-1">Node height</h6>
+          <MetricModeDropdown title="Choose node height" setMode={setHorizontalMode} options={options} currentMode={horizontalSizingMode} />
+        </div>
+        <div>
+          <h6 className="mb-1">Node width</h6>
+          <MetricModeDropdown title="Node width" setMode={setVerticalMode} options={options} currentMode={verticalSizingMode} />
+        </div>
       </div>
     </div>
   );

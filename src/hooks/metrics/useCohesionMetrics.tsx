@@ -16,6 +16,8 @@ export default function useCohesionMetrics(): { coloring: IRatioMetric } {
 
   const coloring: IRatioMetric = useMemo(() => ({
     name: 'Cohesion',
+    context: 'graph',
+    description: 'Cohesion shows how entangled modules within an application are. A low score means (almost) no entanglement, while a high score means many modules depend on each other.',
     nodeDetailsTitle: 'Cohesion',
     nodeDetailsValue(node: cytoscape.NodeSingular) {
       const cohesion = getCohesion(node);

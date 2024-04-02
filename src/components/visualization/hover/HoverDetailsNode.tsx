@@ -1,26 +1,34 @@
 import cytoscape from 'cytoscape';
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import HoverDetailsNodeLeaf from './HoverDetailsNodeLeaf';
 import HoverDetailsNodeParent from './HoverDetailsNodeParent';
-import { ColoringContext } from '../../../context';
+import { ColoringContext, NodeSizingContext } from '../../../context';
+import { IMetricSettings } from '../../../helpers/metrics';
 
 interface Props {
   node: cytoscape.NodeSingular;
 }
 
 export default function HoverDetailsNode({ node }: Props) {
-  const { currentMode } = useContext(ColoringContext);
+  const { currentMode: coloringMode } = useContext(ColoringContext);
+  const { horizontalSizingMode, verticalSizingMode } = useContext(NodeSizingContext);
 
+  const metrices = useMemo(
+    () => [coloringMode, horizontalSizingMode, verticalSizingMode]
+      .filter((m) => m != null)
+      .filter((m, i, all) => i === all
+        .findIndex((m2) => m.name === m2.name)),
+    [coloringMode, horizontalSizingMode, verticalSizingMode],
+  );
   const parents = node.parents().toArray();
 
-  const renderColorModeProperty = () => {
-    if (!currentMode) return null;
-    const value = currentMode.nodeDetailsValue(node);
+  const renderUsedMetric = (m: IMetricSettings) => {
+    const value = m.nodeDetailsValue(node);
     if (value == null) return null;
     return (
       <tr>
         <td className="pe-2 text-end fw-bold">
-          {currentMode.nodeDetailsTitle}
+          {m.nodeDetailsTitle}
           :
         </td>
         <td>{value}</td>
@@ -61,7 +69,7 @@ export default function HoverDetailsNode({ node }: Props) {
       </tr>
       {node.isChildless() && (<HoverDetailsNodeLeaf node={node} />)}
       {node.isParent() && (<HoverDetailsNodeParent node={node} />)}
-      {renderColorModeProperty()}
+      {metrices.map((m) => renderUsedMetric(m))}
     </>
   );
 }

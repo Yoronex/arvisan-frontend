@@ -26,6 +26,7 @@ interface IColoringContext {
 
 const initStructureColoring: ICategoryMetric = {
   name: 'Structure',
+  context: 'graph',
   nodeDetailsTitle: 'Structure',
   nodeDetailsValue() { return null; },
   type: 'category',

@@ -17,6 +17,7 @@ interface INodeSizingContext {
 
 const labelSizingMode: IMetricSettings = {
   name: 'Fit label',
+  context: 'graph',
   nodeDetailsValue: () => null,
   nodeDetailsTitle: '',
   type: 'category',

@@ -36,6 +36,8 @@ export default function useDependencyProfileMetrics() {
 
   const coloring: ICategoryMetric = useMemo(() => ({
     name: 'Dependency profile',
+    context: 'graph',
+    description: 'The dependency profile is a categorization of modules into groups. Hidden modules have no incoming or outgoing dependencies from/to other applications. Inbound modules only have incoming dependencies from other applications. Outbound modules only have outgoing dependencies to other applications. Transit modules have both. NOTE: this metric is only visible on the module layer.',
     nodeDetailsTitle: 'Dependency profile',
     nodeDetailsValue: getDependencyProfileCategory,
     type: 'category',
@@ -45,10 +47,10 @@ export default function useDependencyProfileMetrics() {
       return dependencyProfileColor[dependencyProfile];
     },
     legend: new Map([
-      [dependencyProfileColor[DependencyProfileCategory.HIDDEN], 'Hidden dependency'],
-      [dependencyProfileColor[DependencyProfileCategory.INBOUND], 'Inbound dependency'],
-      [dependencyProfileColor[DependencyProfileCategory.OUTBOUND], 'Outbound dependency'],
-      [dependencyProfileColor[DependencyProfileCategory.TRANSIT], 'Transit dependency'],
+      [dependencyProfileColor[DependencyProfileCategory.HIDDEN], 'Hidden module'],
+      [dependencyProfileColor[DependencyProfileCategory.INBOUND], 'Inbound module'],
+      [dependencyProfileColor[DependencyProfileCategory.OUTBOUND], 'Outbound module'],
+      [dependencyProfileColor[DependencyProfileCategory.TRANSIT], 'Transit module'],
     ]),
   }), [shadeColorByDepth]);
 

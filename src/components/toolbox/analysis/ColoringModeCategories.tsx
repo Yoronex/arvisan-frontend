@@ -7,11 +7,7 @@ interface Props {
 
 export default function ColoringModeCategories({ coloring }: Props) {
   if (coloring.legend.size === 0) {
-    return (
-      <div className="w-100 fst-italic small">
-        Colors set dynamically.
-      </div>
-    );
+    return null;
   }
 
   const colors = [...coloring.legend.keys()];

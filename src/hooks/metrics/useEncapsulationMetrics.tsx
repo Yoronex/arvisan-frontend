@@ -14,6 +14,8 @@ export default function useEncapsulationMetrics(): { colorings: IRatioMetric[] }
 
   const colorings: IRatioMetric[] = useMemo(() => ([{
     name: 'Inbound encapsulation',
+    context: 'graph',
+    description: "A node's inbound encapsulation tries to capture how much is relatively imported from external applications. This score is averaged on other layers.",
     nodeDetailsTitle: 'Inbound encapsulation',
     nodeDetailsValue(node: cytoscape.NodeSingular) {
       const profile = getDependencyProfile(node);
@@ -37,6 +39,8 @@ export default function useEncapsulationMetrics(): { colorings: IRatioMetric[] }
     },
   }, {
     name: 'Outbound encapsulation',
+    context: 'graph',
+    description: "A node's inbound encapsulation tries to capture how much is relatively exported to external applications. This score is averaged on other layers.",
     nodeDetailsTitle: 'Outbound encapsulation',
     nodeDetailsValue(node: cytoscape.NodeSingular) {
       const profile = getDependencyProfile(node);
