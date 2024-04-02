@@ -3,11 +3,13 @@ import {
 } from 'react';
 import { EdgeData, NodeData } from '../api';
 
+type SimpleEdgeData = Omit<EdgeData, 'properties'>;
+
 interface IGraphHighlightContext {
   nodes: NodeData[] | null;
   highlightNodes: (n: NodeData[]) => void;
-  edges: EdgeData[] | null;
-  highlightEdges: (e: EdgeData[]) => void;
+  edges: SimpleEdgeData[] | null;
+  highlightEdges: (e: SimpleEdgeData[]) => void;
   finish: () => void;
 }
 
@@ -21,7 +23,7 @@ export const GraphHighlightContext = createContext<IGraphHighlightContext>({
 
 export default function GraphHighlightContextProvider({ children }: PropsWithChildren) {
   const [nodes, setNodes] = useState<NodeData[] | null>(null);
-  const [edges, setEdges] = useState<EdgeData[] | null>(null);
+  const [edges, setEdges] = useState<SimpleEdgeData[] | null>(null);
 
   const graphHighlightContext = useMemo((): IGraphHighlightContext => ({
     nodes,

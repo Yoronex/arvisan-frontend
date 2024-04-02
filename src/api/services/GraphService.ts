@@ -70,6 +70,7 @@ dependencyLength,
 showSelectedInternalRelations,
 showDomainInternalRelations,
 showExternalRelations,
+includeUnclassifiedApplications,
 showOutgoing,
 showIncoming,
 outgoingRangeMin,
@@ -77,25 +78,47 @@ outgoingRangeMax,
 incomingRangeMin,
 incomingRangeMax,
 selfEdges,
-showWeakDependencies,
-showStrongDependencies,
+showRuntimeDependencies,
+showCompileTimeDependencies,
 showEntityDependencies,
 }: {
 id: string,
 layerDepth: number,
 dependencyLength: number,
+/**
+ * Query relationships that are contained within the selection
+ */
 showSelectedInternalRelations?: boolean,
+/**
+ * Query relationships that are contained within the selection's domain
+ */
 showDomainInternalRelations?: boolean,
+/**
+ * Query relationships that are not contained within the selection's domain
+ */
 showExternalRelations?: boolean,
+/**
+ * Whether to include applications that existing in the unclassified domain. True by default
+ */
+includeUnclassifiedApplications?: boolean,
+/**
+ * Query outgoing relationships from the starting point
+ */
 showOutgoing?: boolean,
+/**
+ * Query incoming relationships from the starting point
+ */
 showIncoming?: boolean,
 outgoingRangeMin?: number,
 outgoingRangeMax?: number,
 incomingRangeMin?: number,
 incomingRangeMax?: number,
+/**
+ * Return relationships that (after lifting) depend on itself
+ */
 selfEdges?: boolean,
-showWeakDependencies?: boolean,
-showStrongDependencies?: boolean,
+showRuntimeDependencies?: boolean,
+showCompileTimeDependencies?: boolean,
 showEntityDependencies?: boolean,
 }): CancelablePromise<GraphWithViolations> {
         return __request(OpenAPI, {
@@ -110,6 +133,7 @@ showEntityDependencies?: boolean,
                 'showSelectedInternalRelations': showSelectedInternalRelations,
                 'showDomainInternalRelations': showDomainInternalRelations,
                 'showExternalRelations': showExternalRelations,
+                'includeUnclassifiedApplications': includeUnclassifiedApplications,
                 'showOutgoing': showOutgoing,
                 'showIncoming': showIncoming,
                 'outgoingRangeMin': outgoingRangeMin,
@@ -117,8 +141,8 @@ showEntityDependencies?: boolean,
                 'incomingRangeMin': incomingRangeMin,
                 'incomingRangeMax': incomingRangeMax,
                 'selfEdges': selfEdges,
-                'showWeakDependencies': showWeakDependencies,
-                'showStrongDependencies': showStrongDependencies,
+                'showRuntimeDependencies': showRuntimeDependencies,
+                'showCompileTimeDependencies': showCompileTimeDependencies,
                 'showEntityDependencies': showEntityDependencies,
             },
         });

@@ -1,9 +1,7 @@
 import cytoscape from 'cytoscape';
 import {
-  getInboundEncapsulation,
   getNrIncomingFunctionDeps,
   getNrOutgoingFunctionDeps,
-  getOutboundEncapsulation,
 } from '../../../helpers/metrics';
 import { getDependencyProfileCategory } from '../../../hooks/metrics/useDependencyProfileMetrics';
 

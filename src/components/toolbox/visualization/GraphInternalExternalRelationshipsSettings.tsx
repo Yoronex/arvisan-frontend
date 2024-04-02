@@ -9,6 +9,7 @@ export default function GraphInternalExternalRelationshipsSettings() {
     showDomainInternalRelationships,
     showExternalRelationships,
     selfEdges,
+    includeNoDomain,
   } = settings;
 
   const setShowSelectionInternalRelationships = (value: boolean) => {
@@ -48,6 +49,12 @@ export default function GraphInternalExternalRelationshipsSettings() {
       selfEdges: value,
     });
   };
+  const setIncludeNoDomain = (value: boolean) => {
+    updateSettings({
+      ...settings,
+      includeNoDomain: value,
+    });
+  };
 
   return (
     <Form>
@@ -74,6 +81,13 @@ export default function GraphInternalExternalRelationshipsSettings() {
         checked={selfEdges}
         type="switch"
         label="Show self edges"
+      />
+      <FormCheck
+        onChange={(event) => setIncludeNoDomain(event.target.checked)}
+        checked={includeNoDomain}
+        type="switch"
+        label={'Show "no_domain"'}
+        className="mt-2"
       />
     </Form>
   );

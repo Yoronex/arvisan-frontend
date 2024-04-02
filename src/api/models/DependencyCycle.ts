@@ -3,11 +3,11 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { ExtendedEdgeData } from './ExtendedEdgeData';
+import type { ExtendedSimpleEdgeData } from './ExtendedSimpleEdgeData';
 import type { NodeData } from './NodeData';
 
 export type DependencyCycle = {
     node: NodeData;
-    path: Array<ExtendedEdgeData>;
+    path: Array<ExtendedSimpleEdgeData>;
     length: number;
 };

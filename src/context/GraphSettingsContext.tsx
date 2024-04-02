@@ -15,8 +15,9 @@ interface IGraphFilterSettings {
   showDomainInternalRelationships: boolean;
   showExternalRelationships: boolean;
   selfEdges: boolean;
-  showWeakDependencies: boolean;
-  showStrongDependencies: boolean;
+  includeNoDomain: boolean;
+  showRuntimeDependencies: boolean;
+  showCompileTimeDependencies: boolean;
   showEntityDependencies: boolean;
 }
 
@@ -39,8 +40,9 @@ const defaultSettings: IGraphFilterSettings = {
   showDomainInternalRelationships: true,
   showExternalRelationships: true,
   selfEdges: true,
-  showWeakDependencies: true,
-  showStrongDependencies: true,
+  includeNoDomain: true,
+  showRuntimeDependencies: true,
+  showCompileTimeDependencies: true,
   showEntityDependencies: true,
 };
 

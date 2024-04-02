@@ -5,17 +5,17 @@ import { GraphSettingsContext } from '../../../context';
 export default function DependencyTypes() {
   const { settings, updateSettings } = useContext((GraphSettingsContext));
   const {
-    showWeakDependencies,
-    showStrongDependencies,
+    showRuntimeDependencies,
+    showCompileTimeDependencies,
     showEntityDependencies,
   } = settings;
 
   const setShowWeakDeps = (value: boolean) => {
-    updateSettings({ ...settings, showWeakDependencies: value });
+    updateSettings({ ...settings, showRuntimeDependencies: value });
   };
 
   const setShowStrongDeps = (value: boolean) => {
-    updateSettings({ ...settings, showStrongDependencies: value });
+    updateSettings({ ...settings, showCompileTimeDependencies: value });
   };
 
   const setShowEntityDeps = (value: boolean) => {
@@ -26,15 +26,15 @@ export default function DependencyTypes() {
     <Form>
       <FormCheck
         onChange={(event) => setShowWeakDeps(event.target.checked)}
-        checked={showWeakDependencies}
+        checked={showRuntimeDependencies}
         type="switch"
-        label="Show weak dependencies"
+        label="Show runtime (weak) dependencies"
       />
       <FormCheck
         onChange={(event) => setShowStrongDeps(event.target.checked)}
-        checked={showStrongDependencies}
+        checked={showCompileTimeDependencies}
         type="switch"
-        label="Show strong dependencies"
+        label="Show compile-time (strong) dependencies"
       />
       <FormCheck
         onChange={(event) => setShowEntityDeps(event.target.checked)}

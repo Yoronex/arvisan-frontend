@@ -3,10 +3,13 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { ExtendedSimpleEdgeData } from './ExtendedSimpleEdgeData';
 import type { NodeData } from './NodeData';
 
-export type LayerViolation = {
+/**
+ * Edge data without graph properties, but which explicit
+ * details about source and target nodes
+ */
+export type ExtendedSimpleEdgeData = {
     /**
      * Unique edge identifier
      */
@@ -31,5 +34,4 @@ export type LayerViolation = {
      * Target node object
      */
     targetNode: NodeData;
-    actualEdges: Array<ExtendedSimpleEdgeData>;
 };

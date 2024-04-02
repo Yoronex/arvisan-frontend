@@ -65,8 +65,9 @@ export default function GraphContextProvider({ children }: Props) {
         incomingRangeMax: settings.maxIncoming === Number.POSITIVE_INFINITY
           ? undefined : settings.maxIncoming,
         selfEdges: settings.selfEdges,
-        showWeakDependencies: settings.showWeakDependencies,
-        showStrongDependencies: settings.showStrongDependencies,
+        includeUnclassifiedApplications: settings.includeNoDomain,
+        showRuntimeDependencies: settings.showRuntimeDependencies,
+        showCompileTimeDependencies: settings.showCompileTimeDependencies,
         showEntityDependencies: settings.showEntityDependencies,
       });
 
