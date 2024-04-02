@@ -5,7 +5,7 @@ import {
   getNrOutgoingFunctionDeps,
   getOutboundEncapsulation,
 } from '../../../helpers/metrics';
-import { getDependencyProfileCategory } from '../../../hooks/coloringModes/useDependencyProfileColoring';
+import { getDependencyProfileCategory } from '../../../hooks/metrics/useDependencyProfileMetrics';
 
 interface Props {
   node: cytoscape.NodeSingular;

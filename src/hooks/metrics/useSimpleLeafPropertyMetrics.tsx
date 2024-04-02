@@ -1,17 +1,17 @@
 import cytoscape from 'cytoscape';
 import { useMemo } from 'react';
-import {
-  DEFAULT_NODE_COLOR, DEFAULT_NODE_COLOR_RATIO, getRatioColor,
-} from '../../helpers/color';
+import { DEFAULT_NODE_COLOR, DEFAULT_NODE_COLOR_RATIO, getRatioColor } from '../../helpers/color';
 import useColorShading from '../useColorShading';
 import {
   getFileSizeKB,
-  getIncomingOutgoingDifference,
+  getIncomingOutgoingDifference, getNrEntities,
   getNrIncomingFunctionDeps,
-  getNrOutgoingFunctionDeps, IRatioMetric,
+  getNrOutgoingFunctionDeps,
+  getNrScreens,
+  IRatioMetric,
 } from '../../helpers/metrics';
 
-export default function useSimpleLeafPropertyColoring(): { colorings: IRatioMetric[] } {
+export default function useSimpleLeafPropertyMetrics(): { colorings: IRatioMetric[] } {
   const { shadeColorByDepth } = useColorShading();
 
   const colors = DEFAULT_NODE_COLOR_RATIO;
@@ -133,6 +133,28 @@ export default function useSimpleLeafPropertyColoring(): { colorings: IRatioMetr
       rangeFunction: getRangeFunction(getFileSizeKB),
       colorFunction: getColorFunction(getFileSizeKB),
       sizeFunction: getSizeFunction(getFileSizeKB),
+    }, {
+      name: 'Nr of screens (log scale)',
+      nodeDetailsTitle: 'Number of screens',
+      nodeDetailsValue(node: cytoscape.NodeSingular) {
+        return getNrScreens(node);
+      },
+      type: 'ratio',
+      colors,
+      rangeFunction: getRangeFunction(getNrScreens),
+      colorFunction: getColorFunction(getNrScreens),
+      sizeFunction: getSizeFunction(getNrScreens),
+    }, {
+      name: 'Nr of entities (log scale)',
+      nodeDetailsTitle: 'Number of entities',
+      nodeDetailsValue(node: cytoscape.NodeSingular) {
+        return getNrEntities(node);
+      },
+      type: 'ratio',
+      colors,
+      rangeFunction: getRangeFunction(getNrEntities),
+      colorFunction: getColorFunction(getNrEntities),
+      sizeFunction: getSizeFunction(getNrEntities),
     }];
   }, [colors, shadeColorByDepth]);
 

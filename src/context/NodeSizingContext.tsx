@@ -3,7 +3,7 @@ import {
 } from 'react';
 import { IMetricSettings } from '../helpers/metrics';
 import { DEFAULT_NODE_COLOR } from '../helpers/color';
-import { useEncapsulationColoring, useSimpleLeafPropertyColoring } from '../hooks/coloringModes';
+import { useEncapsulationMetrics, useSimpleLeafPropertyMetrics } from '../hooks/metrics';
 
 interface INodeSizingContext {
   verticalSizingMode: IMetricSettings;
@@ -39,8 +39,8 @@ export const NodeSizingContext = createContext<INodeSizingContext>({
 interface Props extends PropsWithChildren {}
 
 export default function NodeSizingContextProvider({ children }: Props) {
-  const { colorings: simpleLeafColorings } = useSimpleLeafPropertyColoring();
-  const { colorings: encapsulationColorings } = useEncapsulationColoring();
+  const { colorings: simpleLeafColorings } = useSimpleLeafPropertyMetrics();
+  const { colorings: encapsulationColorings } = useEncapsulationMetrics();
 
   const defaultModeName = labelSizingMode.name;
   const [verticalSizingModeName, setVerticalSizingModeName] = useState(defaultModeName);

@@ -6,7 +6,7 @@ import { NodeData } from '../../api';
 
 export const encapsulationColors = DEFAULT_NODE_COLOR_RATIO;
 
-export default function useEncapsulationColoring(): { colorings: IRatioMetric[] } {
+export default function useEncapsulationMetrics(): { colorings: IRatioMetric[] } {
   const colors = encapsulationColors;
   const rangeFunction = () => [0, 1] as [number, number];
 

@@ -31,7 +31,7 @@ const dependencyProfileColor = {
 /**
  * Dependency profile coloring object required for the coloring function of the graph
  */
-export default function useDependencyProfileColoring() {
+export default function useDependencyProfileMetrics() {
   const { shadeColorByDepth } = useColorShading();
 
   const coloring: ICategoryMetric = useMemo(() => ({

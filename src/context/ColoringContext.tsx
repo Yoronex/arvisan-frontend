@@ -4,11 +4,11 @@ import {
 import cytoscape from 'cytoscape';
 import useColorShading from '../hooks/useColorShading';
 import {
-  useSimpleLeafPropertyColoring,
-  useEncapsulationColoring,
-  useDependencyProfileColoring,
-  useCohesionColoring,
-} from '../hooks/coloringModes';
+  useSimpleLeafPropertyMetrics,
+  useEncapsulationMetrics,
+  useDependencyProfileMetrics,
+  useCohesionMetrics,
+} from '../hooks/metrics';
 import { ICategoryMetric, IMetricSettings } from '../helpers/metrics';
 import { DEFAULT_NODE_COLOR } from '../helpers/color';
 
@@ -47,10 +47,10 @@ interface Props extends PropsWithChildren {}
 
 export default function ColoringContextProvider({ children }: Props) {
   const { shadeColorByDepth } = useColorShading();
-  const { colorings: simpleLeafColorings } = useSimpleLeafPropertyColoring();
-  const { coloring: dependencyProfileColoring } = useDependencyProfileColoring();
-  const { colorings: encapsulationColorings } = useEncapsulationColoring();
-  const { coloring: cohesionColoring } = useCohesionColoring();
+  const { colorings: simpleLeafColorings } = useSimpleLeafPropertyMetrics();
+  const { coloring: dependencyProfileColoring } = useDependencyProfileMetrics();
+  const { colorings: encapsulationColorings } = useEncapsulationMetrics();
+  const { coloring: cohesionColoring } = useCohesionMetrics();
 
   const structureColoring: ICategoryMetric = useMemo(() => ({
     ...initStructureColoring,

@@ -9,7 +9,7 @@ import { IRatioMetric } from '../../helpers/metrics';
 
 export const cohesionColors = DEFAULT_NODE_COLOR_RATIO;
 
-export default function useCohesionColoring(): { coloring: IRatioMetric } {
+export default function useCohesionMetrics(): { coloring: IRatioMetric } {
   const { shadeColorByDepth } = useColorShading();
 
   const getCohesion = (node: cytoscape.NodeSingular) => node.data('properties.cohesion') as NodeData['properties']['cohesion'];

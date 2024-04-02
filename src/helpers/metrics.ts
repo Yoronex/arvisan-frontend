@@ -1,4 +1,5 @@
 import cytoscape from 'cytoscape';
+import { NodeData } from '../api';
 
 /**
  * Given a node's dependency profile, get the average application inbound encapsulation score
@@ -62,6 +63,14 @@ export function getIncomingOutgoingDifference(node: cytoscape.NodeSingular): num
  */
 export function getFileSizeKB(node: cytoscape.NodeSingular): number {
   return node.data('properties.fileSizeKB') ?? Number.NaN;
+}
+
+export function getNrScreens(node: cytoscape.NodeSingular): number {
+  return node.data('properties.nrScreens') as NodeData['properties']['nrScreens'] ?? Number.NaN;
+}
+
+export function getNrEntities(node: cytoscape.NodeSingular): number {
+  return node.data('properties.nrEntities') as NodeData['properties']['nrEntities'] ?? Number.NaN;
 }
 
 type IBaseMetric = {
