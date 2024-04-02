@@ -97,37 +97,22 @@ export default function useSimpleLeafPropertyMetrics(): { colorings: IRatioMetri
       colorFunction: getColorFunction(getNrOutgoingFunctionDeps, scale.mapper),
       sizeFunction: scale.name === 'sqrt' ? getSizeFunction(getNrOutgoingFunctionDeps, scale.mapper) : undefined,
     })), [{
-      name: 'Dependency difference (log scale)',
+      name: 'Dependency difference',
       context: 'visualization',
+      description: 'Number of incoming dependencies minus the number of outgoing dependencies. Negative means more outgoing than incoming and vice versa.',
       nodeDetailsTitle: 'Dependency difference',
       nodeDetailsValue: getIncomingOutgoingDifference,
       type: 'ratio',
       colors,
       rangeFunction: getRangeFunction(getIncomingOutgoingDifference),
       colorFunction(node: cytoscape.NodeSingular, range: [number, number]) {
-        const [min, max] = range;
-        // No negative logarithm, so we can use the general color function
-        if (min >= 0) return getColorFunction(getIncomingOutgoingDifference)(node, range);
-        // Only negative logarithms, so inverse the difference function
-        if (max <= 0) {
-          return getColorFunction(
-            (node2) => -getIncomingOutgoingDifference(node2),
-          )(node, range);
+        if (node.isParent()) {
+          return shadeColorByDepth(node, DEFAULT_NODE_COLOR);
         }
 
-        // Ratio which has a difference of 0, i.e. the border value
-        const borderRatio = (-min) / (max - min);
-        const logMin = logScale.mapper ? logScale.mapper(-min) : -min;
-        const logMax = logScale.mapper ? logScale.mapper(max) : max;
+        const [min, max] = range;
         const value = getIncomingOutgoingDifference(node);
-        let ratio: number;
-        if (value === 0) {
-          ratio = borderRatio;
-        } else if (value < 0) {
-          ratio = (1 - (Math.log10(-value) / logMin)) * borderRatio;
-        } else {
-          ratio = (Math.log10(value) / logMax) * (1 - borderRatio) + borderRatio;
-        }
+        const ratio = (value - min) / (max - min);
 
         const [firstColor, secondColor, ...restColors] = colors;
         return getRatioColor(
