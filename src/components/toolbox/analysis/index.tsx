@@ -27,7 +27,7 @@ export default function ToolboxAnalysis() {
       <NodeSizingMode />
       <hr />
       <h4>Violations</h4>
-      <Form>
+      <Form className="mb-3">
         <IntermediateCheckbox
           label="Show non-violations in visualization"
           indeterminate={visibility.nonViolations === VisibilityOptions.VISIBLE}

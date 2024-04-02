@@ -1,7 +1,7 @@
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightLong, faBinoculars } from '@fortawesome/free-solid-svg-icons';
-import { useContext } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import { DependencyCycle, DependencyCycleRender } from '../../../api';
 import { GraphContext, GraphHighlightContext } from '../../../context';
 import { nodeToString } from '../../../helpers/node';
@@ -11,14 +11,27 @@ interface Props {
   onHighlight?: () => void;
 }
 
-export default function CyclicalDependenciesDetails({ cyclicalDependencies, onHighlight }: Props) {
+export default function CyclicalDependenciesDetails({
+  cyclicalDependencies: cdeps, onHighlight,
+}: Props) {
   const { graph } = useContext(GraphContext);
   const { highlightEdges } = useContext(GraphHighlightContext);
 
-  const cyclicalDepVisible = (d: DependencyCycle) => {
+  const cyclicalDepVisible = useCallback((d: DependencyCycle) => {
     const edges = d.path;
     return edges.every((e1) => graph.edges.find((e2) => e2.data.id.includes(e1.id)));
-  };
+  }, [graph.edges]);
+
+  const cyclicalDependencies = useMemo(() => {
+    const cyclDeps = [...cdeps];
+    return cyclDeps.sort((a, b) => {
+      const aVisible = cyclicalDepVisible(a);
+      const bVisible = cyclicalDepVisible(b);
+      if (aVisible && !bVisible) return -1;
+      if (!aVisible && bVisible) return 1;
+      return 0;
+    });
+  }, [cdeps, cyclicalDepVisible]);
 
   const handleHighlight = (d: DependencyCycleRender) => {
     highlightEdges(d.path);

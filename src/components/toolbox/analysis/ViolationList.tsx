@@ -1,4 +1,4 @@
-import React, { ComponentType, useEffect } from 'react';
+import React, { ComponentType, useEffect, useMemo } from 'react';
 import {
   Form, ListGroup, ListGroupItem, ModalProps,
 } from 'react-bootstrap';
@@ -34,6 +34,17 @@ export default function ViolationsList<T>({
   const [selectedIndex, setSelectedIndex] = React.useState<number | undefined>();
   const selectedGroup = selectedIndex !== undefined ? groups[selectedIndex] : undefined;
 
+  const sortedGroups = useMemo(() => {
+    if (!groupGreyed) return groups;
+    return [...groups].sort((a, b) => {
+      const aGreyed = groupGreyed(a);
+      const bGreyed = groupGreyed(b);
+      if (aGreyed && !bGreyed) return -1;
+      if (!aGreyed && bGreyed) return 1;
+      return 0;
+    });
+  }, [groupGreyed, groups]);
+
   useEffect(() => {
     setSelectedIndex(undefined);
   }, [groups]);
@@ -50,6 +61,15 @@ export default function ViolationsList<T>({
     setShowInVisualization(newValue);
   };
 
+  if (groups.length === 0) {
+    return (
+      <div>
+        <h5>{header}</h5>
+        <p className="fst-italic">No violations found.</p>
+      </div>
+    );
+  }
+
   return (
     <div>
       <h5>{header}</h5>
@@ -63,7 +83,7 @@ export default function ViolationsList<T>({
         />
       </Form>
       <ListGroup className="overflow-y-auto" style={{ maxHeight: '15rem' }}>
-        {groups.map((g, index) => {
+        {sortedGroups.map((g, index) => {
           const greyed = groupGreyed ? groupGreyed(g) : false;
           const disabled = groupDisabled ? groupDisabled(g) : false;
           return (
