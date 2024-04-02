@@ -10,14 +10,14 @@ import {
   getNrScreens,
   IRatioMetric,
 } from '../../helpers/metrics';
+import { linearScale, logScale, sqrtScale } from './scales';
 
 export default function useSimpleLeafPropertyMetrics(): { colorings: IRatioMetric[] } {
   const { shadeColorByDepth } = useColorShading();
 
   const colors = DEFAULT_NODE_COLOR_RATIO;
-  const log10 = (val: number) => Math.log10(val + 1);
 
-  const colorings: IRatioMetric[] = useMemo(() => {
+  const colorings: IRatioMetric[][] = useMemo((): IRatioMetric[][] => {
     const getRangeFunction = (
       getValueFunction: (node: cytoscape.NodeSingular) => number,
     ) => (nodes: cytoscape.NodeCollection): [number, number] => {
@@ -25,6 +25,7 @@ export default function useSimpleLeafPropertyMetrics(): { colorings: IRatioMetri
       let max = Number.NEGATIVE_INFINITY;
 
       nodes.forEach((node) => {
+        if (node.isParent()) return;
         const value = getValueFunction(node);
         min = Math.min(min, value);
         max = Math.max(max, value);
@@ -33,16 +34,22 @@ export default function useSimpleLeafPropertyMetrics(): { colorings: IRatioMetri
       return [min, max];
     };
 
+    /**
+     * Build a node color function
+     * @param getValueFunction Function to get a metric value given a node
+     * @param mapper Optionally map the node value function to a different value, e.g. log10 or sqrt
+     */
     const getColorFunction = (
       getValueFunction: (node: cytoscape.NodeSingular) => number,
+      mapper?: (v: number) => number,
     ) => (node: cytoscape.NodeSingular, range2: [number, number]) => {
       if (node.isParent()) {
         return shadeColorByDepth(node, DEFAULT_NODE_COLOR);
       }
 
       const [min, max] = range2;
-      const logMax = log10(max - min);
-      const value = log10(getValueFunction(node) - min);
+      const logMax = mapper ? mapper(max - min) : max - min;
+      const value = mapper ? mapper(getValueFunction(node) - min) : getValueFunction(node) - min;
       const [firstColor, secondColor, ...restColors] = colors;
 
       return getRatioColor(
@@ -53,35 +60,41 @@ export default function useSimpleLeafPropertyMetrics(): { colorings: IRatioMetri
       );
     };
 
+    /**
+     * Build a node size function
+     * @param getValueFunction Function to get a metric value given a node
+     * @param mapper Optionally map the node value function to a different value, e.g. log10 or sqrt
+     */
     const getSizeFunction = (
       getValueFunction: (node: cytoscape.NodeSingular) => number,
+      mapper?: (v: number) => number,
     ) => (node: cytoscape.NodeSingular, range2: [number, number]) => {
       const [min, max] = range2;
-      const logMax = log10(max - min);
-      const value = log10(getValueFunction(node) - min);
+      const logMax = mapper ? mapper(max - min) : max - min;
+      const value = mapper ? mapper(getValueFunction(node) - min) : getValueFunction(node) - min;
 
       return (value / logMax) * 300;
     };
 
-    return [{
-      name: 'Incoming dependencies (log scale)',
+    return [[linearScale, sqrtScale, logScale].map((scale) => ({
+      name: scale.name ? `Incoming dependencies (${scale.name} scale)` : 'Incoming dependencies',
       nodeDetailsTitle: 'Incoming dependencies',
       nodeDetailsValue() { return null; },
       type: 'ratio',
       colors,
       rangeFunction: getRangeFunction(getNrIncomingFunctionDeps),
-      colorFunction: getColorFunction(getNrIncomingFunctionDeps),
-      sizeFunction: getSizeFunction(getNrIncomingFunctionDeps),
-    }, {
-      name: 'Outgoing dependencies (log scale)',
-      nodeDetailsTitle: 'Incoming dependencies',
+      colorFunction: getColorFunction(getNrIncomingFunctionDeps, scale.mapper),
+      sizeFunction: scale.name === 'sqrt' ? getSizeFunction(getNrIncomingFunctionDeps, scale.mapper) : undefined,
+    })), [linearScale, sqrtScale, logScale].map((scale) => ({
+      name: scale.name ? `Outgoing dependencies (${scale.name} scale)` : 'Outgoing dependencies',
+      nodeDetailsTitle: 'Outgoing dependencies',
       nodeDetailsValue() { return null; },
       type: 'ratio',
       colors,
       rangeFunction: getRangeFunction(getNrOutgoingFunctionDeps),
-      colorFunction: getColorFunction(getNrOutgoingFunctionDeps),
-      sizeFunction: getSizeFunction(getNrOutgoingFunctionDeps),
-    }, {
+      colorFunction: getColorFunction(getNrOutgoingFunctionDeps, scale.mapper),
+      sizeFunction: scale.name === 'sqrt' ? getSizeFunction(getNrOutgoingFunctionDeps, scale.mapper) : undefined,
+    })), [{
       name: 'Dependency difference (log scale)',
       nodeDetailsTitle: 'Dependency difference',
       nodeDetailsValue: getIncomingOutgoingDifference,
@@ -101,8 +114,8 @@ export default function useSimpleLeafPropertyMetrics(): { colorings: IRatioMetri
 
         // Ratio which has a difference of 0, i.e. the border value
         const borderRatio = (-min) / (max - min);
-        const logMin = log10(-min);
-        const logMax = log10(max);
+        const logMin = logScale.mapper ? logScale.mapper(-min) : -min;
+        const logMax = logScale.mapper ? logScale.mapper(max) : max;
         const value = getIncomingOutgoingDifference(node);
         let ratio: number;
         if (value === 0) {
@@ -121,8 +134,8 @@ export default function useSimpleLeafPropertyMetrics(): { colorings: IRatioMetri
           ...restColors,
         );
       },
-    }, {
-      name: 'File Size (kB log scale)',
+    }], [linearScale, sqrtScale, logScale].map((scale) => ({
+      name: scale.name ? `File Size (kB, ${scale.name} scale)` : 'File Size (kB)',
       nodeDetailsTitle: 'File Size',
       nodeDetailsValue(node: cytoscape.NodeSingular) {
         const fileSize = getFileSizeKB(node);
@@ -131,32 +144,28 @@ export default function useSimpleLeafPropertyMetrics(): { colorings: IRatioMetri
       type: 'ratio',
       colors,
       rangeFunction: getRangeFunction(getFileSizeKB),
-      colorFunction: getColorFunction(getFileSizeKB),
-      sizeFunction: getSizeFunction(getFileSizeKB),
-    }, {
-      name: 'Nr of screens (log scale)',
+      colorFunction: getColorFunction(getFileSizeKB, scale.mapper),
+      sizeFunction: scale.name === 'sqrt' ? getSizeFunction(getFileSizeKB, scale.mapper) : undefined,
+    })), [linearScale, sqrtScale, logScale].map((scale) => ({
+      name: scale.name ? `Nr of screens (${scale.name} scale)` : 'Nr of screens',
       nodeDetailsTitle: 'Number of screens',
-      nodeDetailsValue(node: cytoscape.NodeSingular) {
-        return getNrScreens(node);
-      },
+      nodeDetailsValue: getNrScreens,
       type: 'ratio',
       colors,
       rangeFunction: getRangeFunction(getNrScreens),
-      colorFunction: getColorFunction(getNrScreens),
-      sizeFunction: getSizeFunction(getNrScreens),
-    }, {
-      name: 'Nr of entities (log scale)',
+      colorFunction: getColorFunction(getNrScreens, scale.mapper),
+      sizeFunction: scale.name === 'sqrt' ? getSizeFunction(getNrScreens, scale.mapper) : undefined,
+    })), [linearScale, sqrtScale, logScale].map((scale) => ({
+      name: scale.name ? `Nr of entities (${scale.name} scale)` : 'Nr of entities',
       nodeDetailsTitle: 'Number of entities',
-      nodeDetailsValue(node: cytoscape.NodeSingular) {
-        return getNrEntities(node);
-      },
+      nodeDetailsValue: getNrEntities,
       type: 'ratio',
       colors,
       rangeFunction: getRangeFunction(getNrEntities),
-      colorFunction: getColorFunction(getNrEntities),
-      sizeFunction: getSizeFunction(getNrEntities),
-    }];
+      colorFunction: getColorFunction(getNrEntities, scale.mapper),
+      sizeFunction: scale.name === 'sqrt' ? getSizeFunction(getNrEntities, scale.mapper) : undefined,
+    }))];
   }, [colors, shadeColorByDepth]);
 
-  return { colorings };
+  return { colorings: colorings.flat() };
 }
