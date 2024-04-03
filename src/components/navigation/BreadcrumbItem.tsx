@@ -5,7 +5,6 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { Breadcrumb, NodeData } from '../../api';
 import HighlightSearch from '../toolbox/navigator/HighlightSearch';
 import { VisualizationHistory } from '../../context';
-import { searchNodes } from '../../helpers/filter';
 
 interface Props {
   breadcrumb: Breadcrumb;
@@ -25,20 +24,28 @@ export default function BreadcrumbItem({
     setSearchKey('');
   };
 
-  const filteredOptions = searchNodes(breadcrumb.options, searchKey);
+  const filteredOptions = breadcrumb.options.filter((n) => {
+    const label = n.properties?.fullName ?? n.label;
+    const nameSpaces = label.replaceAll('_', ' ');
+    return label.toLowerCase().includes(searchKey.toLowerCase())
+      || nameSpaces.toLowerCase().includes(searchKey.toLowerCase());
+  });
 
-  const getOption = (option: NodeData) => ((
-    <NavDropdown.Item
-      key={option.id}
-      active={breadcrumb.id === option.id}
-      onClick={() => {
-        visitNode({ type: 'backend', data: option, timestamp: new Date() });
-      }}
-      title={option.label}
-    >
-      <HighlightSearch label={option.label} searchKey={searchKey} />
-    </NavDropdown.Item>
-  ));
+  const getOption = (option: NodeData) => {
+    const label = option.properties?.fullName ?? option.label;
+    return (
+      <NavDropdown.Item
+        key={option.id}
+        active={breadcrumb.id === option.id}
+        onClick={() => {
+          visitNode({ type: 'backend', data: option, timestamp: new Date() });
+        }}
+        title={label}
+      >
+        <HighlightSearch label={label} searchKey={searchKey} />
+      </NavDropdown.Item>
+    );
+  };
 
   return (
     <NavDropdown
