@@ -1,14 +1,12 @@
 import cytoscape from 'cytoscape';
-import { ReactNode } from 'react';
 import { getParents } from '../../../helpers/node';
 import { EdgeData, NodeData } from '../../../api';
 
 interface Props {
   edge: cytoscape.EdgeSingular;
-  allReferenceKeys?: boolean,
 }
 
-export default function HoverDetailsEdge({ edge, allReferenceKeys }: Props) {
+export default function HoverDetailsEdge({ edge }: Props) {
   const source = edge.source();
   const target = edge.target();
 
@@ -16,20 +14,8 @@ export default function HoverDetailsEdge({ edge, allReferenceKeys }: Props) {
   const sourceParents = getParents(source.data(), allNodes).slice(1);
   const targetParents = getParents(target.data(), allNodes).slice(1);
 
-  const referenceNames = edge.data('properties.referenceNames') as EdgeData['properties']['referenceNames'];
-  const referenceNameText: ReactNode = referenceNames.length > 1 && !allReferenceKeys ? (
-    <>
-      {referenceNames[0]}
-      {' '}
-      <span className="fst-italic">
-        and
-        {' '}
-        {referenceNames.length - 1}
-        {' '}
-        more...
-      </span>
-    </>
-  ) : referenceNames.join(', ');
+  const references = edge.data('properties.references') as EdgeData['properties']['references'];
+  const referenceTypes = references.map((r) => r.type);
 
   return (
     <>
@@ -70,21 +56,13 @@ export default function HoverDetailsEdge({ edge, allReferenceKeys }: Props) {
         <td>{edge.data('properties.nrModuleDependencies')}</td>
       </tr>
       <tr>
-        <td className="pe-2 text-end fw-bold text-nowrap">Reference key:</td>
-        <td className="text-break">{referenceNameText}</td>
-      </tr>
-      <tr>
-        <td className="pe-2 text-end fw-bold text-nowrap">Reference types:</td>
-        <td className="text-wrap">{(edge.data('properties.referenceTypes') as EdgeData['properties']['referenceTypes']).join(', ')}</td>
-      </tr>
-      <tr>
-        <td className="pe-2 text-end fw-bold text-nowrap">Dependency types:</td>
-        <td className="text-wrap">{(edge.data('properties.dependencyTypes') as EdgeData['properties']['dependencyTypes']).join(', ')}</td>
+        <td className="pe-2 text-end fw-bold text-nowrap">
+          Reference type
+          {referenceTypes.length > 1 && 's'}
+          :
+        </td>
+        <td className="text-wrap">{referenceTypes.join(', ')}</td>
       </tr>
     </>
   );
 }
-
-HoverDetailsEdge.defaultProps = ({
-  allReferenceKeys: false,
-});

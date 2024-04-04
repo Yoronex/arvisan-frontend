@@ -11,9 +11,9 @@ export default function useGraphPostProcessing(
   return useEffect(() => {
     if (!cy.current) return;
     cy.current.edges().forEach((e) => {
-      const weight = e.data('properties.weight') as EdgeData['properties']['weight'];
-      if (!weight) return;
-      e.style('width', Math.sqrt(weight));
+      const nrFunctionDependencies = e.data('properties.nrFunctionDependencies') as EdgeData['properties']['nrFunctionDependencies'];
+      if (!nrFunctionDependencies) return;
+      e.style('width', Math.sqrt(nrFunctionDependencies));
     });
   }, [cy, graph]);
 }

@@ -4,19 +4,10 @@
 /* eslint-disable */
 
 import type { DependencyType } from './DependencyType';
+import type { EdgeReferences } from './EdgeReferences';
 import type { EdgeViolations } from './EdgeViolations';
 
 export type EdgeDataProperties = {
-    /**
-     * Edge reference key (from OutSystems)
-     * @deprecated
-     */
-    referenceKeys: Array<string>;
-    /**
-     * Weight of the edge
-     * @deprecated
-     */
-    weight: number;
     /**
      * Whether this edge is some architectural violation
      */
@@ -24,14 +15,9 @@ export type EdgeDataProperties = {
 any: boolean;
 });
     /**
-     * Names of the actual references in OutSystems
+     * Actual references in OutSystems
      */
-    referenceNames: Array<string>;
-    /**
-     * Type of reference used within OutSystems
- * (e.g. Action, Entity, Integration, WebBlock, etc.)
-     */
-    referenceTypes: Array<string>;
+    references: Array<EdgeReferences>;
     /**
      * Type of dependency
      */

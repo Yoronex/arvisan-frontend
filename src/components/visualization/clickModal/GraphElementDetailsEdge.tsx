@@ -4,6 +4,7 @@ import HoverDetailsEdge from '../hover/HoverDetailsEdge';
 import { ViolationsContext } from '../../../context';
 import CyclicalDependenciesDetails from '../../toolbox/analysis/CyclicalDependenciesDetails';
 import SubLayerViolationsDetails from '../../toolbox/analysis/SubLayerViolationsDetails';
+import { EdgeData } from '../../../api';
 
 interface Props {
   edge: cytoscape.EdgeSingular;
@@ -20,11 +21,30 @@ export default function GraphElementDetailsEdge({ edge, onClose }: Props) {
   const subLayerViolations = violations.subLayers
     .filter((v) => v.id === edgeId);
 
+  const references = edge.data('properties.references') as EdgeData['properties']['references'];
+
   return (
     <div className="d-flex flex-column gap-5">
       <table>
         <tbody>
-          <HoverDetailsEdge edge={edge} allReferenceKeys />
+          <HoverDetailsEdge edge={edge} />
+          <tr>
+            <td className="pe-2 text-end fw-bold text-nowrap">References</td>
+            <td>
+              <div className="d-flex flex-column gap-2">
+                {references.map(({ type, names }) => (
+                  <div key={type}>
+                    <span className="fst-italic fw-bold">
+                      {type}
+                      :
+                      {' '}
+                    </span>
+                    {names.join(', ')}
+                  </div>
+                ))}
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
       <div className="w-100">

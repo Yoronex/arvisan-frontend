@@ -16,6 +16,7 @@ export { Domain } from './models/Domain';
 export type { Edge } from './models/Edge';
 export type { EdgeData } from './models/EdgeData';
 export type { EdgeDataProperties } from './models/EdgeDataProperties';
+export type { EdgeReferences } from './models/EdgeReferences';
 export type { EdgeViolations } from './models/EdgeViolations';
 export type { ErrorResponse } from './models/ErrorResponse';
 export type { ExtendedSimpleEdgeData } from './models/ExtendedSimpleEdgeData';
