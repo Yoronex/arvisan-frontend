@@ -52,10 +52,6 @@ dependencyProfileCategory?: ModuleDependencyProfileCategory;
  */
 selected: Domain.selected;
 /**
- * Node layer depth
- */
-depth: number;
-/**
  * Hex color this node should be
  */
 color: string;

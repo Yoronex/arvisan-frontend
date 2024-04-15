@@ -12,10 +12,10 @@ export default function useColorShading() {
    * @param hexColor
    */
   const shadeColorByDepth = useCallback((node: cytoscape.NodeSingular, hexColor: string) => {
-    const depth = Number(node.data('properties.depth'));
+    const depth = node.ancestors().length;
     const alpha = (layers.length - depth) * 0.15;
     return shadeHexColor(hexColor, alpha);
-  }, [layers.length]);
+  }, [layers]);
 
   return { shadeColorByDepth };
 }
