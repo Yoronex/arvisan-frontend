@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { VisualizationHistory, BreadcrumbsContext } from '../context';
 import BackendVersion from './BackendVersion';
-import { getInboundEncapsulation, getOutboundEncapsulation } from '../helpers/metrics';
 import NodeFinderDatabase from './toolbox/navigator/NodeFinderDatabase';
 
 export default function WelcomeModal() {
@@ -47,9 +46,6 @@ export default function WelcomeModal() {
         setShow(false);
       };
 
-      const inboundEncapsulation = getInboundEncapsulation(d.properties.dependencyProfile);
-      const outboundEncapsulation = getOutboundEncapsulation(d.properties.dependencyProfile);
-
       const fileSizeMb = d.properties.fileSizeKB ? d.properties.fileSizeKB.toLocaleString() : '';
       const avgModuleSize = d.properties.fileSizeKB && d.properties.nrLeaves
         ? (d.properties.fileSizeKB / d.properties.nrLeaves).toFixed(1)
@@ -66,8 +62,6 @@ export default function WelcomeModal() {
           <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.nrOutgoingDependencies}</button></td>
           <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.nrIncomingDependencies}</button></td>
           <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{d.nrInternalDependencies}</button></td>
-          <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{inboundEncapsulation.toFixed(4)}</button></td>
-          <td><button type="button" onClick={click} title={`Select ${d.label}`} className="border-0 bg-transparent">{outboundEncapsulation.toFixed(4)}</button></td>
           <td><Button onClick={click} size="sm" title={`Select ${d.label}`}>Select</Button></td>
         </tr>
       );
@@ -85,8 +79,6 @@ export default function WelcomeModal() {
           <td>Nr Outgoing dependencies</td>
           <td>Nr Incoming dependencies</td>
           <td>Nr Inner dependencies</td>
-          <td>Avg Inbound encapsulation score</td>
-          <td>Avg Outbound encapsulation score</td>
           <td aria-label="Select" />
         </tr>
       </thead>
@@ -115,7 +107,7 @@ export default function WelcomeModal() {
         <Modal.Header closeButton={currentNode != null}>
           <div>
             <Modal.Title>
-              Welcome to the Vopak Architecture Visualizer & Analyzer
+              Welcome to Arvisan
             </Modal.Title>
             <p className="mb-0"><BackendVersion /></p>
             <p className="mb-0">{getFrontendVersion()}</p>
@@ -123,7 +115,7 @@ export default function WelcomeModal() {
         </Modal.Header>
         <Modal.Body>
           <p>
-            This tool allows you to visualize Vopak&apos;s software architecture
+            This tool allows you to visualize a low-code software architecture
             and landscape using a graph visualization. Then, you can use the built-in analysis
             tools to find dependency violations within the generated view.
           </p>
