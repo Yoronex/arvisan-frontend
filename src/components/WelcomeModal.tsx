@@ -107,7 +107,7 @@ export default function WelcomeModal() {
         <Modal.Header closeButton={currentNode != null}>
           <div>
             <Modal.Title>
-              Welcome to Arvisan
+              Welcome to Arvisan, the Architecture Visualizer and Analyzer
             </Modal.Title>
             <p className="mb-0"><BackendVersion /></p>
             <p className="mb-0">{getFrontendVersion()}</p>
