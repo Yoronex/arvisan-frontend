@@ -18,7 +18,7 @@ export default function Breadcrumbs() {
     // Layer is same index as parent, because the top layer is not included in
     // the breadcrumbs(as this has its own endpoint and is cached in memory).
     const { label: parentLayerName } = layers[index];
-    const parentItemName = breadcrumbs[index - 1]?.name ?? currentDomain?.label ?? '???';
+    const parentItemName = breadcrumbs[index - 1]?.name ?? currentDomain?.name ?? '???';
 
     return (
       <BreadcrumbItem

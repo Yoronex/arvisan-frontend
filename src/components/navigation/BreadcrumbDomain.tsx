@@ -43,7 +43,7 @@ export default function BreadcrumbDomain() {
 
   return (
     <NavDropdown
-      title={currentDomain ? currentDomain.label : 'Choose domain'}
+      title={currentDomain ? currentDomain.name : 'Choose domain'}
       active={currentDomain != null && currentNodeId === currentDomain.id}
       onToggle={handleToggle}
     >

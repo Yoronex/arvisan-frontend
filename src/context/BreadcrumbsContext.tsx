@@ -1,9 +1,8 @@
 import {
   createContext, PropsWithChildren, useContext, useEffect, useMemo, useState,
 } from 'react';
-import cytoscape from 'cytoscape';
 import {
-  Breadcrumb, Domain, GraphService, NodeData,
+  Breadcrumb, Domain, GraphService,
 } from '../api';
 import { VisualizationHistory } from './VisualizationHistory';
 import { LayerContext } from './LayerContext';
@@ -12,7 +11,7 @@ import { GraphSettingsContext } from './GraphSettingsContext';
 interface IBreadcrumbsContext {
   domains: Domain[];
   breadcrumbs: Breadcrumb[];
-  currentDomain: NodeData | null;
+  currentDomain: Breadcrumb | null;
   loading: boolean;
 }
 
@@ -24,7 +23,7 @@ export const BreadcrumbsContext = createContext<IBreadcrumbsContext>({
 });
 
 export default function BreadcrumbsContextProvider({ children }: PropsWithChildren) {
-  const [currentDomain, setCurrentDomain] = useState<NodeData | null>(null);
+  const [currentDomain, setCurrentDomain] = useState<Breadcrumb | null>(null);
   const [domains, setDomains] = useState<Domain[]>([]);
   const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb[]>([]);
   const [domainsLoading, setDomainsLoading] = useState(true);
@@ -46,29 +45,15 @@ export default function BreadcrumbsContextProvider({ children }: PropsWithChildr
   useEffect(() => {
     if (!currentNode || !currentNodeId || !layers) return;
 
-    const getDomain = (node: cytoscape.NodeSingular): NodeData => {
-      if (node.isOrphan()) return node.data() as NodeData;
-      const parent = node.parent();
-      return getDomain(parent.first());
-    };
-
-    const updateDomain = (newDomain: NodeData) => {
-      if (newDomain.id === currentDomain?.id) return;
-      setCurrentDomain(newDomain);
-    };
-
-    const topLayer = layers.find((l) => l.parentLabel == null);
-
-    if (currentNode.type === 'cytoscape') {
-      const domain = getDomain(currentNode.data);
-      updateDomain(domain);
-    } else if (currentNode.type === 'backend' && currentNode.data.properties.layer === topLayer?.label) {
-      updateDomain(currentNode.data);
-    }
-
     setBreadcrumbsLoading(true);
     GraphService.getBreadcrumbOptions({ id: currentNodeId, layerDepth: settings.layerDepth })
-      .then((b) => setBreadcrumbs(b))
+      .then((b) => {
+        const topLayer = b.shift();
+        if (topLayer) {
+          setCurrentDomain(topLayer);
+        }
+        setBreadcrumbs(b);
+      })
       .catch((e) => console.error(e))
       .finally(() => setBreadcrumbsLoading(false));
   }, [currentDomain?.id, currentNode, currentNodeId, layers, settings.layerDepth]);
