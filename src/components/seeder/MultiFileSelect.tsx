@@ -1,4 +1,6 @@
 import { Button, Form } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import ControlledFileInput from './ControlledFileInput';
 
 interface Props {
@@ -30,7 +32,7 @@ export default function MultiFileSelect({ files, setFiles, label }: Props) {
       {files.map((f, i) => (
         <div
           key={`${label}-${f?.name ?? i}`}
-          className="d-flex flex-row gap-1 mb-1"
+          className="d-flex flex-row gap-1 mb-2"
         >
           <ControlledFileInput
             file={f}
@@ -38,11 +40,16 @@ export default function MultiFileSelect({ files, setFiles, label }: Props) {
             className="flex-grow-1"
             required
           />
-          <Button variant="danger" onClick={() => deleteFile(i)}>-</Button>
+          <Button variant="danger" onClick={() => deleteFile(i)} title="Remove file">
+            <FontAwesomeIcon icon={faMinus} />
+          </Button>
         </div>
       ))}
       <div>
-        <Button onClick={addFile}>Add file</Button>
+        <Button onClick={addFile}>
+          <FontAwesomeIcon icon={faPlus} className="me-1" />
+          Add file
+        </Button>
       </div>
     </Form.Group>
   );

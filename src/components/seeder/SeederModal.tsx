@@ -19,10 +19,19 @@ export default function SeederModal() {
       <Button onClick={() => setOpen(true)}>Seeder</Button>
       <Modal show={open} size="lg" onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Arvisan data loader</Modal.Title>
+          <Modal.Title>Arvisan input parser</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>This dialog allows you to load new datasets into Arvisan.</p>
+          <p>
+            This dialog allows you to parse datasets into the Arvisan format and optionally
+            load these into the database. Each type of file is optional, so you should provide
+            zero or more. The structure of each of the files can be found in the
+            {' '}
+            <a href="https://github.com/Yoronex/arvisan-input-parser/blob/master/src/input-spec.ts" target="_blank" rel="noreferrer">
+              input specification definitions in the input parser repository
+            </a>
+            , as this parser is executing the parsing and importing.
+          </p>
           <Alert variant="danger">
             <Alert.Heading>
               <FontAwesomeIcon icon={faTriangleExclamation} className="me-2" />

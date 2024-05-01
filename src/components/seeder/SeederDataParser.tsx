@@ -17,11 +17,10 @@ export default function SeederDataParser() {
   const [integrationFiles, setIntegrationFiles] = useState<(File | undefined)[]>([undefined]);
   const [includeLayer, setIncludeLayer] = useState(false);
   const [anonymize, setAnonymize] = useState(false);
-  const [alsoImmediateImport, setAlsoImmediatelyImport] = useState(false);
 
   const noUndefined = (files: (File | undefined)[]) => files.every((f) => f !== undefined);
 
-  const execute = async () => {
+  const execute = async (seedDatabase: boolean) => {
     const res = await GraphService.parseGraph({
       formData: {
         structureFiles: structureFiles as File[],
@@ -33,7 +32,7 @@ export default function SeederDataParser() {
       },
     }) as unknown as Blob;
 
-    if (alsoImmediateImport) {
+    if (seedDatabase) {
       const zip = await JSZip.loadAsync(res);
       const nodes = zip.file('nodes.csv');
       const relationships = zip.file('relationships.csv');
@@ -65,7 +64,7 @@ export default function SeederDataParser() {
     }
   };
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = (event: FormEvent, seedDatabase = false) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -74,7 +73,7 @@ export default function SeederDataParser() {
 
     if (noUndefined(structureFiles) && noUndefined(dependencyFiles)) {
       setLoading(true);
-      execute()
+      execute(seedDatabase)
         .catch((e: ApiError) => {
           setResult({ variant: 'danger', message: e.message });
         })
@@ -103,17 +102,17 @@ export default function SeederDataParser() {
             id="anonymize"
             checked={anonymize}
             onChange={(e) => setAnonymize(e.target.checked)}
-            label="Anonymize the dataset."
-          />
-          <Form.Check
-            id="also-import"
-            checked={alsoImmediateImport}
-            onChange={(e) => setAlsoImmediatelyImport(e.target.checked)}
-            label="After parsing the input data, import this data into the database instead of downloading it."
+            label="Anonymize the resulting graph"
           />
         </div>
-        <div>
-          <LoadingButton type="submit" loading={loading}>Submit</LoadingButton>
+        <div className="d-flex flex-row gap-2">
+          <LoadingButton type="submit" loading={loading}>Parse & download</LoadingButton>
+          <LoadingButton
+            onClick={(e) => handleSubmit(e, true)}
+            loading={loading}
+          >
+            Parse & seed
+          </LoadingButton>
         </div>
         <Collapse in={!!result}>
           <div className="mt-3">
