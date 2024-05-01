@@ -9,13 +9,12 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint-fix": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
     "preview": "vite preview",
-    "gen-client": "openapi --useOptions --input ../arvisan-backend/build/swagger.json --output ./src/api"
+    "gen-client": "openapi-ts --input ../arvisan-backend/build/swagger.json --output ./src/api"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@types/node": "^20.11.30",
     "bootstrap": "^5.3.3",
     "cytoscape": "^3.28.1",
     "cytoscape-cola": "^2.5.1",
@@ -26,9 +25,11 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@hey-api/openapi-ts": "^0.42.1",
     "@types/cytoscape": "^3.19.16",
     "@types/cytoscape-cola": "file:local-types/cytoscape-cola",
     "@types/cytoscape-klay": "^3.1.4",
+    "@types/node": "^20.11.30",
     "@types/react": "^18.2.69",
     "@types/react-cytoscapejs": "^1.2.5",
     "@types/react-dom": "^18.2.22",
@@ -41,7 +42,6 @@
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
-    "openapi-typescript-codegen": "^0.28.0",
     "sass": "^1.72.0",
     "typescript": "^5.4.3",
     "vite": "^5.2.6"
