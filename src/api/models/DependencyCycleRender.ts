@@ -1,12 +1,10 @@
-/* generated using openapi-typescript-codegen -- do no edit */
+/* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { DependencyCycle } from './DependencyCycle';
 import type { ExtendedSimpleEdgeData } from './ExtendedSimpleEdgeData';
 import type { NodeData } from './NodeData';
-
 export type DependencyCycleRender = {
     node: NodeData;
     path: Array<ExtendedSimpleEdgeData>;
@@ -14,3 +12,4 @@ export type DependencyCycleRender = {
     actualCycles: Array<DependencyCycle>;
     id: string;
 };
+

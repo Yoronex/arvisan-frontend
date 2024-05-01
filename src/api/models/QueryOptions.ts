@@ -1,8 +1,7 @@
-/* generated using openapi-typescript-codegen -- do no edit */
+/* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 export type QueryOptions = {
     layerDepth: number;
     dependencyLength: number;
@@ -42,3 +41,4 @@ export type QueryOptions = {
     showCompileTimeDependencies?: boolean;
     showEntityDependencies?: boolean;
 };
+

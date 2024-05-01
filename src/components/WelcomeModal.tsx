@@ -7,6 +7,7 @@ import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { VisualizationHistory, BreadcrumbsContext } from '../context';
 import BackendVersion from './BackendVersion';
 import NodeFinderDatabase from './toolbox/navigator/NodeFinderDatabase';
+import SeederModal from './seeder/SeederModal';
 
 export default function WelcomeModal() {
   const { currentNode, visitNode } = useContext(VisualizationHistory);
@@ -114,6 +115,7 @@ export default function WelcomeModal() {
           </div>
         </Modal.Header>
         <Modal.Body>
+          <SeederModal />
           <p>
             This tool allows you to visualize a low-code software architecture
             and landscape using a graph visualization. Then, you can use the built-in analysis
