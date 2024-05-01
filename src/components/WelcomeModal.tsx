@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import {
-  Button, Modal, NavLink, Placeholder, Table,
+  Button, Modal, NavLink, Placeholder, Spinner, Table,
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
@@ -8,6 +8,7 @@ import { VisualizationHistory, BreadcrumbsContext } from '../context';
 import BackendVersion from './BackendVersion';
 import NodeFinderDatabase from './toolbox/navigator/NodeFinderDatabase';
 import SeederModal from './seeder/SeederModal';
+import { SeederContext } from '../context/SeederContext';
 
 export default function WelcomeModal() {
   const { currentNode, visitNode } = useContext(VisualizationHistory);
@@ -16,6 +17,9 @@ export default function WelcomeModal() {
   const [show, setShow] = useState(currentNode == null);
   const sortedDomains = domains
     .sort((d1, d2) => d2.nrOutgoingDependencies - d1.nrOutgoingDependencies);
+
+  const { loading: seederLoading, present: canSeed } = useContext(SeederContext);
+  const [seederOpen, setSeederOpen] = useState(false);
 
   const handleClose = () => {
     if (currentNode == null) return;
@@ -104,7 +108,9 @@ export default function WelcomeModal() {
         Overview
       </NavLink>
 
-      <Modal show={show} size="xl" onHide={handleClose}>
+      <SeederModal open={seederOpen} handleClose={() => setSeederOpen(false)} />
+
+      <Modal show={show && !seederOpen} size="xl" onHide={handleClose}>
         <Modal.Header closeButton={currentNode != null}>
           <div>
             <Modal.Title>
@@ -115,7 +121,15 @@ export default function WelcomeModal() {
           </div>
         </Modal.Header>
         <Modal.Body>
-          <SeederModal />
+          <div className="d-flex flex-gap-2 mb-2">
+            <Button
+              disabled={seederLoading || !canSeed}
+              onClick={() => setSeederOpen(true)}
+              variant="outline-primary"
+            >
+              {seederLoading ? <Spinner size="sm" /> : 'Seeder'}
+            </Button>
+          </div>
           <p>
             This tool allows you to visualize a low-code software architecture
             and landscape using a graph visualization. Then, you can use the built-in analysis

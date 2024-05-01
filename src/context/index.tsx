@@ -9,6 +9,7 @@ import ViolationsContextProvider from './ViolationsContext';
 import ColoringContextProvider from './ColoringContext';
 import GraphSettingsContextProvider from './GraphSettingsContext';
 import NodeSizingContextProvider from './NodeSizingContext';
+import SeederContextProvider from './SeederContext';
 
 export { LayerContext } from './LayerContext';
 export { BreadcrumbsContext } from './BreadcrumbsContext';
@@ -23,26 +24,28 @@ export { NodeSizingContext } from './NodeSizingContext';
 
 export function ContextProviders({ children }: PropsWithChildren) {
   return (
-    <LayerContextProvider>
-      <GraphSettingsContextProvider>
-        <VisualizationHistoryProvider>
-          <BreadcrumbsContextProvider>
-            <ViolationsContextProvider>
-              <GraphContextProvider>
-                <VisualizationLayoutContextProvider>
-                  <GraphHighlightContextProvider>
-                    <ColoringContextProvider>
-                      <NodeSizingContextProvider>
-                        {children}
-                      </NodeSizingContextProvider>
-                    </ColoringContextProvider>
-                  </GraphHighlightContextProvider>
-                </VisualizationLayoutContextProvider>
-              </GraphContextProvider>
-            </ViolationsContextProvider>
-          </BreadcrumbsContextProvider>
-        </VisualizationHistoryProvider>
-      </GraphSettingsContextProvider>
-    </LayerContextProvider>
+    <SeederContextProvider>
+      <LayerContextProvider>
+        <GraphSettingsContextProvider>
+          <VisualizationHistoryProvider>
+            <BreadcrumbsContextProvider>
+              <ViolationsContextProvider>
+                <GraphContextProvider>
+                  <VisualizationLayoutContextProvider>
+                    <GraphHighlightContextProvider>
+                      <ColoringContextProvider>
+                        <NodeSizingContextProvider>
+                          {children}
+                        </NodeSizingContextProvider>
+                      </ColoringContextProvider>
+                    </GraphHighlightContextProvider>
+                  </VisualizationLayoutContextProvider>
+                </GraphContextProvider>
+              </ViolationsContextProvider>
+            </BreadcrumbsContextProvider>
+          </VisualizationHistoryProvider>
+        </GraphSettingsContextProvider>
+      </LayerContextProvider>
+    </SeederContextProvider>
   );
 }
