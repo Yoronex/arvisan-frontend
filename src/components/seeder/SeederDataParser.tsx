@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
 import { Variant } from 'react-bootstrap/types';
 import { Alert, Collapse, Form } from 'react-bootstrap';
+import * as JSZip from 'jszip';
 import MultiFileSelect from './MultiFileSelect';
 import { ApiError, GraphService } from '../../api';
 import LoadingButton from '../forms/LoadingButton';
@@ -30,15 +31,38 @@ export default function SeederDataParser() {
         includeModuleLayerLayer: includeLayer ? 'true' : 'false',
         anonymize: anonymize ? 'true' : 'false',
       },
-    });
-    const blob = new Blob([res], {
-      type: 'application/zip',
-    });
-    const zipUrl = URL.createObjectURL(blob);
-    const tempLink = document.createElement('a');
-    tempLink.href = zipUrl;
-    tempLink.setAttribute('download', 'output.zip');
-    tempLink.click();
+    }) as unknown as Blob;
+
+    if (alsoImmediateImport) {
+      const zip = await JSZip.loadAsync(res);
+      const nodes = zip.file('nodes.csv');
+      const relationships = zip.file('relationships.csv');
+      if (!nodes || !relationships) {
+        throw new Error('nodes.csv or relationships.csv not found in the intermediate response. Try to not immediately import the data, but first download it.');
+      }
+      const nodesBlob = await nodes.async('blob');
+      const relationshipsBlob = await relationships.async('blob');
+
+      await GraphService.importGraph({
+        formData: {
+          nodes: nodesBlob,
+          relationships: relationshipsBlob,
+        },
+      });
+      setResult({ variant: 'success', message: 'Graph successfully imported. Reloading the page to use the new dataset...' });
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
+    } else {
+      const zipUrl = URL.createObjectURL(res);
+      const tempLink = document.createElement('a');
+      document.body.appendChild(tempLink);
+      tempLink.href = zipUrl;
+      tempLink.setAttribute('download', 'output.zip');
+      tempLink.click();
+      document.body.removeChild(tempLink);
+      setResult({ variant: 'success', message: 'Graph successfully parsed.' });
+    }
   };
 
   const handleSubmit = (event: FormEvent) => {
@@ -51,7 +75,6 @@ export default function SeederDataParser() {
     if (noUndefined(structureFiles) && noUndefined(dependencyFiles)) {
       setLoading(true);
       execute()
-        .then(() => {})
         .catch((e: ApiError) => {
           setResult({ variant: 'danger', message: e.message });
         })
@@ -87,7 +110,6 @@ export default function SeederDataParser() {
             checked={alsoImmediateImport}
             onChange={(e) => setAlsoImmediatelyImport(e.target.checked)}
             label="After parsing the input data, import this data into the database instead of downloading it."
-            disabled
           />
         </div>
         <div>
