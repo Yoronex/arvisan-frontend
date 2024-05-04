@@ -53,7 +53,6 @@ export default function SeederDataImporter() {
             type="file"
             id="upload-nodes-file"
             accept=".csv,application/csv"
-            value={nodesFile ? [nodesFile.name] : []}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setNodesFile(e.target.files ? e.target.files[0] : undefined);
             }}
