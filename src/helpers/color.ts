@@ -1,5 +1,5 @@
 export const DEFAULT_NODE_COLOR = '#7B7D7D';
-export const DEFAULT_NODE_COLOR_RATIO = ['#2081f9', '#f99820'];
+export const DEFAULT_NODE_COLOR_RATIO = ['#ff00ff', '#ffff00'];
 
 // From https://github.com/PimpTrizkit/PJs/wiki/12.-Shade,-Blend-and-Convert-a-Web-Color-(pSBC.js)#--version-2-hex--
 
