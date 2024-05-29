@@ -86,10 +86,22 @@ export default function SeederDataParser() {
   return (
     <div>
       <h5>Data parser</h5>
-      <Form noValidate validated={validated} onSubmit={handleSubmit} className="d-flex flex-column gap-2">
-        <MultiFileSelect files={structureFiles} setFiles={setStructureFiles} label="Structure files" />
+      <p className="fst-italic">
+        Use this form to parse raw datasets to the Arvisan format. You can either download the
+        output as a.zip file, or directly import the parser output into Arvisan. Please look at the
+        {' '}
+        <a href="https://github.com/Yoronex/arvisan-input-parser/blob/master/docs/data-sources/README.md">
+          data sources documentation
+        </a>
+        {' '}
+        to find which data should be used for which field, and where these datasets can be found.
+        Note that all datasets are optional, but make sure you remove their corresponding file input
+        fields.
+      </p>
+      <Form noValidate validated={validated} onSubmit={handleSubmit} className="d-flex flex-column gap-3">
         <MultiFileSelect files={dependencyFiles} setFiles={setDependencyFiles} label="Dependency files" />
         <MultiFileSelect files={detailsFiles} setFiles={setDetailsFiles} label="Module details files" />
+        <MultiFileSelect files={structureFiles} setFiles={setStructureFiles} label="Structure files" />
         <MultiFileSelect files={integrationFiles} setFiles={setIntegrationFiles} label="Integration files" />
         <div className="my-2">
           <Form.Check

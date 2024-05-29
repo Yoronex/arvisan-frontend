@@ -32,7 +32,7 @@ export default function MultiFileSelect({ files, setFiles, label }: Props) {
       {files.map((f, i) => (
         <div
           key={`${label}-${f?.name ?? i}`}
-          className="d-flex flex-row gap-1 mb-2"
+          className="d-flex flex-row gap-1 mb-2 ms-2"
         >
           <ControlledFileInput
             file={f}
@@ -45,7 +45,7 @@ export default function MultiFileSelect({ files, setFiles, label }: Props) {
           </Button>
         </div>
       ))}
-      <div>
+      <div className="ms-2">
         <Button onClick={addFile}>
           <FontAwesomeIcon icon={faPlus} className="me-1" />
           Add file
